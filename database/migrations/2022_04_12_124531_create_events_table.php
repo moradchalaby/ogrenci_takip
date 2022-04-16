@@ -18,7 +18,7 @@ class CreateEventsTable extends Migration
             $table->string('title');
             $table->text('aciklama');
             $table->string('color');
-            $table->integer('kullanici_id');
+            $table->string('kullanici_name');
             $table->datetime('start');
             $table->datetime('end');
             $table->timestamps();

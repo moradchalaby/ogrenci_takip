@@ -16,6 +16,7 @@ class CreateSinifTable extends Migration
         Schema::create('sinif', function (Blueprint $table) {
             $table->id();
             $table->string('sinif_ad');
+            $table->integer('kullanici_id');
             $table->integer('sinif_birim');
             $table->enum('sinif_durum', ['0', '1']);
             $table->timestamps();

@@ -16,6 +16,7 @@ class CreateHraporTable extends Migration
         Schema::create('hrapor', function (Blueprint $table) {
             $table->id();
             $table->integer('kullanici_id');
+            $table->string('kullanici_adsoyad');
             $table->string('hrapor_sayfa');
             $table->string('hrapor_ders');
             $table->date('hrapor_tarih');

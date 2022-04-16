@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CalenderController;
 
 Auth::routes();
+
+
 Route::namespace('Akmescid')->group(function () {
     Route::prefix('takvim')->group(function () {
 

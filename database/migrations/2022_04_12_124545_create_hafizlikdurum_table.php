@@ -16,6 +16,7 @@ class CreateHafizlikdurumTable extends Migration
         Schema::create('hafizlikdurum', function (Blueprint $table) {
             $table->id();
             $table->integer('ogrenci_id');
+            $table->string('ogrenci_adsoyad');
             $table->string('hafizlik_durum');
             $table->date('bast');
             $table->date('sont');

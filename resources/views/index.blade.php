@@ -1,4 +1,4 @@
- @extends('layout')
+ @extends('layouts.app')
 
 
  @section('content')
@@ -285,7 +285,7 @@
                          $('#ModalEdit #title').val(event.title);
                          $('#ModalEdit #aciklama').val(event.aciklama);
                          $('#ModalEdit #color1').val(event.color);
-                         $('#ModalEdit #kullanici').val(event.kullanici);
+                         $('#ModalEdit #kullanici').val(event.kullanici_name);
                          $("#picker2").colorPick({
                              'initialColor': $('#color1').val(),
                              'palette': ["#BF4565", "#93BFA3", "#F2EFC4",
@@ -351,7 +351,7 @@
                      drop: true,
                  },
                  success: (data) => {
-                     var dat = JSON.parse(data);
+                     var dat = JSON.parse(JSON.stringify(data));
                      console.log(data);
                      var Toast = Swal.mixin({
                          toast: true,
@@ -471,7 +471,8 @@
                      color: formdata[2]['value'],
                      start: formdata[3]['value'],
                      end: formdata[5]['value'],
-                     kullanici_id: '44'
+                     kullanici_id: '{{ Auth::user()->name }}'
+
                  },
                  dataType: 'text',
                  success: (data) => {

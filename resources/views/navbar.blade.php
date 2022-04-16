@@ -95,16 +95,7 @@
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
             </div>
-        <li class="nav-item dropdown">
-            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false" v-pre>
-                {{ Auth::user()->kullanici_adsoyad }}
-            </a>
 
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-
-            </div>
-        </li>
         </li>
 
 
@@ -149,7 +140,7 @@
 
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <span class="dropdown-item dropdown-header">KULLANICI ADI</span>
+                <span class="dropdown-item dropdown-header">{{ Auth::user()->name }}</span>
                 <div class="dropdown-divider"></div>
 
                 <a href="#" class="dropdown-item dropdown-header">
@@ -165,7 +156,7 @@
 
 
                 <a class="dropdown-item dropdown-header" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                         document.getElementById('logout-form').submit();">
+                                                                 document.getElementById('logout-form').submit();">
                     <i class="fas fa-power-off mr-2"></i> Çıkış
 
                 </a>

@@ -9,5 +9,5 @@ use Illuminate\Support\Carbon;
 class Event extends Model
 {
     //
-    protected $fillable = ['id', 'title', 'aciklama', 'color', 'kullanici_id', 'start', 'end', 'allDay', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'title', 'aciklama', 'color', 'kullanici_name', 'start', 'end', 'allDay', 'created_at', 'updated_at'];
 }

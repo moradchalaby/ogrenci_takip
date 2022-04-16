@@ -41,7 +41,7 @@ class CalenderController extends Controller
             $data = Event::whereDate('start', '>=', $request->start)
                 ->whereDate('end', '<=', $request->end)
 
-                ->get(['id', 'title', 'color', 'aciklama', 'kullanici_id', 'start', 'end']);
+                ->get(['id', 'title', 'color', 'aciklama', 'kullanici_name', 'start', 'end']);
 
 
             return response()->json($data);
@@ -93,7 +93,7 @@ class CalenderController extends Controller
                 'color' => $request->color,
                 'start' => $request->start,
                 'end' => $request->end,
-                'kullanici_id' => $request->kullanici_id,
+                'kullanici_name' => $request->kullanici_id,
 
             ]);
             return response()->json($event);

@@ -16,7 +16,9 @@ class CreateHfzlkdersTable extends Migration
         Schema::create('hfzlkders', function (Blueprint $table) {
             $table->id();
             $table->integer('ogrenci_id');
+            $table->string('ogrenci_adsoyad');
             $table->integer('kullanici_id');
+            $table->string('kullanici_name');
             $table->string('hafizlik_sayfa');
             $table->string('hafizlik_cuz');
             $table->string('hafizlik_topl');

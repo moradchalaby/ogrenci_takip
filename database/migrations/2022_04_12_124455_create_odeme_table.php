@@ -16,8 +16,10 @@ class CreateOdemeTable extends Migration
         Schema::create('odeme', function (Blueprint $table) {
             $table->id('odeme_id');
             $table->integer('ogrenci_id');
+            $table->string('ogrenci_adsoyad');
             $table->double('odeme_tutar');
             $table->enum('odeme_kur', ['₺', '€', '$']);
+            $table->string('kullanici_name');
             $table->integer('kullanici_id');
             $table->date('odeme_tarih');
             $table->string('odeme_ay');
