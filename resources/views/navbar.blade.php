@@ -140,7 +140,16 @@
 
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <span class="dropdown-item dropdown-header">{{ Auth::user()->name }}</span>
+
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex ">
+                    <div class="image dropdown-item dropdown-header">
+                        <img src="{{ Auth::user()->kullanici_resim }}" class="img-circle elevation-2"
+                            alt="User Image">
+                        <p>{{ Auth::user()->name }}</p>
+                    </div>
+
+                </div>
+
                 <div class="dropdown-divider"></div>
 
                 <a href="#" class="dropdown-item dropdown-header">
