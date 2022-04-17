@@ -32,21 +32,27 @@
     <link rel="stylesheet" href="dist/css/colorPick.dark.theme.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="dist/css/custom.css">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed sidebar-collapse">
     <div class="wrapper">
+        @if (!Auth::check())
+            <script>
+                window.location = "/login";
+            </script>
+        @else
+            <!-- Preloader -->
+            <div class="preloader flex-column justify-content-center align-items-center">
+                <img class="animation__wobble" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+            </div>
 
-        <!-- Preloader -->
-        <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__wobble" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-        </div>
-
-        @include('navbar')
-        @include('sidebar')
+            @include('navbar')
+            @include('sidebar')
 
 
-        @yield('content')
+            @yield('content')
+        @endif
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
             <!-- Control sidebar content goes here -->

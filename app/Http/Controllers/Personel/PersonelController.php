@@ -53,22 +53,32 @@ class PersonelController extends Controller
             ->where('users.name', 'like', '%' . $searchValue . '%')
             ->select('users.*')
             ->skip($start)
-            ->take($rowperpage)
+            ->take($totalRecords)
             ->get();
 
         $data_arr = array();
 
         foreach ($records as $record) {
             $id = $record->id;
-
+            $kullanici_resim = $record->kullanici_resim;
             $name = $record->name;
             $email = $record->email;
 
             $data_arr[] = array(
-                "id" => $id,
+
+                "kullanici_resim" => '<img alt="Avatar" class="avatar" src="' . $kullanici_resim . '">',
 
                 "name" => '<a href="#" onclick="alert(\'Hello world!\')">' . $name . '</a>',
-                "email" => $email
+                "email" => $email,
+                "islemler" => '<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-id="' . $id . '" data="' . strval($record) . '"
+                                          data-target="#modalAdd">
+                                          
+                                          Suzenle
+                                      </button><input type="hidden" id="veri' . $id . '" value="' . strval($record) . '">
+                                          <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
+                                          data-target="#modalAdd">
+                                          Sil
+                                      </button>'
             );
         }
 
@@ -87,9 +97,10 @@ class PersonelController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($data)
     {
         //
+
     }
 
     /**
