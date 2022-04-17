@@ -21,6 +21,11 @@
     <!-- SweetAlert2 -->
     <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
 
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
     <link rel="stylesheet" href="dist/css/colorPick.css">
     <!-- The following line applies the dark theme -->
@@ -57,6 +62,7 @@
             </div>
         </footer>
     </div>
+
     <!-- jQuery -->
     <script src="plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap -->
@@ -65,16 +71,14 @@
     <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
     <!-- AdminLTE App -->
     <script src="dist/js/adminlte.min.js"></script>
+
     <!-- fullCalendar 2.2.5 -->
 
-    <script src="plugins/moment/moment.js"></script>
-    <script src="plugins/fullcalendar/dist/fullcalendar.js"></script>
+
     <!-- AdminLTE for demo purposes -->
     <script src="dist/js/demo.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src="dist/js/colorPick.js"></script>
-    <script src="plugins/fullcalendar/dist/lang/tr.js"></script>
-    <script src="plugins/moment/locale/tr.js"></script>
+
     @yield('script')
 </body>
 

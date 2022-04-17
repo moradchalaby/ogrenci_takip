@@ -212,6 +212,12 @@
  @section('js')
  @endsection
  @section('script')
+     <script src="plugins/moment/moment.js"></script>
+     <script src="plugins/fullcalendar/dist/fullcalendar.js"></script>
+     <!-- AdminLTE App -->
+     <script src="dist/js/colorPick.js"></script>
+     <script src="plugins/fullcalendar/dist/lang/tr.js"></script>
+     <script src="plugins/moment/locale/tr.js"></script>
      <script>
          $(document).ready(function() {
              $("#picker1").colorPick({
