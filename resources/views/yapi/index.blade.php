@@ -9,12 +9,12 @@
               <div class="container-fluid">
                   <div class="row mb-2">
                       <div class="col-sm-6">
-                          <h1>DataTables</h1>
+                          <h1>BİRİMLER</h1>
                       </div>
                       <div class="col-sm-6">
                           <ol class="breadcrumb float-sm-right">
                               <li class="breadcrumb-item"><a href="#">Home</a></li>
-                              <li class="breadcrumb-item active">DataTables</li>
+                              <li class="breadcrumb-item active">Birimler</li>
                           </ol>
                       </div>
                   </div>
@@ -30,9 +30,9 @@
 
                           <div class="card">
                               <div class="card-header">
-                                  <h3 class="card-title">DataTable with default features</h3>
+                                  <h3 class="card-title">Birim Listesi</h3>
                                   <div class="card-tools">
-                                      <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
+                                      <button type="button" class="btn btn-success btn-xs" id="yeni" data-toggle="modal"
                                           data-target="#modalAdd">
                                           Yeni Ekle
                                       </button>
@@ -44,23 +44,16 @@
                                   <table id="example1" class="table table-bordered table-striped">
                                       <thead>
                                           <tr>
-                                              <td>Resim</td>
+                                              <td>Sıra</td>
+                                              <td>Birim Adı</td>
 
-                                              <td>Name</td>
-                                              <td>Email</td>
-                                              <td>Islemler</td>
+                                              <td>Birim Sorumlusu</td>
+
+
                                           </tr>
                                       </thead>
                                       <tbody></tbody>
-                                      <tfoot>
-                                          <tr>
-                                              <td>Resim</td>
 
-                                              <td>Name</td>
-                                              <td>Email</td>
-                                              <td>Islemler</td>
-                                          </tr>
-                                      </tfoot>
                                   </table>
                               </div>
                               <!-- /.card-body -->
@@ -83,23 +76,17 @@
           <div class="modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
-                      <h4 class="modal-title">Yeni Personel Ekle</h4>
+                      <h4 class="modal-title">Yeni Birim Ekle</h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                       </button>
                   </div>
                   <div class="modal-body">
-                      <form method="POST" id="useradd" action="#">
+                      <form method="POST" id="birimadd" action="#">
                           @csrf
                           <div class="input-group mb-3">
-                              <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
-                                  name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                              <input id="birim_adi" name="birim_adi" class="form-control">
 
-                              @error('name')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                              @enderror
                               <div class="input-group-append">
                                   <div class="input-group-text">
                                       <span class="fas fa-user"></span>
@@ -107,51 +94,16 @@
                               </div>
                           </div>
                           <div class="input-group mb-3">
-                              <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                                  name="email" value="{{ old('email') }}" required autocomplete="email">
+                              <select name="yearpicker" id="yearpicker" class="form-control">
+                                  <option value="">SEÇİNİZ</option>p
+                              </select>
+                              <div class="input-group-append">
+                                  <div class="input-group-text">
+                                      <span class="fas fa-user"></span>
+                                  </div>
+                              </div>
+                          </div>
 
-                              @error('email')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                              @enderror
-                              <div class="input-group-append">
-                                  <div class="input-group-text">
-                                      <span class="fas fa-envelope"></span>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="input-group mb-3">
-                              <input id="password" type="password"
-                                  class="form-control @error('password') is-invalid @enderror" name="password" required
-                                  autocomplete="new-password">
-
-                              @error('password')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                              @enderror
-                              <div class="input-group-append">
-                                  <div class="input-group-text">
-                                      <span class="fas fa-lock"></span>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="input-group mb-3">
-                              <input id="password-confirm" type="password" class="form-control"
-                                  name="password_confirmation" required autocomplete="new-password">
-                              <div class="input-group-append">
-                                  <div class="input-group-text">
-                                      <span class="fas fa-lock"></span>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="icheck-primary">
-                              <input type="checkbox" id="agreeTerms" name="terms" value="agree">
-                              <label for="agreeTerms">
-                                  I agree to the <a href="#">terms</a>
-                              </label>
-                          </div>
                           <div class="modal-footer justify-content-between">
 
 
@@ -197,44 +149,71 @@
       <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
       <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
       <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-      <script src="dist/js/tolower.js"></script>
       <script>
           $(function() {
               var table = $("#example1").DataTable({
-
-                  ajax: "{{ route('personel.getEmployees') }}",
+                  ajax: "{{ route('birim.getBirim') }}",
 
                   processing: true,
                   serverSide: true,
                   "deferRender": true,
-                  "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-                  "search": {
-                      "caseInsensitive": true
-                  },
+                  "buttons": ["copy", "csv", "excel", "pdf", {
+                      extend: 'print',
+
+                      exportOptions: {
+                          columns: ':visible'
+                      }
+                  }, "colvis"],
                   columns: [{
-                          data: 'kullanici_resim'
-                      },
-                      {
-                          data: 'name'
+                          data: 'birim_id'
                       },
 
                       {
-                          data: 'email'
+                          data: 'birim_ad'
                       },
                       {
-                          data: 'islemler'
+                          data: 'birim_sorumlu'
                       },
                   ],
+                  "language": {
+                      buttons: {
+                          colvis: 'Sütun Seç',
+                          copy: "Kopyala",
+                          print: "Yazdır"
+                      },
+                      "decimal": "",
+
+                      "emptyTable": "Tabloda veri yok",
+                      "info": "",
+                      "infoEmpty": "",
+                      "infoFiltered": "(Toplam _MAX_ kayıt.)",
+                      "infoPostFix": "",
+                      "thousands": ",",
+                      "lengthMenu": "Gösterilen _MENU_",
+                      "loadingRecords": "Yükleniyor...",
+                      "processing": "İşleniyor...",
+                      "search": "Arama:",
+                      "zeroRecords": "Eşleşen kayıt bulunamadı",
+                      "paginate": {
+                          "first": "İlk",
+                          "last": "Son",
+                          "next": "İleri",
+                          "previous": "Geri"
+                      },
+                      "aria": {
+                          "sortAscending": ": sütunu artan şekilde sıralamak için etkinleştirin",
+                          "sortDescending": ": sütunu azalan sıralamak için etkinleştir"
+                      }
+                  },
                   "responsive": true,
                   "lengthMenu": [
                       [-1, 10, 25, 50],
-                      ["All", 10, 25, 50]
+                      ["Tümü", 10, 25, 50]
                   ],
                   "autoWidth": true,
                   initComplete: function() {
                       table.buttons().container()
                           .appendTo($('.col-md-6:eq(0)', table.table().container()));
-
                   }
 
               });
@@ -242,26 +221,31 @@
           });
       </script>
       <script>
+          let startYear = 2008;
+          let endYear = new Date().getFullYear();
+          var a;
+          for (i = endYear; i > startYear; i--) {
+              a = i + ' - ' + (i + 1);
+              $('#yearpicker').append($('<option />').val(a).html(a));
+          }
+      </script>
+      <script>
           $.ajaxSetup({
               headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }
           });
-          $('#useradd').on("submit", function(e) {
+          $('#birimadd').on("submit", function(e) {
               e.preventDefault();
-              var formdata = $('#useradd').serializeArray();
+              var formdata = $('#birimadd').serializeArray();
               //console.log(formdata);
               $.ajax({
 
-                  url: '{{ route('register') }}',
+                  url: '/birim.birimadd',
                   type: 'POST',
                   data: {
-                      name: formdata[1]['value'],
-                      email: formdata[2]['value'],
-                      password: formdata[3]['value'],
-                      password_confirmation: formdata[4]['value'],
-                      terms: formdata[5]['value'],
-
+                      birim_ad: formdata[1]['value'],
+                      birim_donem: formdata[2]['value'],
 
                   },
                   dataType: 'text',
@@ -278,10 +262,10 @@
                       });
                       Toast.fire({
                           icon: 'success',
-                          title: dat["name"] + '<br>  İşlem Başarılı <br>',
+                          title: dat["birimad"] + '<br>  İşlem Başarılı <br>',
                       })
 
-                      document.getElementById("useradd").reset();
+                      document.getElementById("birimadd").reset();
                   },
                   error: function(data) {
                       var dat = JSON.parse(data);
@@ -296,7 +280,7 @@
                       });
                       Toast.fire({
                           icon: 'error',
-                          title: dat["name"]
+                          title: dat["birimad"]
 
                               +
                               '<br> İşlem başarısız <br>',

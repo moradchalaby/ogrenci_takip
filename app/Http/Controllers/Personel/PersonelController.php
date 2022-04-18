@@ -52,7 +52,9 @@ class PersonelController extends Controller
 
         // Fetch records
         $records = User::orderBy($columnName, $columnSortOrder)
+
             ->where('users.name', 'like', '%' . $searchValue . '%')
+            ->orwhere('users.email', 'like', '%' . $searchValue . '%')
             ->select('users.*')
             ->skip($start)
             ->take($totalRecords)

@@ -1,65 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\Personel;
+namespace App\Http\Controllers\Yapi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Birim;
+use App\Models\Birimhoca;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\User;
-use App\Models\Birimhoca;
 
-class BirimhocaController extends Controller
+class BirimController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-
         //
-        if ($request->ajax()) {
-
-            $data = User::get(['id', 'name']);
-            foreach ($data as $veri) {
-                $gonder[] = "<option value=\"" . $veri['id'] . "\">" . $veri['name'] . "</option>";
-            }
-
-            return response()->json($gonder);
-        }
-        return view('personel.birim');
-    }
-    public function hocagetir(Request $request)
-    {
-
-        //
-        if ($request->ajax()) {
-
-            $data = User::get(['id', 'name']);
-            $gonder[] = "<option >HOCA SEÇİNİZ</option>";
-            foreach ($data as $veri) {
-                $gonder[] = "<option value=\"" . $veri['id'] . "\">" . $veri['name'] . "</option>";
-            }
-
-            return response()->json($gonder);
-        }
-    }
-    //Todo ekle sil düzenle işlemlerini yap
-    public function birimgetir(Request $request)
-    {
-
-        //
-        if ($request->ajax()) {
-            $gonder[] = "<option > BİRİM SEÇİNİZ</option>";
-            $data = Birim::get(['birim_id', 'birim_ad']);
-            foreach ($data as $veri) {
-                $gonder[] = "<option value=\"" . $veri['birim_id'] . "\">" . $veri['birim_ad'] . "</option>";
-            }
-
-            return response()->json($gonder);
-        }
+        return view('yapi.index');
     }
     public function getBirim(Request $request)
     {
@@ -78,54 +37,62 @@ class BirimhocaController extends Controller
         $columnName = $columnName_arr[$columnIndex]['data']; // Column name
         $columnSortOrder = $order_arr[0]['dir']; // asc or desc
         $searchValue = $search_arr['value']; // Search value
+
         // Total records
-        $totalRecords = Birimhoca::select('count(*) as allcount')->count();
-        /*    select('count(*) as allcount')->count(); */
+        $totalRecords = Birim::select('count(*) as allcount')->count();
         $totalRecordswithFilter =
-            User::select('users.*', DB::raw('count(kullanici_id) as allcount'))
-            ->rightJoin(
+            Birim::select('birim.*', 'birimhoca.*', 'users.*')
+            ->join(
                 'birimhoca',
-                'birimhoca.kullanici_id',
+                'birimhoca.birim_id',
                 '=',
-                'users.id'
+                'birim.birim_id'
             )
-            ->groupBy('users.id')->where('name', 'like', '%' . $searchValue . '%')->count();
+            ->join('users', 'users.id', '=', 'birimhoca.kullanici_id')
+
+            ->groupBy('birim.birim_id')->where('birim_ad', 'like', '%' . $searchValue . '%')->count();
 
         // Fetch records
         $records =
-            User::select('users.*', 'birimhoca.*', 'birim.*')
-            ->join('birimhoca', 'birimhoca.kullanici_id', '=', 'users.id')
-            ->join('birim', 'birim.birim_id', '=', 'birimhoca.birim_id')
+            Birim::select('birim.*', 'birimhoca.*', 'users.*')
+            ->join(
+                'birimhoca',
+                'birimhoca.birim_id',
+                '=',
+                'birim.birim_id'
+            )
+
 
             ->orderBy($columnName, $columnSortOrder)
-            ->where('users.name', 'like', '%' . $searchValue . '%')
-            ->select('users.*', 'birim.birim_ad', 'birim.birim_id as birimid')
+            ->where('birim.birim_ad', 'like', '%' . $searchValue . '%')
+            ->select(
+
+                'birim.*',
+
+            )
             ->skip($start)
             ->take($totalRecords)
             ->get();
 
-
         $data_arr = array();
 
         foreach ($records as $record) {
-            $id = $record->id;
-            $kullanici_resim = $record->kullanici_resim;
-            $name = $record->name;
+            $birim_id = $record->birim_id;
+            $birim_ad = $record->birim_ad;
+            $birim_sorumlu = $record->name;
 
-            $birim  = $record->birim_ad;
 
             $data_arr[] = array(
 
-                "kullanici_resim" => '<img alt="Avatar" class="avatar" src="' . $kullanici_resim . '">',
+                "birim_ad" =>  $birim_ad,
 
-                "name" => '<a href="#" onclick="alert(\'Hello world!\')">' . $name . '</a>',
-
-                "birim_ad" => $birim,
-                "islemler" => '<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-id="' . $id . '" data="' . strval($record) . '"
+                "birim_id" => '<a href="#" onclick="alert(\'Hello world!\')">' . $birim_id . '</a>',
+                "birim_sorumlu" => $birim_sorumlu,
+                "islemler" => '<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-id="' . $birim_id . '" data="' . strval($record) . '"
                                           data-target="#modalAdd">
 
                                           Suzenle
-                                      </button><input type="hidden" id="veri' . $id . '" value="' . strval($record) . '">
+                                      </button><input type="hidden" id="veri' . $birim_id . '" value="' . strval($record) . '">
                                           <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
                                           data-target="#modalAdd">
                                           Sil
@@ -149,9 +116,19 @@ class BirimhocaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function birimadd(Request $request)
     {
+
         //
+        if ($request->ajax()) {
+
+            $data = Birim::create([
+                'birim_ad' => $request->birim_ad,
+                'birim_donem' => $request->birim_donem,
+            ]);
+
+            return response()->json($data);
+        }
     }
 
     /**

@@ -16,7 +16,7 @@ class CreateHafizlikhocaTable extends Migration
         Schema::create('hafizlikhoca', function (Blueprint $table) {
             $table->id();
             $table->integer('kullanici_id');
-
+            $table->string('vazife');
             $table->integer('birim_id');
             $table->timestamps();
         });

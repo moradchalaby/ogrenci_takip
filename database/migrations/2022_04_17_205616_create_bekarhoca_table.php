@@ -16,6 +16,7 @@ class CreateBekarhocaTable extends Migration
         Schema::create('bekarhoca', function (Blueprint $table) {
             $table->id();
             $table->integer('kullanici_id');
+            $table->string('vazife');
             $table->timestamps();
         });
     }

@@ -16,8 +16,8 @@ class CreateDersTable extends Migration
         Schema::create('ders', function (Blueprint $table) {
             $table->id('ders_id');
             $table->string('ders_ad');
-            $table->integer('ders_birim');
-            $table->integer('ders_hoca');
+            $table->integer('birim_id');
+            $table->integer('kullanici_id');
             $table->timestamps();
         });
     }
