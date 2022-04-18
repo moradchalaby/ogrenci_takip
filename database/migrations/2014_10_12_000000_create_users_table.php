@@ -18,15 +18,12 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('kullanici_resim')->nullable();
+            $table->string('kullanici_resim')->default('dist/img/logo-yok.png');
             $table->string('password');
             $table->date('kullanici_dt')->default('2020-01-01');
             $table->string('kullanici_tc')->nullable();
             $table->string('kullanici_gsm')->nullable();
             $table->text('kullanici_adres')->nullable();
-            $table->string('kullanici_yetki')->nullable();
-            $table->string('kullanici_birim')->nullable();
-            $table->string('kullanici_sinif')->nullable();
             $table->string('kullanici_durum')->default('1');
             $table->rememberToken();
             $table->timestamps();
