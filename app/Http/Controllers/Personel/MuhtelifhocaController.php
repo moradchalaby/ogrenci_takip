@@ -3,13 +3,9 @@
 namespace App\Http\Controllers\Personel;
 
 use App\Http\Controllers\Controller;
-use App\Models\Birim;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Models\User;
-use App\Models\Birimhoca;
 
-class BirimhocaController extends Controller
+class MuhtelifhocaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -165,6 +161,7 @@ class BirimhocaController extends Controller
             return response()->json($data);
         }
     }
+
     /**
      * Store a newly created resource in storage.
      *

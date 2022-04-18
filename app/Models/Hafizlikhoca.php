@@ -13,4 +13,16 @@ class Hafizlikhoca extends Model
      * @var string
      */
     protected $table = 'hafizlikhoca';
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'id',
+        'kullanici_id',
+        'birim_id'
+
+
+    ];
 }

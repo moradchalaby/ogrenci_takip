@@ -32,7 +32,7 @@
                               <div class="card-header">
                                   <h3 class="card-title">DataTable with default features</h3>
                                   <div class="card-tools">
-                                      <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
+                                      <button type="button" class="btn btn-success btn-xs" id="yeni" data-toggle="modal"
                                           data-target="#modalAdd">
                                           Yeni Ekle
                                       </button>
@@ -47,20 +47,13 @@
                                               <td>Resim</td>
 
                                               <td>Name</td>
-                                              <td>Email</td>
+
+
                                               <td>Islemler</td>
                                           </tr>
                                       </thead>
                                       <tbody></tbody>
-                                      <tfoot>
-                                          <tr>
-                                              <td>Resim</td>
 
-                                              <td>Name</td>
-                                              <td>Email</td>
-                                              <td>Islemler</td>
-                                          </tr>
-                                      </tfoot>
                                   </table>
                               </div>
                               <!-- /.card-body -->
@@ -83,75 +76,24 @@
           <div class="modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
-                      <h4 class="modal-title">Yeni Personel Ekle</h4>
+                      <h4 class="modal-title">Yeni Birim Sorumlusu Ekle</h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                       </button>
                   </div>
                   <div class="modal-body">
-                      <form method="POST" id="useradd" action="#">
+                      <form id="birimhocaekle" action="">
                           @csrf
                           <div class="input-group mb-3">
-                              <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
-                                  name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-
-                              @error('name')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                              @enderror
+                              <select id="hoca" name="kullanici_id" class="form-control">
+                              </select>
                               <div class="input-group-append">
                                   <div class="input-group-text">
                                       <span class="fas fa-user"></span>
                                   </div>
                               </div>
                           </div>
-                          <div class="input-group mb-3">
-                              <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                                  name="email" value="{{ old('email') }}" required autocomplete="email">
 
-                              @error('email')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                              @enderror
-                              <div class="input-group-append">
-                                  <div class="input-group-text">
-                                      <span class="fas fa-envelope"></span>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="input-group mb-3">
-                              <input id="password" type="password"
-                                  class="form-control @error('password') is-invalid @enderror" name="password" required
-                                  autocomplete="new-password">
-
-                              @error('password')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                              @enderror
-                              <div class="input-group-append">
-                                  <div class="input-group-text">
-                                      <span class="fas fa-lock"></span>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="input-group mb-3">
-                              <input id="password-confirm" type="password" class="form-control"
-                                  name="password_confirmation" required autocomplete="new-password">
-                              <div class="input-group-append">
-                                  <div class="input-group-text">
-                                      <span class="fas fa-lock"></span>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="icheck-primary">
-                              <input type="checkbox" id="agreeTerms" name="terms" value="agree">
-                              <label for="agreeTerms">
-                                  I agree to the <a href="#">terms</a>
-                              </label>
-                          </div>
                           <div class="modal-footer justify-content-between">
 
 
@@ -198,63 +140,24 @@
       <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
       <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
       <script>
-          $(function() {
-              var table = $("#example1").DataTable({
-                  ajax: "{{ route('personel.getEmployees') }}",
-
-                  processing: true,
-                  serverSide: true,
-                  "deferRender": true,
-                  "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-                  columns: [{
-                          data: 'kullanici_resim'
-                      },
-                      {
-                          data: 'name'
-                      },
-
-                      {
-                          data: 'email'
-                      },
-                      {
-                          data: 'islemler'
-                      },
-                  ],
-                  "responsive": true,
-                  "lengthMenu": [
-                      [-1, 10, 25, 50],
-                      ["All", 10, 25, 50]
-                  ],
-                  "autoWidth": true,
-                  initComplete: function() {
-                      table.buttons().container()
-                          .appendTo($('.col-md-6:eq(0)', table.table().container()));
-                  }
-
-              });
-
-          });
-      </script>
-      <script>
           $.ajaxSetup({
               headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }
           });
-          $('#useradd').on("submit", function(e) {
+          $('#birimhocaekle').on("submit", function(e) {
+              console.log('çalıştı')
               e.preventDefault();
-              var formdata = $('#useradd').serializeArray();
-              //console.log(formdata);
+              var formdata = $('#birimhocaekle').serializeArray();
+              console.log(formdata);
               $.ajax({
 
-                  url: '{{ route('register') }}',
+                  url: "{{ route('bekarhoca.create') }}",
                   type: 'POST',
                   data: {
-                      name: formdata[1]['value'],
-                      email: formdata[2]['value'],
-                      password: formdata[3]['value'],
-                      password_confirmation: formdata[4]['value'],
-                      terms: formdata[5]['value'],
+                      kullanici_id: formdata[1]['value'],
+                      // birim_id: formdata[2]['value'],
+
 
 
                   },
@@ -275,7 +178,7 @@
                           title: dat["name"] + '<br>  İşlem Başarılı <br>',
                       })
 
-                      document.getElementById("useradd").reset();
+                      document.getElementById("birimhocaekle").reset();
                   },
                   error: function(data) {
                       var dat = JSON.parse(data);
@@ -301,5 +204,112 @@
 
 
           })
+      </script>
+      <script>
+          $(function() {
+              var table = $("#example1").DataTable({
+                  ajax: "{{ route('bekarhoca.getBirim') }}",
+
+                  processing: true,
+                  serverSide: true,
+                  "deferRender": true,
+
+                  "buttons": ["copy", "csv", "excel", "pdf", {
+                      extend: 'print',
+
+                      exportOptions: {
+                          columns: ':visible'
+                      }
+                  }, "colvis"],
+                  columns: [{
+                          data: 'kullanici_resim'
+                      },
+                      {
+                          data: 'name'
+                      },
+
+                      {
+                          data: 'islemler'
+                      },
+                  ],
+                  "language": {
+                      buttons: {
+                          colvis: 'Sütun Seç',
+                          copy: "Kopyala",
+                          print: "Yazdır"
+                      },
+                      "decimal": "",
+
+                      "emptyTable": "Tabloda veri yok",
+                      "info": "",
+                      "infoEmpty": "",
+                      "infoFiltered": "(Toplam _MAX_ kayıt.)",
+                      "infoPostFix": "",
+                      "thousands": ",",
+                      "lengthMenu": "Gösterilen _MENU_",
+                      "loadingRecords": "Yükleniyor...",
+                      "processing": "İşleniyor...",
+                      "search": "Arama:",
+                      "zeroRecords": "Eşleşen kayıt bulunamadı",
+                      "paginate": {
+                          "first": "İlk",
+                          "last": "Son",
+                          "next": "İleri",
+                          "previous": "Geri"
+                      },
+                      "aria": {
+                          "sortAscending": ": sütunu artan şekilde sıralamak için etkinleştirin",
+                          "sortDescending": ": sütunu azalan sıralamak için etkinleştir"
+                      }
+                  },
+                  "responsive": true,
+                  "lengthMenu": [
+                      [-1, 10, 25, 50],
+                      ["Tümü", 10, 25, 50]
+                  ],
+                  "autoWidth": true,
+                  initComplete: function() {
+                      table.buttons().container()
+                          .appendTo($('.col-md-6:eq(0)', table.table().container()));
+                  }
+
+              });
+
+          });
+      </script>
+      <script>
+          $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          });
+          hocagetir();
+          //  birimgetir();
+
+          function hocagetir() {
+              $.ajax({
+                  type: 'post',
+                  url: '/bekarhoca/hocagetir',
+                  data: {
+                      get_option: true
+                  },
+                  success: function(response) {
+                      document.getElementById("hoca").innerHTML = response;
+                  }
+              });
+          }
+
+          function birimgetir() {
+              $.ajax({
+                  type: 'post',
+                  url: '/bekarhoca/birimgetir',
+                  data: {
+                      get_option: true
+                  },
+                  success: function(response) {
+                      document.getElementById("birim").innerHTML = response;
+                  }
+              });
+          }
       </script>
   @endsection

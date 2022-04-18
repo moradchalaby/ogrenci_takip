@@ -45,9 +45,10 @@
                                       <thead>
                                           <tr>
                                               <td>Sıra</td>
+                                              <td>Dönem</td>
                                               <td>Birim Adı</td>
-
                                               <td>Birim Sorumlusu</td>
+                                              <td>İşlem</td>
 
 
                                           </tr>
@@ -130,6 +131,57 @@
           <!-- /.modal-dialog -->
       </div>
       <!-- /.modal -->
+
+      <div class="modal fade" id="modalEdit">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h4 class="modal-title">Birim İsmi Değiştir</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      <form method="POST" id="birimadd" action="#">
+                          @csrf
+                          <div class="input-group mb-3">
+                              <input id="birim_adi" name="birim_ad" class="form-control">
+
+                              <div class="input-group-append">
+                                  <div class="input-group-text">
+                                      <span class="fas fa-pen-to-square"></span>
+                                  </div>
+                              </div>
+                          </div>
+
+                          <input type="hidden" id="birim_id" name="birim_id" class="form-control">
+
+                          <div class="modal-footer justify-content-between">
+
+
+
+
+                              <!-- /.col -->
+
+                              <button type="button" class="btn btn-default bg-danger" data-dismiss="modal">İptal</button>
+                              <button type="submit" class="btn btn-primary">
+                                  {{ __('Kaydet') }}</button>
+
+                              <!-- /.col -->
+
+
+
+                          </div>
+
+                      </form>
+                  </div>
+
+              </div>
+              <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
   @endsection
   @section('css')
   @endsection
@@ -150,6 +202,17 @@
       <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
       <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
       <script>
+          $('#modalEdit').on('show.bs.modal', function(e) {
+
+              //get data-id attribute of the clicked element
+              var id = $(e.relatedTarget).data('id');
+              var ad = $(e.relatedTarget).data('ad');
+              //populate the textbox
+              $(e.currentTarget).find('input[name="birim_id"]').val(id);
+              $(e.currentTarget).find('input[name="birim_ad"]').val(ad);
+          });
+      </script>
+      <script>
           $(function() {
               var table = $("#example1").DataTable({
                   ajax: "{{ route('birim.getBirim') }}",
@@ -157,6 +220,9 @@
                   processing: true,
                   serverSide: true,
                   "deferRender": true,
+                  "order": [
+                      [0, "desc"]
+                  ],
                   "buttons": ["copy", "csv", "excel", "pdf", {
                       extend: 'print',
 
@@ -167,12 +233,17 @@
                   columns: [{
                           data: 'birim_id'
                       },
-
+                      {
+                          data: 'birim_donem'
+                      },
                       {
                           data: 'birim_ad'
                       },
                       {
                           data: 'birim_sorumlu'
+                      },
+                      {
+                          data: 'islemler'
                       },
                   ],
                   "language": {
@@ -241,7 +312,7 @@
               //console.log(formdata);
               $.ajax({
 
-                  url: '/birim.birimadd',
+                  url: '/birim/birimadd',
                   type: 'POST',
                   data: {
                       birim_ad: formdata[1]['value'],
@@ -268,9 +339,9 @@
                       document.getElementById("birimadd").reset();
                   },
                   error: function(data) {
-                      var dat = JSON.parse(data);
+                      // var dat = JSON.parse(data);
                       $('#modalAdd').modal('hide');
-
+                      console.log(data);
 
                       var Toast = Swal.mixin({
                           toast: true,
@@ -280,12 +351,12 @@
                       });
                       Toast.fire({
                           icon: 'error',
-                          title: dat["birimad"]
+                          title: data
 
                               +
                               '<br> İşlem başarısız <br>',
                       })
-                      document.getElementById("useradd").reset();
+                      document.getElementById("birimadd").reset();
                   },
               });
 

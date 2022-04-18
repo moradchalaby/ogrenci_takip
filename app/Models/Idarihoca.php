@@ -13,4 +13,15 @@ class Idarihoca extends Model
      * @var string
      */
     protected $table = 'idarihoca';
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'id',
+        'kullanici_id',
+
+
+    ];
 }

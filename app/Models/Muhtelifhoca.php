@@ -13,4 +13,15 @@ class Muhtelifhoca extends Model
      * @var string
      */
     protected $table = 'muhtelifhoca';
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'id',
+        'kullanici_id',
+
+
+    ];
 }

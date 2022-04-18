@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Personel;
 
 use App\Http\Controllers\Controller;
-use App\Models\Birim;
 use Illuminate\Http\Request;
+use App\Models\Birim;
+
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
-use App\Models\Birimhoca;
+use App\Models\Hafizlikhoca;
 
-class BirimhocaController extends Controller
+class HafizlikhocaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -29,7 +30,7 @@ class BirimhocaController extends Controller
 
             return response()->json($gonder);
         }
-        return view('personel.birim');
+        return view('personel.hafizlik');
     }
     public function hocagetir(Request $request)
     {
@@ -79,13 +80,13 @@ class BirimhocaController extends Controller
         $columnSortOrder = $order_arr[0]['dir']; // asc or desc
         $searchValue = $search_arr['value']; // Search value
         // Total records
-        $totalRecords = Birimhoca::select('count(*) as allcount')->count();
+        $totalRecords = Hafizlikhoca::select('count(*) as allcount')->count();
         /*    select('count(*) as allcount')->count(); */
         $totalRecordswithFilter =
             User::select('users.*', DB::raw('count(kullanici_id) as allcount'))
             ->rightJoin(
-                'birimhoca',
-                'birimhoca.kullanici_id',
+                'hafizlikhoca',
+                'hafizlikhoca.kullanici_id',
                 '=',
                 'users.id'
             )
@@ -93,13 +94,12 @@ class BirimhocaController extends Controller
 
         // Fetch records
         $records =
-            User::select('users.*', 'birimhoca.*', 'birim.*')
-            ->join('birimhoca', 'birimhoca.kullanici_id', '=', 'users.id')
-            ->join('birim', 'birim.birim_id', '=', 'birimhoca.birim_id')
+            User::select('users.*', 'hafizlikhoca.*')
+            ->join('hafizlikhoca', 'hafizlikhoca.kullanici_id', '=', 'users.id')
 
             ->orderBy($columnName, $columnSortOrder)
             ->where('users.name', 'like', '%' . $searchValue . '%')
-            ->select('users.*', 'birim.birim_ad', 'birim.birim_id as birimid')
+            ->select('users.*')
             ->skip($start)
             ->take($totalRecords)
             ->get();
@@ -112,7 +112,7 @@ class BirimhocaController extends Controller
             $kullanici_resim = $record->kullanici_resim;
             $name = $record->name;
 
-            $birim  = $record->birim_ad;
+
 
             $data_arr[] = array(
 
@@ -120,7 +120,7 @@ class BirimhocaController extends Controller
 
                 "name" => '<a href="#" onclick="alert(\'Hello world!\')">' . $name . '</a>',
 
-                "birim_ad" => $birim,
+
                 "islemler" => '<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-id="' . $id . '" data="' . strval($record) . '"
                                           data-target="#modalAdd">
 
@@ -155,8 +155,8 @@ class BirimhocaController extends Controller
         //
         if ($request->ajax()) {
 
-            $data = Birimhoca::updateOrCreate(
-                ['birim_id' => $request->birim_id],
+            $data = Hafizlikhoca::updateOrCreate(
+                ['kullanici_id' => $request->kullanici_id],
                 [
                     'kullanici_id' => $request->kullanici_id,
                     'birim_id' => $request->birim_id,
@@ -165,6 +165,7 @@ class BirimhocaController extends Controller
             return response()->json($data);
         }
     }
+
     /**
      * Store a newly created resource in storage.
      *

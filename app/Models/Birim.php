@@ -13,4 +13,15 @@ class Birim extends Model
      * @var string
      */
     protected $table = 'birim';
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'birim_id',
+        'birim_ad',
+        'birim_donem',
+
+    ];
 }

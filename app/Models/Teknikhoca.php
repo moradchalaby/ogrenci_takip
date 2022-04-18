@@ -13,4 +13,15 @@ class Teknikhoca extends Model
      * @var string
      */
     protected $table = 'teknikpersonel';
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'id',
+        'kullanici_id',
+
+
+    ];
 }

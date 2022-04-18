@@ -42,7 +42,7 @@ class BirimController extends Controller
         $totalRecords = Birim::select('count(*) as allcount')->count();
         $totalRecordswithFilter =
             Birim::select('birim.*', 'birimhoca.*', 'users.*')
-            ->join(
+            ->leftJoin(
                 'birimhoca',
                 'birimhoca.birim_id',
                 '=',
@@ -55,11 +55,17 @@ class BirimController extends Controller
         // Fetch records
         $records =
             Birim::select('birim.*', 'birimhoca.*', 'users.*')
-            ->join(
+            ->leftJoin(
                 'birimhoca',
                 'birimhoca.birim_id',
                 '=',
                 'birim.birim_id'
+            )
+            ->leftJoin(
+                'users',
+                'users.id',
+                '=',
+                'birimhoca.kullanici_id'
             )
 
 
@@ -68,6 +74,10 @@ class BirimController extends Controller
             ->select(
 
                 'birim.*',
+                'users.name',
+                'users.id'
+
+
 
             )
             ->skip($start)
@@ -78,6 +88,7 @@ class BirimController extends Controller
 
         foreach ($records as $record) {
             $birim_id = $record->birim_id;
+            $birim_donem = $record->birim_donem;
             $birim_ad = $record->birim_ad;
             $birim_sorumlu = $record->name;
 
@@ -85,18 +96,18 @@ class BirimController extends Controller
             $data_arr[] = array(
 
                 "birim_ad" =>  $birim_ad,
-
+                "birim_donem" => $birim_donem,
                 "birim_id" => '<a href="#" onclick="alert(\'Hello world!\')">' . $birim_id . '</a>',
                 "birim_sorumlu" => $birim_sorumlu,
-                "islemler" => '<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-id="' . $birim_id . '" data="' . strval($record) . '"
-                                          data-target="#modalAdd">
+                "islemler" => '<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-id="' . $birim_id . '" data-ad="' . $birim_ad . '"
+                                          data-target="#modalEdit">
 
-                                          Suzenle
-                                      </button><input type="hidden" id="veri' . $birim_id . '" value="' . strval($record) . '">
+                                         <i class="fa-solid fa-pen-to-square"></i>
+                                      </button>'/*  <input type="hidden" id="veri' . $birim_id . '" value="' . strval($record) . '">
                                           <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
                                           data-target="#modalAdd">
                                           Sil
-                                      </button>'
+                                      </button>*/
             );
         }
 
@@ -112,14 +123,15 @@ class BirimController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
+     *  Store a newly created resource in storage.
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function birimadd(Request $request)
     {
 
         //
+        /*  echo 'geldik'; */
         if ($request->ajax()) {
 
             $data = Birim::create([

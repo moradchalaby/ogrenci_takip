@@ -13,4 +13,15 @@ class Birimhoca extends Model
      * @var string
      */
     protected $table = 'birimhoca';
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'birim_id',
+        'kullanici_id',
+
+
+    ];
 }

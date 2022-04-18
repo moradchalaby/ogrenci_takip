@@ -57,17 +57,64 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fa-solid fa-row nav-icon"></i>
+                                <p>İdari Hocalar</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="/personel" class="nav-link">
                                 <i class="fa-solid fa-people-group nav-icon"></i>
                                 <p>Hocalar</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/birimhoca" class="nav-link">
-                                <i class="fa-solid fa-people-group nav-icon"></i>
-                                <p>Birim Hocaları</p>
+                            <a href="/birim" class="nav-link">
+                                <i class="fa-solid fa-address-card nav-icon"></i>
+                                <p>Birimler</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('birimhoca.index') }}" class="nav-link">
+                                <i class="fa-solid fa-row nav-icon"></i>
+                                <p>Birim Sorumluları</p>
+                            </a>
+                        </li>
+                        <li class="nav-header">HOCALAR</li>
+                        <li class="nav-item">
+                            <a href="{{ route('hafizlikhoca.index') }}" class="nav-link">
+                                <i class="fa-solid fa-row nav-icon"></i>
+                                <p>Hafızlık Hocaları</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fa-solid fa-row nav-icon"></i>
+                                <p>İhtisas Hocaları</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('bekarhoca.index') }}" class="nav-link">
+                                <i class="fa-solid fa-row nav-icon"></i>
+                                <p>Bekar Hocalar</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fa-solid fa-row nav-icon"></i>
+                                <p>Muhtelif Hocalar</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fa-solid fa-row nav-icon"></i>
+                                <p>Teknik Personel</p>
+                            </a>
+                        </li>
+
+
+
 
                     </ul>
                 </li>

@@ -82,10 +82,10 @@
                       </button>
                   </div>
                   <div class="modal-body">
-                      <form method="POST" id="useradd" action="#">
+                      <form id="birimhocaekle" action="">
                           @csrf
                           <div class="input-group mb-3">
-                              <select id="hoca" class="form-control">
+                              <select id="hoca" name="kullanici_id" class="form-control">
                               </select>
                               <div class="input-group-append">
                                   <div class="input-group-text">
@@ -94,7 +94,7 @@
                               </div>
                           </div>
                           <div class="input-group mb-3">
-                              <select id="birim" class="form-control">
+                              <select id="birim" name="birim_id" class="form-control">
                               </select>
                               <div class="input-group-append">
                                   <div class="input-group-text">
@@ -149,6 +149,72 @@
       <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
       <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
       <script>
+          $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          });
+          $('#birimhocaekle').on("submit", function(e) {
+              console.log('çalıştı')
+              e.preventDefault();
+              var formdata = $('#birimhocaekle').serializeArray();
+              console.log(formdata);
+              $.ajax({
+
+                  url: "{{ route('birimhoca.create') }}",
+                  type: 'POST',
+                  data: {
+                      kullanici_id: formdata[1]['value'],
+                      birim_id: formdata[2]['value'],
+
+
+
+                  },
+                  dataType: 'text',
+                  success: (data) => {
+                      var dat = JSON.parse(data);
+                      $("#example1").DataTable().ajax.reload();
+                      $('#modalAdd').modal('hide');
+                      console.log(data);
+                      var Toast = Swal.mixin({
+                          toast: true,
+                          position: 'top',
+                          showConfirmButton: false,
+                          timer: 3000
+                      });
+                      Toast.fire({
+                          icon: 'success',
+                          title: dat["name"] + '<br>  İşlem Başarılı <br>',
+                      })
+
+                      document.getElementById("birimhocaekle").reset();
+                  },
+                  error: function(data) {
+                      var dat = JSON.parse(data);
+                      $('#modalAdd').modal('hide');
+
+
+                      var Toast = Swal.mixin({
+                          toast: true,
+                          position: 'top',
+                          showConfirmButton: false,
+                          timer: 3000
+                      });
+                      Toast.fire({
+                          icon: 'error',
+                          title: dat["name"]
+
+                              +
+                              '<br> İşlem başarısız <br>',
+                      })
+                      document.getElementById("useradd").reset();
+                  },
+              });
+
+
+          })
+      </script>
+      <script>
           $(function() {
               var table = $("#example1").DataTable({
                   ajax: "{{ route('birimhoca.getBirim') }}",
@@ -156,6 +222,7 @@
                   processing: true,
                   serverSide: true,
                   "deferRender": true,
+                  order: 'desc',
                   "buttons": ["copy", "csv", "excel", "pdf", {
                       extend: 'print',
 
@@ -256,72 +323,5 @@
                   }
               });
           }
-      </script>
-      <script>
-          $.ajaxSetup({
-              headers: {
-                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-              }
-          });
-          $('#useradd').on("submit", function(e) {
-              e.preventDefault();
-              var formdata = $('#useradd').serializeArray();
-              //console.log(formdata);
-              $.ajax({
-
-                  url: '{{ route('register') }}',
-                  type: 'POST',
-                  data: {
-                      name: formdata[1]['value'],
-                      email: formdata[2]['value'],
-                      password: formdata[3]['value'],
-                      password_confirmation: formdata[4]['value'],
-                      terms: formdata[5]['value'],
-
-
-                  },
-                  dataType: 'text',
-                  success: (data) => {
-                      var dat = JSON.parse(data);
-                      $("#example1").DataTable().ajax.reload();
-                      $('#modalAdd').modal('hide');
-                      console.log(data);
-                      var Toast = Swal.mixin({
-                          toast: true,
-                          position: 'top',
-                          showConfirmButton: false,
-                          timer: 3000
-                      });
-                      Toast.fire({
-                          icon: 'success',
-                          title: dat["name"] + '<br>  İşlem Başarılı <br>',
-                      })
-
-                      document.getElementById("useradd").reset();
-                  },
-                  error: function(data) {
-                      var dat = JSON.parse(data);
-                      $('#modalAdd').modal('hide');
-
-
-                      var Toast = Swal.mixin({
-                          toast: true,
-                          position: 'top',
-                          showConfirmButton: false,
-                          timer: 3000
-                      });
-                      Toast.fire({
-                          icon: 'error',
-                          title: dat["name"]
-
-                              +
-                              '<br> İşlem başarısız <br>',
-                      })
-                      document.getElementById("useradd").reset();
-                  },
-              });
-
-
-          })
       </script>
   @endsection
