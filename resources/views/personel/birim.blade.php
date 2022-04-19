@@ -222,7 +222,7 @@
                   processing: true,
                   serverSide: true,
                   "deferRender": true,
-                  order: 'desc',
+
                   "buttons": ["copy", "csv", "excel", "pdf", {
                       extend: 'print',
 
@@ -251,7 +251,6 @@
                           print: "Yazdır"
                       },
                       "decimal": "",
-
                       "emptyTable": "Tabloda veri yok",
                       "info": "",
                       "infoEmpty": "",
@@ -301,7 +300,7 @@
           function hocagetir() {
               $.ajax({
                   type: 'post',
-                  url: '/hocagetir',
+                  url: "{{ route('birimhoca.hocagetir') }}",
                   data: {
                       get_option: true
                   },
@@ -314,7 +313,7 @@
           function birimgetir() {
               $.ajax({
                   type: 'post',
-                  url: '/birimgetir',
+                  url: "{{ route('birimhoca.birimgetir') }}",
                   data: {
                       get_option: true
                   },
