@@ -41,20 +41,7 @@
                               </div>
                               <!-- /.card-header -->
                               <div class="card-body">
-                                  <table id="example1" class="table table-bordered table-striped">
-                                      <thead>
-                                          <tr>
-                                              <td>Resim</td>
-
-                                              <td>Name</td>
-
-
-                                              <td>Islemler</td>
-                                          </tr>
-                                      </thead>
-                                      <tbody></tbody>
-
-                                  </table>
+                                  {!! $html->table() !!}
                               </div>
                               <!-- /.card-body -->
                           </div>
@@ -147,6 +134,7 @@
       <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
       <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
       <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
       <script>
           $.ajaxSetup({
               headers: {
@@ -213,78 +201,7 @@
 
           })
       </script>
-      <script>
-          $(function() {
-              var table = $("#example1").DataTable({
-                  ajax: "{{ route('hafizlikhoca.getBirim') }}",
 
-                  processing: true,
-                  serverSide: true,
-                  "deferRender": true,
-
-                  "buttons": ["copy", "csv", "excel", "pdf", {
-                      extend: 'print',
-
-                      exportOptions: {
-                          columns: ':visible'
-                      }
-                  }, "colvis"],
-                  columns: [{
-                          data: 'kullanici_resim'
-                      },
-                      {
-                          data: 'name'
-                      },
-
-                      {
-                          data: 'islemler'
-                      },
-                  ],
-                  "language": {
-                      buttons: {
-                          colvis: 'Sütun Seç',
-                          copy: "Kopyala",
-                          print: "Yazdır"
-                      },
-                      "decimal": "",
-
-                      "emptyTable": "Tabloda veri yok",
-                      "info": "",
-                      "infoEmpty": "",
-                      "infoFiltered": "(Toplam _MAX_ kayıt.)",
-                      "infoPostFix": "",
-                      "thousands": ",",
-                      "lengthMenu": "Gösterilen _MENU_",
-                      "loadingRecords": "Yükleniyor...",
-                      "processing": "İşleniyor...",
-                      "search": "Arama:",
-                      "zeroRecords": "Eşleşen kayıt bulunamadı",
-                      "paginate": {
-                          "first": "İlk",
-                          "last": "Son",
-                          "next": "İleri",
-                          "previous": "Geri"
-                      },
-                      "aria": {
-                          "sortAscending": ": sütunu artan şekilde sıralamak için etkinleştirin",
-                          "sortDescending": ": sütunu azalan sıralamak için etkinleştir"
-                      }
-                  },
-                  "responsive": true,
-                  "lengthMenu": [
-                      [-1, 10, 25, 50],
-                      ["Tümü", 10, 25, 50]
-                  ],
-                  "autoWidth": true,
-                  initComplete: function() {
-                      table.buttons().container()
-                          .appendTo($('.col-md-6:eq(0)', table.table().container()));
-                  }
-
-              });
-
-          });
-      </script>
       <script>
           $.ajaxSetup({
               headers: {

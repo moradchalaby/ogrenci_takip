@@ -9,12 +9,12 @@
               <div class="container-fluid">
                   <div class="row mb-2">
                       <div class="col-sm-6">
-                          <h1>DataTables</h1>
+                          <h1>{!! $veri['title'] !!}</h1>
                       </div>
                       <div class="col-sm-6">
                           <ol class="breadcrumb float-sm-right">
                               <li class="breadcrumb-item"><a href="#">Home</a></li>
-                              <li class="breadcrumb-item active">DataTables</li>
+                              <li class="breadcrumb-item active">{!! $veri['page'] !!}</li>
                           </ol>
                       </div>
                   </div>
@@ -30,7 +30,7 @@
 
                           <div class="card">
                               <div class="card-header">
-                                  <h3 class="card-title">DataTable with default features</h3>
+                                  <h3 class="card-title">{!! $veri['table_desc'] !!}</h3>
                                   <div class="card-tools">
                                       <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
                                           data-target="#modalAdd">
@@ -41,27 +41,7 @@
                               </div>
                               <!-- /.card-header -->
                               <div class="card-body">
-                                  <table id="example1" class="table table-bordered table-striped">
-                                      <thead>
-                                          <tr>
-                                              <td>Resim</td>
-
-                                              <td>Name</td>
-                                              <td>Email</td>
-                                              <td>Islemler</td>
-                                          </tr>
-                                      </thead>
-                                      <tbody></tbody>
-                                      <tfoot>
-                                          <tr>
-                                              <td>Resim</td>
-
-                                              <td>Name</td>
-                                              <td>Email</td>
-                                              <td>Islemler</td>
-                                          </tr>
-                                      </tfoot>
-                                  </table>
+                                  {!! $html->table() !!}
                               </div>
                               <!-- /.card-body -->
                           </div>
@@ -199,48 +179,34 @@
       <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
       <script src="dist/js/tolower.js"></script>
       <script>
-          $(function() {
-              var table = $("#example1").DataTable({
+          (function($, DataTable) {
 
-                  ajax: "{{ route('personel.getEmployees') }}",
-
-                  processing: true,
-                  serverSide: true,
-                  "deferRender": true,
-                  "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-                  "search": {
-                      "caseInsensitive": true
+              // Datatable global configuration
+              $.extend(true, DataTable.defaults, {
+                  language: {
+                      "url": "/dist/js/tr.json"
                   },
-                  columns: [{
-                          data: 'kullanici_resim'
-                      },
-                      {
-                          data: 'name'
-                      },
 
-                      {
-                          data: 'email'
-                      },
-                      {
-                          data: 'islemler'
-                      },
-                  ],
+                  "buttons": ["copy", "csv", "excel", "pdf", {
+                      extend: 'print',
+
+                      exportOptions: {
+                          columns: ':visible'
+                      }
+                  }, "colvis"],
                   "responsive": true,
                   "lengthMenu": [
                       [-1, 10, 25, 50],
-                      ["All", 10, 25, 50]
+                      ["Tümü", 10, 25, 50]
                   ],
                   "autoWidth": true,
-                  initComplete: function() {
-                      table.buttons().container()
-                          .appendTo($('.col-md-6:eq(0)', table.table().container()));
-
-                  }
 
               });
 
-          });
+          })(jQuery, jQuery.fn.dataTable);
       </script>
+
+      {!! $html->scripts() !!}
       <script>
           $.ajaxSetup({
               headers: {

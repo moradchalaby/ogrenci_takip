@@ -75,7 +75,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('birimhoca.index') }}" class="nav-link">
+                            <a href="{{ route('birimhoca.index') }}"
+                                class="nav-link {{ active('birimhoca.index') }}">
                                 <i class="fa-solid fa-row nav-icon"></i>
                                 <p>Birim Sorumluları</p>
                             </a>
@@ -107,7 +108,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="#" class="nav-link ">
                                 <i class="fa-solid fa-row nav-icon"></i>
                                 <p>Teknik Personel</p>
                             </a>
@@ -125,4 +126,5 @@
         <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
+
 </aside>

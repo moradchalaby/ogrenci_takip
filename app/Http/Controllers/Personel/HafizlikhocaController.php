@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Hafizlikhoca;
 
+use \Yajra\Datatables\Datatables;
+use Yajra\DataTables\Html\Builder;
+
 class HafizlikhocaController extends Controller
 {
     /**
@@ -17,20 +20,56 @@ class HafizlikhocaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, Builder $builder)
     {
 
-        //
-        if ($request->ajax()) {
+        if (request()->ajax()) {
+            $data
+                = User::select('users.*', 'hafizlikhoca.*')
+                ->join('hafizlikhoca', 'hafizlikhoca.kullanici_id', '=', 'users.id')
 
-            $data = User::get(['id', 'name']);
-            foreach ($data as $veri) {
-                $gonder[] = "<option value=\"" . $veri['id'] . "\">" . $veri['name'] . "</option>";
-            }
 
-            return response()->json($gonder);
+                ->select('users.*', 'users.id', 'users.email', 'users.kullanici_resim');
+
+
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('resim', function ($row) {
+
+                    $resim = '<img alt="Avatar" class="avatar" src="' . $row['kullanici_resim'] . '">';
+
+                    return $resim;
+                })
+                ->addColumn('action', function ($row) {
+
+                    $btn = '<a type="button" class="btn btn-success btn-xs" data-toggle="modal" data-id="' . $row['id'] . '" data="' . strval($row) . '"
+                                          data-target="#modalAdd">
+
+                                          Düzenle
+                                      </a>';
+
+                    return $btn;
+                })
+                ->rawColumns(['resim', 'action'])
+                ->make(true);
         }
-        return view('personel.hafizlik');
+
+        $html = $builder->columns([
+            ['data' => 'id', 'name' => 'id', 'title' => 'Id'],
+            ['data' => 'resim', 'name' => 'resim', 'title' => 'Resim'],
+            ['data' => 'name', 'name' => 'name', 'title' => 'Name'],
+            ['data' => 'email', 'name' => 'email', 'title' => 'Email'],
+            ['data' => 'action', 'name' => 'action', 'title' => 'İşlemler'],
+            ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Updated At'],
+        ])->lengthMenu([
+            [-1, 10, 25, 50],
+            ["Tümü", 10, 25, 50]
+        ],)
+
+            ->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
+
+        return view('personel.index', compact('html'));
     }
     public function hocagetir(Request $request)
     {
@@ -65,83 +104,31 @@ class HafizlikhocaController extends Controller
     public function getBirim(Request $request)
     {
 
-        ## Read value
-        $draw = $request->get('draw');
-        $start = $request->get("start");
-        $rowperpage = $request->get("length"); // Rows display per page
-
-        $columnIndex_arr = $request->get('order');
-        $columnName_arr = $request->get('columns');
-        $order_arr = $request->get('order');
-        $search_arr = $request->get('search');
-
-        $columnIndex = $columnIndex_arr[0]['column']; // Column index
-        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
-        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
-        $searchValue = $search_arr['value']; // Search value
-        // Total records
-        $totalRecords = Hafizlikhoca::select('count(*) as allcount')->count();
-        /*    select('count(*) as allcount')->count(); */
-        $totalRecordswithFilter =
-            User::select('users.*', DB::raw('count(kullanici_id) as allcount'))
-            ->rightJoin(
-                'hafizlikhoca',
-                'hafizlikhoca.kullanici_id',
-                '=',
-                'users.id'
-            )
-            ->groupBy('users.id')->where('name', 'like', '%' . $searchValue . '%')->count();
-
-        // Fetch records
-        $records =
-            User::select('users.*', 'hafizlikhoca.*')
-            ->join('hafizlikhoca', 'hafizlikhoca.kullanici_id', '=', 'users.id')
-
-            ->orderBy($columnName, $columnSortOrder)
-            ->where('users.name', 'like', '%' . $searchValue . '%')
-            ->select('users.*')
-            ->skip($start)
-            ->take($totalRecords)
-            ->get();
+        if ($request->ajax()) {
+            $data
+                = User::select('users.*', 'hafizlikhoca.*')
+                ->join('hafizlikhoca', 'hafizlikhoca.kullanici_id', '=', 'users.id')
 
 
-        $data_arr = array();
-
-        foreach ($records as $record) {
-            $id = $record->id;
-            $kullanici_resim = $record->kullanici_resim;
-            $name = $record->name;
+                ->select('users.name', 'users.id', 'users.email', 'users.kullanici_resim');
 
 
 
-            $data_arr[] = array(
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
 
-                "kullanici_resim" => '<img alt="Avatar" class="avatar" src="' . $kullanici_resim . '">',
-
-                "name" => '<a href="#" onclick="alert(\'Hello world!\')">' . $name . '</a>',
-
-
-                "islemler" => '<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-id="' . $id . '" data="' . strval($record) . '"
+                    $btn = '<a type="button" class="btn btn-success btn-xs" data-toggle="modal" data-id="' . $row['id'] . '" data="' . strval($row) . '"
                                           data-target="#modalAdd">
 
-                                          Suzenle
-                                      </button><input type="hidden" id="veri' . $id . '" value="' . strval($record) . '">
-                                          <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
-                                          data-target="#modalAdd">
-                                          Sil
-                                      </button>'
-            );
+                                          Düzenle
+                                      </a>';
+
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
         }
-
-        $response = array(
-            "draw" => intval($draw),
-            "iTotalRecords" => $totalRecords,
-            "iTotalDisplayRecords" => $totalRecordswithFilter,
-            "aaData" => $data_arr
-        );
-
-        echo json_encode($response);
-        exit;
     }
 
     /**

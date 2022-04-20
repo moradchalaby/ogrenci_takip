@@ -41,27 +41,7 @@
                               </div>
                               <!-- /.card-header -->
                               <div class="card-body">
-                                  <table id="example1" class="table table-bordered table-striped">
-                                      <thead>
-                                          <tr>
-                                              <td>Resim</td>
-
-                                              <td>Name</td>
-                                              <td>Email</td>
-                                              <td>Islemler</td>
-                                          </tr>
-                                      </thead>
-                                      <tbody></tbody>
-                                      <tfoot>
-                                          <tr>
-                                              <td>Resim</td>
-
-                                              <td>Name</td>
-                                              <td>Email</td>
-                                              <td>Islemler</td>
-                                          </tr>
-                                      </tfoot>
-                                  </table>
+                                  {!! $html->table() !!}
                               </div>
                               <!-- /.card-body -->
                           </div>

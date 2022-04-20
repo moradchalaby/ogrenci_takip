@@ -14,6 +14,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
         "nesbot/carbon": "^2.57",
+        "watson/active": "^6.0",
         "yajra/laravel-datatables": "1.5"
     },
     "require-dev": {

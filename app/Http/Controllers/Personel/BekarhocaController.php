@@ -9,6 +9,8 @@ use App\Models\Birim;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Bekarhoca;
+use \Yajra\Datatables\Datatables;
+use Yajra\DataTables\Html\Builder;
 
 class BekarhocaController extends Controller
 {
@@ -17,20 +19,58 @@ class BekarhocaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, Builder $builder)
     {
 
-        //
-        if ($request->ajax()) {
 
-            $data = User::get(['id', 'name']);
-            foreach ($data as $veri) {
-                $gonder[] = "<option value=\"" . $veri['id'] . "\">" . $veri['name'] . "</option>";
-            }
+        if (request()->ajax()) {
+            $data
+                = User::select('users.*', 'bekarhoca.*')
+                ->join('bekarhoca', 'bekarhoca.kullanici_id', '=', 'users.id')
 
-            return response()->json($gonder);
+
+                ->select('users.*', 'users.id', 'users.email', 'users.kullanici_resim');
+
+
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('resim', function ($row) {
+
+                    $resim = '<img alt="Avatar" class="avatar" src="' . $row['kullanici_resim'] . '">';
+
+                    return $resim;
+                })
+                ->addColumn('action', function ($row) {
+
+                    $btn = '<a type="button" class="btn btn-success btn-xs" data-toggle="modal" data-id="' . $row['id'] . '" data="' . strval($row) . '"
+                                          data-target="#modalAdd">
+
+                                          Düzenle
+                                      </a>';
+
+                    return $btn;
+                })
+                ->rawColumns(['resim', 'action'])
+                ->make(true);
         }
-        return view('personel.bekar');
+
+        $html = $builder->columns([
+            ['data' => 'id', 'name' => 'id', 'title' => 'Id'],
+            ['data' => 'resim', 'name' => 'resim', 'title' => 'Resim'],
+            ['data' => 'name', 'name' => 'name', 'title' => 'Name'],
+            ['data' => 'email', 'name' => 'email', 'title' => 'Email'],
+            ['data' => 'action', 'name' => 'action', 'title' => 'İşlemler'],
+            ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Updated At'],
+        ])->lengthMenu([
+            [-1, 10, 25, 50],
+            ["Tümü", 10, 25, 50]
+        ],)
+
+            ->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
+
+
+        return view('personel.index', compact('html'));
     }
     public function hocagetir(Request $request)
     {

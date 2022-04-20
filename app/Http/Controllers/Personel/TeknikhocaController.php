@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Personel;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use \Yajra\Datatables\Datatables;
+use Yajra\DataTables\Html\Builder;
 
 class TeknikhocaController extends Controller
 {

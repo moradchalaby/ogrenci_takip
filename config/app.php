@@ -166,6 +166,7 @@ return [
          * Package Service Providers...
          */
         yajra\Datatables\DatatablesServiceProvider::class,
+        Watson\Active\ActiveServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -231,6 +232,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Datatables' => yajra\Datatables\Datatables::class,
+        'Active' => Watson\Active\Facades\Active::class,
 
     ],
 
