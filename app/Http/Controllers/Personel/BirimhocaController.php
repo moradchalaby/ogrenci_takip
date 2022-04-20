@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Birimhoca;
 
-use Datatables;
+use \Yajra\Datatables\Datatables;
 
 class BirimhocaController extends Controller
 {
