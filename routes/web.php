@@ -41,6 +41,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'User'], function () {
 
         //?BirimHoca
         Route::get('/birimhoca/getBirim/', [BirimhocaController::class, 'getBirim'])->name('birimhoca.getBirim');
+        Route::get('/birimhoca/store/', [BirimhocaController::class, 'store'])->name('birimhoca.store');
         Route::post('/birimhoca/birimhocaekle/', [BirimhocaController::class, 'create'])->name('birimhoca.create');
         Route::get('/birimhoca', [BirimhocaController::class, 'index'])->name('birimhoca.index');
         Route::post('/birimhoca/hocagetir', [BirimhocaController::class, 'hocagetir'])->name('birimhoca.hocagetir');

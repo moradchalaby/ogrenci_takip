@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Birimhoca;
 
+use Datatables;
+
 class BirimhocaController extends Controller
 {
     /**
@@ -144,6 +146,7 @@ class BirimhocaController extends Controller
         exit;
     }
 
+
     /**
      * Show the form for creating a new resource.
      *
@@ -173,7 +176,27 @@ class BirimhocaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $data =
+                User::select('users.*', 'birimhoca.*', 'birim.*')
+                ->join('birimhoca', 'birimhoca.kullanici_id', '=', 'users.id')
+                ->join('birim', 'birim.birim_id', '=', 'birimhoca.birim_id')
+
+
+                ->select('users.*', 'birim.birim_ad', 'birim.birim_id as birimid');
+
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+
+                    $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
+
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
     }
 
     /**

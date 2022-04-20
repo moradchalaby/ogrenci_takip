@@ -44,15 +44,15 @@
                                   <table id="example1" class="table table-bordered table-striped">
                                       <thead>
                                           <tr>
-                                              <td>Resim</td>
-
-                                              <td>Name</td>
-
-                                              <td>Birim</td>
-                                              <td>Islemler</td>
+                                              <th>No</th>
+                                              <th>Name</th>
+                                              <th>Birim</th>
+                                              <th>Email</th>
+                                              <th width="100px">Action</th>
                                           </tr>
                                       </thead>
-                                      <tbody></tbody>
+                                      <tbody>
+                                      </tbody>
 
                                   </table>
                               </div>
@@ -217,31 +217,29 @@
       <script>
           $(function() {
               var table = $("#example1").DataTable({
-                  ajax: "{{ route('birimhoca.getBirim') }}",
-
                   processing: true,
                   serverSide: true,
-                  "deferRender": true,
-
-                  "buttons": ["copy", "csv", "excel", "pdf", {
-                      extend: 'print',
-
-                      exportOptions: {
-                          columns: ':visible'
-                      }
-                  }, "colvis"],
+                  ajax: "{{ route('birimhoca.store') }}",
                   columns: [{
-                          data: 'kullanici_resim'
+                          data: 'id',
+                          name: 'id'
                       },
                       {
-                          data: 'name'
+                          data: 'name',
+                          name: 'name'
+                      }, {
+                          data: 'birim_ad',
+                          name: 'birim_ad'
                       },
-
                       {
-                          data: 'birim_ad'
+                          data: 'email',
+                          name: 'email'
                       },
                       {
-                          data: 'islemler'
+                          data: 'action',
+                          name: 'action',
+                          orderable: false,
+                          searchable: false
                       },
                   ],
                   "language": {
