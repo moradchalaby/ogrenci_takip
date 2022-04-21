@@ -30,9 +30,12 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         // Admin  mi ?
-        Gate::define('yetkili', function ($user) {
+        Gate::define('yetkili', function ($user, $post) {
+            if ($post == '') {
+                $post = Request::route()->getPrefix();
+            }
             return
-                $user->hasRole(Request::route()->getPrefix()) ? Response::allow() : Response::deny('Bu işlem için kullanıcı olmalısınız!');
+                $user->hasRole($post) ? Response::allow() : Response::deny('Bu işlem için kullanıcı olmalısınız!');
             /* return
                 $user->hasRole('admin') ? Response::allow() : Response::deny('Bu işlem için admin olmalısınız!'); */
         });

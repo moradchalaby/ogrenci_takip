@@ -92,20 +92,24 @@
                             </a>
                         </li>
                         <li class="nav-header">HOCALAR</li>
-                        <li class="nav-item">
-                            <a href="{{ route('hafizlikhoca.index') }}"
-                                class="nav-link {{ active('hafizlikhoca.index') }}">
-                                <i class="fa-solid fa-row nav-icon"></i>
-                                <p>Hafızlık Hocaları</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('ihtisashoca.index') }}"
-                                class="nav-link {{ active('ihtisashoca.index') }}">
-                                <i class="fa-solid fa-row nav-icon"></i>
-                                <p>İhtisas Hocaları</p>
-                            </a>
-                        </li>
+                        @can('yetkili', '/hafizlikhoca')
+                            <li class="nav-item">
+                                <a href="{{ route('hafizlikhoca.index') }}"
+                                    class="nav-link {{ active('hafizlikhoca.index') }}">
+                                    <i class="fa-solid fa-row nav-icon"></i>
+                                    <p>Hafızlık Hocaları</p>
+                                </a>
+                            </li>
+                        @endcan
+                        @cannot('yetkili', '/teknikhoca')
+                            <li class="nav-item">
+                                <a href="{{ route('ihtisashoca.index') }}"
+                                    class="nav-link {{ active('ihtisashoca.index') }}">
+                                    <i class="fa-solid fa-row nav-icon"></i>
+                                    <p>İhtisas Hocaları</p>
+                                </a>
+                            </li>
+                        @endcannot
                         <li class="nav-item">
                             <a href="{{ route('bekarhoca.index') }}"
                                 class="nav-link {{ active('bekarhoca.index') }}">

@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Personel;
 
 use App\Http\Controllers\Controller;
 use App\Models\Birim;
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Birimhoca;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Request as FacadesRequest;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use \Yajra\Datatables\Datatables;
 use Yajra\DataTables\Html\Builder;
@@ -18,8 +18,13 @@ class BirimhocaController extends Controller
 {
     public function __construct()
     {
-
-        $this->middleware('can:yetkili');
+        /*
+routes 'e prefix isimlerini ekleyeceğiz
+user_route 'a yetkilendirme yapacağız
+*/
+        if (Gate::allows('yetkili', Request::route()->getPrefix())) {
+            $this->middleware('auth');
+        }
     }
     /**
      * Display a listing of the resource.
