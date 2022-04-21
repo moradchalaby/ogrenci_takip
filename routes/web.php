@@ -43,14 +43,15 @@ Route::group(['middleware' => 'auth', 'namespace' => 'User'], function () {
         Route::get('/personel', [PersonelController::class, 'index'])->name('personel.index');
 
         Route::get('/personel/getEmployees/', [PersonelController::class, 'getEmployees'])->name('personel.getEmployees');
-
-        //?BirimHoca
-        Route::get('/birimhoca/getBirim/', [BirimhocaController::class, 'getBirim'])->name('birimhoca.getBirim');
-        Route::get('/birimhoca/store/', [BirimhocaController::class, 'store'])->name('birimhoca.store');
-        Route::post('/birimhoca/birimhocaekle/', [BirimhocaController::class, 'create'])->name('birimhoca.create');
-        Route::get('/birimhoca', [BirimhocaController::class, 'index'])->name('birimhoca.index');
-        Route::post('/birimhoca/hocagetir', [BirimhocaController::class, 'hocagetir'])->name('birimhoca.hocagetir');
-        Route::post('/birimhoca/birimgetir', [BirimhocaController::class, 'birimgetir'])->name('birimhoca.birimgetir');
+        Route::prefix('birimhoca')->group(function () {
+            //?BirimHoca
+            Route::get('/getBirim', [BirimhocaController::class, 'getBirim'])->name('birimhoca.getBirim');
+            Route::get('/store', [BirimhocaController::class, 'store'])->name('birimhoca.store');
+            Route::post('/birimhocaekle', [BirimhocaController::class, 'create'])->name('birimhoca.create');
+            Route::get('/', [BirimhocaController::class, 'index'])->name('birimhoca.index');
+            Route::get('/hocagetir', [BirimhocaController::class, 'hocagetir'])->name('birimhoca.hocagetir');
+            Route::post('/birimgetir', [BirimhocaController::class, 'birimgetir'])->name('birimhoca.birimgetir');
+        });
         //?BekarHoca
         Route::get('/bekarhoca/getBirim/', [BekarhocaController::class, 'getBirim'])->name('bekarhoca.getBirim');
         Route::post('/bekarhoca/bekarhocaekle/', [BekarhocaController::class, 'create'])->name('bekarhoca.create');

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAlanlarTable extends Migration
+class CreateRoleUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateAlanlarTable extends Migration
      */
     public function up()
     {
-        Schema::create('alanlar', function (Blueprint $table) {
+        Schema::create('role_user', function (Blueprint $table) {
             $table->id();
-            $table->string('alan_ad');
-            $table->string('alan_onem');
+            $table->unsignedBigInteger('role_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateAlanlarTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('alanlar');
+        Schema::dropIfExists('role_user');
     }
 }

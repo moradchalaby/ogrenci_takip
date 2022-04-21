@@ -8,11 +8,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Birimhoca;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Request as FacadesRequest;
+use Illuminate\Support\Facades\Route;
 use \Yajra\Datatables\Datatables;
 use Yajra\DataTables\Html\Builder;
 
 class BirimhocaController extends Controller
 {
+    public function __construct()
+    {
+
+        $this->middleware('can:yetkili');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,6 +28,9 @@ class BirimhocaController extends Controller
      */
     public function index(Request $request, Builder $builder)
     {
+
+        $veri['title'] = 'Birim Sorumluları';
+        $veri['name'] = 'Birim Sorumlusu';
 
 
         if (request()->ajax()) {
@@ -68,14 +79,15 @@ class BirimhocaController extends Controller
 
             ->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
 
-        $veri['title'] = 'Birim Sorumluları';
-        $veri['name'] = 'Birim Sorumlusu';
+
 
 
         return view('personel.birim', compact('html', 'veri'));
     }
     public function hocagetir(Request $request)
     {
+        dd(FacadesRequest::route()->getPrefix());
+        exit;
 
         //
         if ($request->ajax()) {
