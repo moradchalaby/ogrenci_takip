@@ -9,17 +9,18 @@
               <div class="container-fluid">
                   <div class="row mb-2">
                       <div class="col-sm-6">
-                          <h1>DataTables</h1>
+                          <h1>{!! $veri['title'] !!}</h1>
                       </div>
                       <div class="col-sm-6">
                           <ol class="breadcrumb float-sm-right">
                               <li class="breadcrumb-item"><a href="#">Home</a></li>
-                              <li class="breadcrumb-item active">DataTables</li>
+                              <li class="breadcrumb-item active">{!! $veri['name'] !!}</li>
                           </ol>
                       </div>
                   </div>
               </div><!-- /.container-fluid -->
           </section>
+
 
           <!-- Main content -->
           <section class="content">
@@ -30,9 +31,9 @@
 
                           <div class="card">
                               <div class="card-header">
-                                  <h3 class="card-title">DataTable with default features</h3>
+                                  <h3 class="card-title">{!! $veri['name'] !!} Tam Liste</h3>
                                   <div class="card-tools">
-                                      <button type="button" class="btn btn-success btn-xs" id="yeni" data-toggle="modal"
+                                      <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
                                           data-target="#modalAdd">
                                           Yeni Ekle
                                       </button>
@@ -56,23 +57,29 @@
           <!-- /.content -->
       </div>
 
-
-
-
       <div class="modal fade" id="modalAdd">
           <div class="modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
-                      <h4 class="modal-title">Yeni Birim Sorumlusu Ekle</h4>
+                      <h4 class="modal-title">Yeni {!! $veri['name'] !!} Ekle</h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                       </button>
                   </div>
                   <div class="modal-body">
-                      <form id="birimhocaekle" action="">
+                      <form id="ekle" action="">
                           @csrf
                           <div class="input-group mb-3">
                               <select id="hoca" name="kullanici_id" class="form-control">
+                              </select>
+                              <div class="input-group-append">
+                                  <div class="input-group-text">
+                                      <span class="fas fa-user"></span>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="input-group mb-3">
+                              <select id="birim" name="birim_id" class="form-control">
                               </select>
                               <div class="input-group-append">
                                   <div class="input-group-text">
@@ -126,16 +133,46 @@
       <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
       <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
       <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+      <script src="dist/js/tolower.js"></script>
+      <script>
+          (function($, DataTable) {
+
+              // Datatable global configuration
+              $.extend(true, DataTable.defaults, {
+                  language: {
+                      "url": "/dist/js/tr.json"
+                  },
+
+                  "buttons": ["copy", "csv", "excel", "pdf", {
+                      extend: 'print',
+
+                      exportOptions: {
+                          columns: ':visible'
+                      }
+                  }, "colvis"],
+                  "responsive": true,
+                  "lengthMenu": [
+                      [-1, 10, 25, 50],
+                      ["Tümü", 10, 25, 50]
+                  ],
+                  "autoWidth": true,
+
+              });
+
+          })(jQuery, jQuery.fn.dataTable);
+      </script>
+
+      {!! $html->scripts() !!}
       <script>
           $.ajaxSetup({
               headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }
           });
-          $('#birimhocaekle').on("submit", function(e) {
+          $('#ekle').on("submit", function(e) {
               console.log('çalıştı')
               e.preventDefault();
-              var formdata = $('#birimhocaekle').serializeArray();
+              var formdata = $('#ekle').serializeArray();
               console.log(formdata);
               $.ajax({
 
@@ -192,78 +229,7 @@
 
           })
       </script>
-      <script>
-          $(function() {
-              var table = $("#example1").DataTable({
-                  ajax: "{{ route('bekarhoca.getBirim') }}",
 
-                  processing: true,
-                  serverSide: true,
-                  "deferRender": true,
-
-                  "buttons": ["copy", "csv", "excel", "pdf", {
-                      extend: 'print',
-
-                      exportOptions: {
-                          columns: ':visible'
-                      }
-                  }, "colvis"],
-                  columns: [{
-                          data: 'kullanici_resim'
-                      },
-                      {
-                          data: 'name'
-                      },
-
-                      {
-                          data: 'islemler'
-                      },
-                  ],
-                  "language": {
-                      buttons: {
-                          colvis: 'Sütun Seç',
-                          copy: "Kopyala",
-                          print: "Yazdır"
-                      },
-                      "decimal": "",
-
-                      "emptyTable": "Tabloda veri yok",
-                      "info": "",
-                      "infoEmpty": "",
-                      "infoFiltered": "(Toplam _MAX_ kayıt.)",
-                      "infoPostFix": "",
-                      "thousands": ",",
-                      "lengthMenu": "Gösterilen _MENU_",
-                      "loadingRecords": "Yükleniyor...",
-                      "processing": "İşleniyor...",
-                      "search": "Arama:",
-                      "zeroRecords": "Eşleşen kayıt bulunamadı",
-                      "paginate": {
-                          "first": "İlk",
-                          "last": "Son",
-                          "next": "İleri",
-                          "previous": "Geri"
-                      },
-                      "aria": {
-                          "sortAscending": ": sütunu artan şekilde sıralamak için etkinleştirin",
-                          "sortDescending": ": sütunu azalan sıralamak için etkinleştir"
-                      }
-                  },
-                  "responsive": true,
-                  "lengthMenu": [
-                      [-1, 10, 25, 50],
-                      ["Tümü", 10, 25, 50]
-                  ],
-                  "autoWidth": true,
-                  initComplete: function() {
-                      table.buttons().container()
-                          .appendTo($('.col-md-6:eq(0)', table.table().container()));
-                  }
-
-              });
-
-          });
-      </script>
       <script>
           $.ajaxSetup({
               headers: {

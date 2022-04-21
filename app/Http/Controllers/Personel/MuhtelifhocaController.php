@@ -67,7 +67,13 @@ class MuhtelifhocaController extends Controller
 
             ->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
 
-        return view('personel.index', compact('html'));
+
+        $veri['title'] = 'Muhtelif Hocalar';
+        $veri['name'] = 'Muhtelif Hoca';
+
+
+
+        return view('personel.muhtelif', compact('html', 'veri'));
     }
     public function hocagetir(Request $request)
     {

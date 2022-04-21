@@ -68,9 +68,11 @@ class IhtisashocaController extends Controller
         ],)
 
             ->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
+        $veri['title'] = 'İhtisas Hocaları';
+        $veri['name'] = 'İhtisas Hocası';
 
 
-        return view('personel.index', compact('html'));
+        return view('personel.ihtisas', compact('html', 'veri'));
     }
     public function hocagetir(Request $request)
     {

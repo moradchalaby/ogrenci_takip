@@ -17,14 +17,19 @@ use App\Http\Controllers\Personel\PersonelController;
 use App\Http\Controllers\Personel\BirimhocaController;
 use App\Http\Controllers\Personel\BekarhocaController;
 use App\Http\Controllers\Personel\MuhtelifhocaController;
+use App\Http\Controllers\Personel\IhtisashocaController;
 use App\Http\Controllers\Personel\HafizlikhocaController;
+use App\Http\Controllers\Personel\TeknikhocaController;
+use App\Http\Controllers\Personel\IdarihocaController;
 use App\Http\Controllers\Yapi\BirimController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\RoutesController;
 
-Auth::routes();
+
 
 
 Route::group(['middleware' => 'auth', 'namespace' => 'User'], function () {
+    Auth::routes();
     Route::get('/', [CalenderController::class, 'index']);
     Route::prefix('takvim')->group(function () {
 
@@ -35,7 +40,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'User'], function () {
     });
     Route::namespace('Personel')->group(function () {
 
-        Route::get('/personel', [PersonelController::class, 'index']);
+        Route::get('/personel', [PersonelController::class, 'index'])->name('personel.index');
 
         Route::get('/personel/getEmployees/', [PersonelController::class, 'getEmployees'])->name('personel.getEmployees');
 
@@ -76,14 +81,22 @@ Route::group(['middleware' => 'auth', 'namespace' => 'User'], function () {
         Route::get('/teknikhoca', [TeknikhocaController::class, 'index'])->name('teknikhoca.index');
         Route::post('/teknikhoca/hocagetir', [TeknikhocaController::class, 'hocagetir']);
         Route::post('/teknikhoca/birimgetir', [TeknikhocaController::class, 'birimgetir']);
+        //?İdariHoca
+        Route::get('/idarihoca/getBirim/', [IdarihocaController::class, 'getBirim'])->name('idarihoca.getBirim');
+        Route::post('/idarihoca/idarihocaekle/', [IdarihocaController::class, 'create'])->name('idarihoca.create');
+        Route::get('/idarihoca', [IdarihocaController::class, 'index'])->name('idarihoca.index');
+        Route::post('/idarihoca/hocagetir', [IdarihocaController::class, 'hocagetir']);
+        Route::post('/idarihoca/birimgetir', [IdarihocaController::class, 'birimgetir']);
     });
     Route::namespace('Yapi')->group(function () {
 
-        Route::get('/birim', [BirimController::class, 'index']);
+        Route::get('/birim', [BirimController::class, 'index'])->name('birim.index');
         Route::get('/birim/getBirim/', [BirimController::class, 'getBirim'])->name('birim.getBirim');
         Route::post('/birim/birimadd/', [BirimController::class, 'birimadd'])->name('birim.birimadd');
     });
+    Route::get('/routes', [RoutesController::class, 'showApplicationRoutes'])->name('routes.index');
 });
+Auth::routes();
 Route::get('/login/redirect', function () {
     return redirect(route('auth.login'));
 })->name('login');

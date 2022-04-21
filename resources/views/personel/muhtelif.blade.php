@@ -1,6 +1,7 @@
   @extends('layouts.app')
 
 
+
   @section('content')
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
@@ -9,17 +10,18 @@
               <div class="container-fluid">
                   <div class="row mb-2">
                       <div class="col-sm-6">
-                          <h1>DataTables</h1>
+                          <h1>{!! $veri['title'] !!}</h1>
                       </div>
                       <div class="col-sm-6">
                           <ol class="breadcrumb float-sm-right">
                               <li class="breadcrumb-item"><a href="#">Home</a></li>
-                              <li class="breadcrumb-item active">DataTables</li>
+                              <li class="breadcrumb-item active">{!! $veri['name'] !!}</li>
                           </ol>
                       </div>
                   </div>
               </div><!-- /.container-fluid -->
           </section>
+
 
           <!-- Main content -->
           <section class="content">
@@ -30,7 +32,7 @@
 
                           <div class="card">
                               <div class="card-header">
-                                  <h3 class="card-title">DataTable with default features</h3>
+                                  <h3 class="card-title">{!! $veri['name'] !!} Tam Liste</h3>
                                   <div class="card-tools">
                                       <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
                                           data-target="#modalAdd">
@@ -56,30 +58,21 @@
           <!-- /.content -->
       </div>
 
-
-
-
       <div class="modal fade" id="modalAdd">
           <div class="modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
-                      <h4 class="modal-title">Yeni Personel Ekle</h4>
+                      <h4 class="modal-title">Yeni {!! $veri['name'] !!} Ekle</h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                       </button>
                   </div>
                   <div class="modal-body">
-                      <form method="POST" id="useradd" action="#">
+                      <form id="ekle" action="">
                           @csrf
                           <div class="input-group mb-3">
-                              <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
-                                  name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-
-                              @error('name')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                              @enderror
+                              <select id="hoca" name="kullanici_id" class="form-control">
+                              </select>
                               <div class="input-group-append">
                                   <div class="input-group-text">
                                       <span class="fas fa-user"></span>
@@ -87,51 +80,15 @@
                               </div>
                           </div>
                           <div class="input-group mb-3">
-                              <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                                  name="email" value="{{ old('email') }}" required autocomplete="email">
+                              <select id="birim" name="birim_id" class="form-control">
+                              </select>
+                              <div class="input-group-append">
+                                  <div class="input-group-text">
+                                      <span class="fas fa-user"></span>
+                                  </div>
+                              </div>
+                          </div>
 
-                              @error('email')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                              @enderror
-                              <div class="input-group-append">
-                                  <div class="input-group-text">
-                                      <span class="fas fa-envelope"></span>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="input-group mb-3">
-                              <input id="password" type="password"
-                                  class="form-control @error('password') is-invalid @enderror" name="password" required
-                                  autocomplete="new-password">
-
-                              @error('password')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                              @enderror
-                              <div class="input-group-append">
-                                  <div class="input-group-text">
-                                      <span class="fas fa-lock"></span>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="input-group mb-3">
-                              <input id="password-confirm" type="password" class="form-control"
-                                  name="password_confirmation" required autocomplete="new-password">
-                              <div class="input-group-append">
-                                  <div class="input-group-text">
-                                      <span class="fas fa-lock"></span>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="icheck-primary">
-                              <input type="checkbox" id="agreeTerms" name="terms" value="agree">
-                              <label for="agreeTerms">
-                                  I agree to the <a href="#">terms</a>
-                              </label>
-                          </div>
                           <div class="modal-footer justify-content-between">
 
 
@@ -177,44 +134,36 @@
       <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
       <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
       <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+      <script src="dist/js/tolower.js"></script>
       <script>
-          $(function() {
-              var table = $("#example1").DataTable({
-                  ajax: "{{ route('personel.getEmployees') }}",
+          (function($, DataTable) {
 
-                  processing: true,
-                  serverSide: true,
-                  "deferRender": true,
-                  "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-                  columns: [{
-                          data: 'kullanici_resim'
-                      },
-                      {
-                          data: 'name'
-                      },
+              // Datatable global configuration
+              $.extend(true, DataTable.defaults, {
+                  language: {
+                      "url": "/dist/js/tr.json"
+                  },
 
-                      {
-                          data: 'email'
-                      },
-                      {
-                          data: 'islemler'
-                      },
-                  ],
+                  "buttons": ["copy", "csv", "excel", "pdf", {
+                      extend: 'print',
+
+                      exportOptions: {
+                          columns: ':visible'
+                      }
+                  }, "colvis"],
                   "responsive": true,
                   "lengthMenu": [
                       [-1, 10, 25, 50],
-                      ["All", 10, 25, 50]
+                      ["Tümü", 10, 25, 50]
                   ],
                   "autoWidth": true,
-                  initComplete: function() {
-                      table.buttons().container()
-                          .appendTo($('.col-md-6:eq(0)', table.table().container()));
-                  }
 
               });
 
-          });
+          })(jQuery, jQuery.fn.dataTable);
       </script>
+
+      {!! $html->scripts() !!}
       <script>
           $.ajaxSetup({
               headers: {
@@ -281,5 +230,40 @@
 
 
           })
+      </script>
+      <script>
+          $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          });
+          hocagetir();
+          //  birimgetir();
+
+          function hocagetir() {
+              $.ajax({
+                  type: 'post',
+                  url: '/bekarhoca/hocagetir',
+                  data: {
+                      get_option: true
+                  },
+                  success: function(response) {
+                      document.getElementById("hoca").innerHTML = response;
+                  }
+              });
+          }
+
+          function birimgetir() {
+              $.ajax({
+                  type: 'post',
+                  url: '/bekarhoca/birimgetir',
+                  data: {
+                      get_option: true
+                  },
+                  success: function(response) {
+                      document.getElementById("birim").innerHTML = response;
+                  }
+              });
+          }
       </script>
   @endsection

@@ -3,17 +3,14 @@
 namespace App\Http\Controllers\Personel;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Birim;
-
-use Illuminate\Support\Facades\DB;
+use App\Models\Birimhoca;
 use App\Models\User;
-use App\Models\Hafizlikhoca;
-
-use \Yajra\Datatables\Datatables;
+use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
 
-class HafizlikhocaController extends Controller
+class IdarihocaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,15 +22,15 @@ class HafizlikhocaController extends Controller
 
         if (request()->ajax()) {
             $data
-                = User::select('users.*', 'hafizlikhoca.*')
-                ->join('hafizlikhoca', 'hafizlikhoca.kullanici_id', '=', 'users.id')
+                = User::select('users.*', 'idarihoca.*')
+                ->join('idarihoca', 'idarihoca.kullanici_id', '=', 'users.id')
 
 
                 ->select('users.*', 'users.id', 'users.email', 'users.kullanici_resim');
 
 
 
-            return Datatables::of($data)
+            return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('resim', function ($row) {
 
@@ -68,11 +65,13 @@ class HafizlikhocaController extends Controller
         ],)
 
             ->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
-        $veri['title'] = 'Hafızlık Hocaları';
-        $veri['name'] = 'Hafızlık Hocası';
 
 
-        return view('personel.hafizlik', compact('html', 'veri'));
+        $veri['title'] = 'İdari Hocalar';
+        $veri['name'] = 'İdari Hoca';
+
+
+        return view('personel.idari', compact('html', 'veri'));
     }
     public function hocagetir(Request $request)
     {
@@ -117,8 +116,8 @@ class HafizlikhocaController extends Controller
         //
         if ($request->ajax()) {
 
-            $data = Hafizlikhoca::updateOrCreate(
-                ['kullanici_id' => $request->kullanici_id],
+            $data = Birimhoca::updateOrCreate(
+                ['birim_id' => $request->birim_id],
                 [
                     'kullanici_id' => $request->kullanici_id,
                     'birim_id' => $request->birim_id,

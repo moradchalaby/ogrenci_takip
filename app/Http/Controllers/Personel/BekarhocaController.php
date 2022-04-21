@@ -69,8 +69,10 @@ class BekarhocaController extends Controller
 
             ->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
 
+        $veri['title'] = 'Bekar Hocalar';
+        $veri['name'] = 'Bekar Hoca';
 
-        return view('personel.index', compact('html'));
+        return view('personel.bekar', compact('html', 'veri'));
     }
     public function hocagetir(Request $request)
     {
@@ -101,87 +103,6 @@ class BekarhocaController extends Controller
 
             return response()->json($gonder);
         }
-    }
-    public function getBirim(Request $request)
-    {
-
-        ## Read value
-        $draw = $request->get('draw');
-        $start = $request->get("start");
-        $rowperpage = $request->get("length"); // Rows display per page
-
-        $columnIndex_arr = $request->get('order');
-        $columnName_arr = $request->get('columns');
-        $order_arr = $request->get('order');
-        $search_arr = $request->get('search');
-
-        $columnIndex = $columnIndex_arr[0]['column']; // Column index
-        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
-        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
-        $searchValue = $search_arr['value']; // Search value
-        // Total records
-        $totalRecords = Bekarhoca::select('count(*) as allcount')->count();
-        /*    select('count(*) as allcount')->count(); */
-        $totalRecordswithFilter =
-            User::select('users.*', DB::raw('count(kullanici_id) as allcount'))
-            ->rightJoin(
-                'bekarhoca',
-                'bekarhoca.kullanici_id',
-                '=',
-                'users.id'
-            )
-            ->groupBy('users.id')->where('name', 'like', '%' . $searchValue . '%')->count();
-
-        // Fetch records
-        $records =
-            User::select('users.*', 'bekarhoca.*')
-            ->join('bekarhoca', 'bekarhoca.kullanici_id', '=', 'users.id')
-
-            ->orderBy($columnName, $columnSortOrder)
-            ->where('users.name', 'like', '%' . $searchValue . '%')
-            ->select('users.*')
-            ->skip($start)
-            ->take($totalRecords)
-            ->get();
-
-
-        $data_arr = array();
-
-        foreach ($records as $record) {
-            $id = $record->id;
-            $kullanici_resim = $record->kullanici_resim;
-            $name = $record->name;
-
-
-
-            $data_arr[] = array(
-
-                "kullanici_resim" => '<img alt="Avatar" class="avatar" src="' . $kullanici_resim . '">',
-
-                "name" => '<a href="#" onclick="alert(\'Hello world!\')">' . $name . '</a>',
-
-
-                "islemler" => '<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-id="' . $id . '" data="' . strval($record) . '"
-                                          data-target="#modalAdd">
-
-                                          Suzenle
-                                      </button><input type="hidden" id="veri' . $id . '" value="' . strval($record) . '">
-                                          <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
-                                          data-target="#modalAdd">
-                                          Sil
-                                      </button>'
-            );
-        }
-
-        $response = array(
-            "draw" => intval($draw),
-            "iTotalRecords" => $totalRecords,
-            "iTotalDisplayRecords" => $totalRecordswithFilter,
-            "aaData" => $data_arr
-        );
-
-        echo json_encode($response);
-        exit;
     }
 
     /**
