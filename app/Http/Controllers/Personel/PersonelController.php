@@ -43,6 +43,10 @@ class PersonelController extends Controller
                                           data-target="#modalAdd">
 
                                           Düzenle
+                                      </a>
+                                      <a href="/yetki/' . $row['id'] . '" type="button" class="btn btn-success btn-xs">
+
+                                        Yetkiler
                                       </a>';
 
                     return $btn;

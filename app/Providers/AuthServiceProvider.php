@@ -31,25 +31,48 @@ class AuthServiceProvider extends ServiceProvider
 
         // Admin  mi ?
         Gate::define('yetkili', function ($user, $post) {
-            if ($post == '') {
-                $post = Request::route()->getPrefix();
+
+            if ($user->hasRole($post) || $user->hasRole('root')) {
+                return   Response::allow();
+            } else {
+                return  Response::deny('Bu işlem için yetkiniz yok!');
+            } /* return
+                $user->hasRole('admin') ? Response::allow() : Response::deny('Bu işlem için admin olmalısınız!'); */
+        });
+        Gate::define('islem', function ($user, $post) {
+            if ($user->hasRole($post . '/islem') || $user->hasRole('root')) {
+                return   Response::allow();
+            } else {
+                return  Response::deny('Bu işlem için yetkiniz yok!');
             }
-            return
-                $user->hasRole($post) ? Response::allow() : Response::deny('Bu işlem için kullanıcı olmalısınız!');
             /* return
                 $user->hasRole('admin') ? Response::allow() : Response::deny('Bu işlem için admin olmalısınız!'); */
         });
 
+
         // Normal Kullanıcı mı ?
-        Gate::define('is-user', function ($user) {
-            return
-                $user->hasRole('madmin') ? Response::allow() : Response::deny('Bu işlem için kullanıcı olmalısınız!');
+        Gate::define('idari', function ($user) {
+            if ($user->hasRole('idari') || $user->hasRole('root')) {
+                return   Response::allow();
+            } else {
+                return  Response::deny('Bu işlem için yetkiniz yok!');
+            }
         });
 
         // Editör mü ?
-        Gate::define('is-editor', function ($user) {
-            return
-                $user->hasRole('editor') ? Response::allow() :  Response::deny('Bu işlem için editor olmalısınız!');
+        Gate::define('birims', function ($user) {
+            if ($user->hasRole('birims') || $user->hasRole('root')) {
+                return   Response::allow();
+            } else {
+                return  Response::deny('Bu işlem için yetkiniz yok!');
+            }
+        });
+        Gate::define('root', function ($user) {
+            if ($user->hasRole('root') || $user->hasRole('root')) {
+                return   Response::allow();
+            } else {
+                return  Response::deny('Bu işlem için yetkiniz yok!');
+            }
         });
     }
 }

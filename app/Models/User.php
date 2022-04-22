@@ -57,4 +57,11 @@ class User extends Authenticatable
 
         return false;
     }
+    public function hasRol($role, $user)
+    {
+
+        if (User::find($user)->roles()->where('roles_slug', $role)->first()) return true;
+
+        return false;
+    }
 }

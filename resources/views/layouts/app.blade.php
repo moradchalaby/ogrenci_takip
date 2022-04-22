@@ -13,26 +13,26 @@
     <!-- Font Awesome Icons -->
 
     <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
     <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <link rel="stylesheet" href="/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 
-    <link rel="stylesheet" href="dist/css/fullcalendar.css">
+    <link rel="stylesheet" href="/dist/css/fullcalendar.css">
     <!-- SweetAlert2 -->
-    <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src="/plugins/sweetalert2/sweetalert2.min.js"></script>
 
-    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
     <!-- DataTables -->
-    <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
-    <link rel="stylesheet" href="dist/css/colorPick.css">
+    <link rel="stylesheet" href="/dist/css/colorPick.css">
     <!-- The following line applies the dark theme -->
-    <link rel="stylesheet" href="dist/css/colorPick.dark.theme.css">
+    <link rel="stylesheet" href="/dist/css/colorPick.dark.theme.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="dist/css/custom.css">
+    <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="/dist/css/custom.css">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed sidebar-collapse">
@@ -44,7 +44,8 @@
         @else
             <!-- Preloader -->
             <div class="preloader flex-column justify-content-center align-items-center">
-                <img class="animation__wobble" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+                <img class="animation__wobble" src="/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60"
+                    width="60">
             </div>
 
             @include('layouts.navbar')
@@ -70,19 +71,19 @@
     </div>
 
     <!-- jQuery -->
-    <script src="plugins/jquery/jquery.min.js"></script>
+    <script src="/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap -->
-    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery UI -->
-    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
     <!-- AdminLTE App -->
-    <script src="dist/js/adminlte.min.js"></script>
+    <script src="/dist/js/adminlte.min.js"></script>
 
     <!-- fullCalendar 2.2.5 -->
-    <script src="plugins/fontawesome-free/js/all.min.js"></script>
+    <script src="/plugins/fontawesome-free/js/all.min.js"></script>
 
     <!-- AdminLTE for demo purposes -->
-    <script src="dist/js/demo.js"></script>
+    <script src="/dist/js/demo.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 
     @yield('script')

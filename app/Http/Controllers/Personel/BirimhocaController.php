@@ -91,7 +91,7 @@ user_route 'a yetkilendirme yapacağız
     }
     public function hocagetir(Request $request)
     {
-        dd(FacadesRequest::route()->getPrefix());
+        dd(Request::route()->getPrefix());
         exit;
 
         //
