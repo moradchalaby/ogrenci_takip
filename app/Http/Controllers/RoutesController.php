@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 use Illuminate\Support\Facades\Route;
 
 class RoutesController extends Controller
@@ -12,10 +14,10 @@ class RoutesController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except([
-            'showApplicationRoutes',
-        ]);
+
+        $this->middleware('can:yetkili');
     }
+
 
     /**
      * Show application routes.

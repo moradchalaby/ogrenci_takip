@@ -9,12 +9,18 @@ use App\Models\Birim;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Hafizlikhoca;
-
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 use \Yajra\Datatables\Datatables;
 use Yajra\DataTables\Html\Builder;
 
 class HafizlikhocaController extends Controller
 {
+    public function __construct()
+    {
+
+        $this->middleware('can:yetkili');
+    }
     /**
      * Display a listing of the resource.
      *

@@ -7,11 +7,19 @@ use App\Models\Birim;
 use App\Models\Birimhoca;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 use \Yajra\Datatables\Datatables;
 use Yajra\DataTables\Html\Builder;
 
 class MuhtelifhocaController extends Controller
 {
+
+    public function __construct()
+    {
+
+        $this->middleware('can:yetkili');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +28,15 @@ class MuhtelifhocaController extends Controller
     public function index(Request $request, Builder $builder)
     {
 
+        /*  $role = FacadesRequest::route()->getPrefix();
 
+        if (Gate::allows('yetkili', $role)) {
+            dd('oldu');
+            exit;
+        } else {
+            dd('olmadı');
+            exit;
+        } */
         if (request()->ajax()) {
             $data
                 = User::select('users.*', 'muhtelifhoca.*')

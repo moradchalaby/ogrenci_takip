@@ -6,18 +6,26 @@ use App\Models\Event;
 use App\Models\Kullanici;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class CalenderController extends Controller
 {
+    public function __construct()
+    {
+
+        $this->middleware('can:yetkili');
+    }
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    /*  public function __construct()
     {
-        $this->middleware('auth');
-    }
+
+        $this->middleware('can:yetkili');
+    } */
     /**
      * Display a listing of the resource.
      *

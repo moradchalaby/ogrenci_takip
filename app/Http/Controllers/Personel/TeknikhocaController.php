@@ -6,19 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Models\Birim;
 use App\Models\Birimhoca;
 use App\Models\User;
-use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate as FacadesGate;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 use \Yajra\Datatables\Datatables;
 use Yajra\DataTables\Html\Builder;
 
 class TeknikhocaController extends Controller
 {
-
     public function __construct()
     {
 
-        $this->middleware('can:is-Admin');
+        $this->middleware('can:yetkili');
     }
     /**
      * Display a listing of the resource.
@@ -27,13 +26,7 @@ class TeknikhocaController extends Controller
      */
     public function index(Request $request, Builder $builder)
     {
-        if (FacadesGate::allows('isAdmin')) {
 
-            dd('Admin allowed');
-        } else {
-
-            dd('You are not Admin');
-        }
         if (request()->ajax()) {
             $data
                 = User::select('users.*', 'teknikpersonel.*')

@@ -64,4 +64,10 @@ class User extends Authenticatable
 
         return false;
     }
+
+    public function hasUser($id)
+    {
+
+        return User::find($id)->roles()->where('user_id', $id)->first();
+    }
 }

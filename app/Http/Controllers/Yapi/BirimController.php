@@ -7,9 +7,20 @@ use App\Models\Birim;
 use App\Models\Birimhoca;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class BirimController extends Controller
 {
+    public function __construct()
+    {
+
+        if (Gate::allows('yetkili', FacadesRequest::route()->getPrefix())) {
+            $this->middleware('auth');
+        } else {
+            $this->middleware('can:root');
+        }
+    }
     /**
      * Display a listing of the resource.
      *

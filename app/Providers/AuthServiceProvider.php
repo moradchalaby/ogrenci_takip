@@ -30,9 +30,20 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         // Admin  mi ?
-        Gate::define('yetkili', function ($user, $post) {
+        Gate::define('yetkili', function ($user, $rout = '') {
+            if ($rout == '') {
+                $rout =  Request::route()->getPrefix();
+            }
+            if (empty($rout)) {
+                $rout = '/takvim';
+            }
+            if (!str_contains($rout, '/')) {
+                $rout = '/' . $rout;
+            }
 
-            if ($user->hasRole($post) || $user->hasRole('root')) {
+            if (
+                $user->hasRole($rout) || $user->hasRole('root')
+            ) {
                 return   Response::allow();
             } else {
                 return  Response::deny('Bu işlem için yetkiniz yok!');

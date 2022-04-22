@@ -7,11 +7,18 @@ use App\Models\Birim;
 use App\Models\Birimhoca;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
 
 class IdarihocaController extends Controller
 {
+    public function __construct()
+    {
+
+        $this->middleware('can:yetkili');
+    }
     /**
      * Display a listing of the resource.
      *

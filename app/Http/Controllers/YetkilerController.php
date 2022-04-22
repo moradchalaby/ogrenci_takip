@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\RoleUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class YetkilerController extends Controller
@@ -12,7 +13,8 @@ class YetkilerController extends Controller
 
     public function __construct()
     {
-        $this->middleware('can:root');
+
+        $this->middleware('can:yetkili');
     }
     /**
      * Display a listing of the resource.

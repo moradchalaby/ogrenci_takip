@@ -28,10 +28,11 @@ use App\Http\Controllers\RoutesController;
 
 
 
-
+Auth::routes();
 Route::group(['middleware' => 'auth', 'namespace' => 'User'], function () {
-    Auth::routes();
+
     Route::get('/', [CalenderController::class, 'index']);
+
     Route::prefix('takvim')->group(function () {
 
         Route::get('/', [CalenderController::class, 'index']);

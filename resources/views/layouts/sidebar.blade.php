@@ -69,7 +69,8 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-
+                        @endcan
+                        @can('yetkili', 'idarihoca')
                             <li class="nav-item">
                                 <a href="{{ route('idarihoca.index') }}"
                                     class="nav-link {{ active('idarihoca.index') }}">
@@ -77,19 +78,24 @@
                                     <p>İdari Hocalar</p>
                                 </a>
                             </li>
+                        @endcan
+                        @can('yetkili', 'personel')
                             <li class="nav-item">
                                 <a href="{{ route('personel.index') }}" class="nav-link {{ active('personel.index') }}">
                                     <i class="fa-solid fa-people-group nav-icon"></i>
                                     <p>Hocalar</p>
                                 </a>
                             </li>
+                        @endcan
+                        @can('yetkili', 'birim')
                             <li class="nav-item">
                                 <a href="{{ route('birim.index') }}" class="nav-link {{ active('birim.index') }}">
                                     <i class="fa-solid fa-address-card nav-icon"></i>
                                     <p>Birimler</p>
                                 </a>
                             </li>
-
+                        @endcan
+                        @can('yetkili', '/birimhoca')
                             <li class="nav-item">
                                 <a href="{{ route('birimhoca.index') }}"
                                     class="nav-link {{ active('birimhoca.index') }}">
@@ -97,9 +103,11 @@
                                     <p>Birim Sorumluları</p>
                                 </a>
                             </li>
-
+                        @endcan
+                        @can('yetkili', 'idari')
                             <li class="nav-header">HOCALAR</li>
-
+                        @endcan
+                        @can('yetkili', '/hafizlikhoca')
                             <li class="nav-item">
                                 <a href="{{ route('hafizlikhoca.index') }}"
                                     class="nav-link {{ active('hafizlikhoca.index') }}">
@@ -107,7 +115,8 @@
                                     <p>Hafızlık Hocaları</p>
                                 </a>
                             </li>
-
+                        @endcan
+                        @can('yetkili', '/ihtisashoca')
                             <li class="nav-item">
                                 <a href="{{ route('ihtisashoca.index') }}"
                                     class="nav-link {{ active('ihtisashoca.index') }}">
@@ -115,7 +124,8 @@
                                     <p>İhtisas Hocaları</p>
                                 </a>
                             </li>
-
+                        @endcan
+                        @can('yetkili', '/bekarhoca')
                             <li class="nav-item">
                                 <a href="{{ route('bekarhoca.index') }}"
                                     class="nav-link {{ active('bekarhoca.index') }}">
@@ -123,7 +133,8 @@
                                     <p>Bekar Hocalar</p>
                                 </a>
                             </li>
-
+                        @endcan
+                        @can('yetkili', '/muhtelifhoca')
                             <li class="nav-item">
                                 <a href="{{ route('muhtelifhoca.index') }}"
                                     class="nav-link {{ active('muhtelifhoca.index') }}">
@@ -131,9 +142,8 @@
                                     <p>Muhtelif Hocalar</p>
                                 </a>
                             </li>
-
-
-
+                        @endcan
+                        @can('yetkili', '/teknikhoca')
                             <li class="nav-item">
                                 <a href="{{ route('teknikhoca.index') }}"
                                     class="nav-link {{ active('teknikhoca.index') }}">
@@ -141,15 +151,15 @@
                                     <p>Teknik Personel</p>
                                 </a>
                             </li>
+                        @endcan
 
 
 
 
-
+                        @can('idari', 'idari')
                         </ul>
                     </li>
                 @endcan
-
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
