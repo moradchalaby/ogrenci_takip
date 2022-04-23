@@ -42,6 +42,7 @@
                               </div>
                               <!-- /.card-header -->
                               <div class="card-body">
+
                                   {!! $html->table() !!}
                               </div>
                               <!-- /.card-body -->

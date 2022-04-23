@@ -29,7 +29,7 @@ use App\Http\Controllers\RoutesController;
 
 
 Auth::routes();
-Route::group(['middleware' => 'auth', 'namespace' => 'User'], function () {
+Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
 
     Route::get('/', [CalenderController::class, 'index']);
 
@@ -137,3 +137,6 @@ Route::get('/login/redirect', function () {
 Route::get('/login/redirect', function () {
     return redirect(route('auth.login'));
 })->name('/');
+
+
+require __DIR__ . '/auth.php';

@@ -159,7 +159,7 @@
                         <i class="fas fa-users mr-2"></i>Hesap Bilgileri
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item dropdown-header">
+                    <a href="{{ route('password.request') }}" class="dropdown-item dropdown-header">
                         <i class="fas fa-key mr-2"></i> Şifre Değiştir
 
                     </a>
