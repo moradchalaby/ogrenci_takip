@@ -131,12 +131,12 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
     Route::get('/routes', [RoutesController::class, 'showApplicationRoutes'])->name('routes.index');
 });
 Auth::routes();
-Route::get('/login/redirect', function () {
+/* Route::get('/login/redirect', function () {
     return redirect(route('auth.login'));
 })->name('login');
 Route::get('/login/redirect', function () {
     return redirect(route('auth.login'));
-})->name('/');
+})->name('/'); */
 
 
 require __DIR__ . '/auth.php';
