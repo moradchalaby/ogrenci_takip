@@ -160,6 +160,34 @@
                         </ul>
                     </li>
                 @endcan
+                @can('egitim', 'egitim')
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-users-gear"></i>
+                            <p>
+                                Eğitim
+                                <i class="fas fa-angle-left right"></i>
+
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                        @endcan
+                        @can('yetkili', 'ogrenci')
+                            <li class="nav-item">
+                                <a href="{{ route('ogrenci.index') }}" class="nav-link {{ active('ogrenci.index') }}">
+                                    <i class="fa-solid fa-row nav-icon"></i>
+                                    <p>Tüm Öğrenci Listesi </p>
+                                </a>
+                            </li>
+                        @endcan
+
+
+
+
+                        @can('egitim', 'egitim')
+                        </ul>
+                    </li>
+                @endcan
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

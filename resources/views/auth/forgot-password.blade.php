@@ -11,14 +11,23 @@
 
 
                 <!-- Session Status -->
-                <x-auth-session-status class="mb-4" :status="session('status')" />
+
 
                 <!-- Validation Errors -->
-                <x-auth-validation-errors class="mb-4" :errors="$errors" />
-                <div class="card-body">
-                    <p class="login-box-msg">You forgot your password? Here you can easily retrieve a new password.</p>
+                <span class="invalid-feedback" role="alert">
+                </span>
+                <div class="card-body login-box-msg">
+                    <div class="mb-4 text-sm text-gray-600">
+                        {{ __('Şifrenizi sıfırlamak için size bi rmail göndereceğiz.') }}
+                    </div>
+
+                    <x-auth-session-status class="mb-4" :status="session('status')" />
+
+                    <!-- Validation Errors -->
+                    <x-auth-validation-errors class="mb-4" :errors="$errors" />
                     <form method="POST" action="{{ route('password.email') }}">
                         @csrf
+
                         <div class="input-group mb-3">
                             <input id="email" class="form-control" type="email" name="email" :value="old('email')"
                                 required autofocus />
@@ -35,6 +44,7 @@
                             </div>
                             <!-- /.col -->
                         </div>
+
                     </form>
                     <p class="mt-3 mb-1">
                         <a href="login.html">Login</a>

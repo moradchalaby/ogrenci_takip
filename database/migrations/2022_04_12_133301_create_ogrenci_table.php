@@ -14,30 +14,31 @@ class CreateOgrenciTable extends Migration
     public function up()
     {
         Schema::create('ogrenci', function (Blueprint $table) {
-            $table->id('ogrenci_id');
+            $table->id('id');
             $table->string('ogrenci_adsoyad');
-            $table->integer('kullanici_id');
+            $table->integer('kullanici_id')->nullable();
             $table->date('ogrenci_dt')->default('2020-01-01');
-            $table->string('ogrenci_tc');
-            $table->string('babaad');
-            $table->string('annead');
-            $table->string('babames');
-            $table->string('annemes');
-            $table->string('babatel');
-            $table->string('annetel');
-            $table->text('ogrenci_adres');
-            $table->enum('ogrenci_izin', ['0', '1']);
-            $table->integer('ogrenci_birim');
-            $table->integer('ogrenci_sinif');
-            $table->integer('ogrenci_kytdurum');
-            $table->string('ogrenci_okuldurum');
-            $table->string('ogrenci_resim');
-            $table->string('ogrenci_kmlk');
-            $table->string('ogrenci_sglk');
-            $table->string('ogrenci_belge1');
-            $table->string('ogrenci_belge2');
-            $table->string('ogrenci_belge3');
-            $table->rememberToken();
+            $table->string('ogrenci_tc')->nullable();
+            $table->string('babaad')->nullable();
+            $table->string('annead')->nullable();
+            $table->string('babames')->nullable();
+            $table->string('annemes')->nullable();
+            $table->string('babatel')->nullable();
+            $table->string('annetel')->nullable();
+            $table->string('ogrenci_ulke')->nullable();
+            $table->string('ogrenci_sehir')->nullable();
+            $table->text('ogrenci_adres')->nullable();
+            $table->string('ogrenci_resim')->nullable();
+            $table->string('ogrenci_kmlk')->nullable();
+            $table->string('ogrenci_sglk')->nullable();
+            $table->string('ogrenci_belge1')->nullable();
+            $table->string('ogrenci_belge2')->nullable();
+            $table->string('ogrenci_belge3')->nullable();
+            $table->text('ogrenci_aciklama')->nullable();
+            $table->integer('ogrenci_yetim')->default(0);
+            $table->integer('ogrenci_bosanma')->default(0);
+            $table->integer('ogrenci_kytdurum')->nullable()->default(1);
+            $table->date('ayrilma_tarih')->nullable();
             $table->timestamps();
         });
     }

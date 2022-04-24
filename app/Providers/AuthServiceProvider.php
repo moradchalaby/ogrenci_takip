@@ -69,6 +69,13 @@ class AuthServiceProvider extends ServiceProvider
                 return  Response::deny('Bu işlem için yetkiniz yok!');
             }
         });
+        Gate::define('egitim', function ($user) {
+            if ($user->hasRole('egitim') || $user->hasRole('root')) {
+                return   Response::allow();
+            } else {
+                return  Response::deny('Bu işlem için yetkiniz yok!');
+            }
+        });
 
         // Editör mü ?
         Gate::define('birims', function ($user) {

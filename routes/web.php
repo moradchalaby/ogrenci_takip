@@ -21,6 +21,7 @@ use App\Http\Controllers\Personel\IhtisashocaController;
 use App\Http\Controllers\Personel\HafizlikhocaController;
 use App\Http\Controllers\Personel\TeknikhocaController;
 use App\Http\Controllers\Personel\IdarihocaController;
+use App\Http\Controllers\Egitim\OgrenciController;
 use App\Http\Controllers\Yapi\BirimController;
 use App\Http\Controllers\YetkilerController;
 use App\Http\Controllers\Auth\LoginController;
@@ -127,6 +128,16 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::get('/', [BirimController::class, 'index'])->name('birim.index');
         Route::get('/getBirim', [BirimController::class, 'getBirim'])->name('birim.getBirim');
         Route::post('/birimadd', [BirimController::class, 'birimadd'])->name('birim.birimadd');
+    });
+
+    Route::prefix('ogrenci')->group(function () {
+        //?Öğrenci
+        // Route::get('/getBirim', [OgrenciController::class, 'getBirim'])->name('ogrenci.getBirim');
+        // Route::get('/store', [OgrenciController::class, 'store'])->name('ogrenci.store');
+        // Route::post('/create', [OgrenciController::class, 'create'])->name('ogrenci.create');
+        Route::get('/', [OgrenciController::class, 'index'])->name('ogrenci.index');
+        // Route::get('/hocagetir', [OgrenciController::class, 'hocagetir'])->name('ogrenci.hocagetir');
+        // Route::post('/birimgetir', [OgrenciController::class, 'birimgetir'])->name('ogrenci.birimgetir');
     });
     Route::get('/routes', [RoutesController::class, 'showApplicationRoutes'])->name('routes.index');
 });
