@@ -14,7 +14,7 @@ class CreateOgrenciTable extends Migration
     public function up()
     {
         Schema::create('ogrenci', function (Blueprint $table) {
-            $table->id('id');
+            $table->id();
             $table->string('ogrenci_adsoyad');
             $table->integer('kullanici_id')->nullable();
             $table->date('ogrenci_dt')->default('2020-01-01');
@@ -25,7 +25,7 @@ class CreateOgrenciTable extends Migration
             $table->string('annemes')->nullable();
             $table->string('babatel')->nullable();
             $table->string('annetel')->nullable();
-            $table->string('ogrenci_ulke')->nullable();
+            $table->string('ogrenci_tel')->nullable();
             $table->string('ogrenci_sehir')->nullable();
             $table->text('ogrenci_adres')->nullable();
             $table->string('ogrenci_resim')->nullable();
@@ -37,7 +37,7 @@ class CreateOgrenciTable extends Migration
             $table->text('ogrenci_aciklama')->nullable();
             $table->integer('ogrenci_yetim')->default(0);
             $table->integer('ogrenci_bosanma')->default(0);
-            $table->integer('ogrenci_kytdurum')->nullable()->default(1);
+            $table->integer('ogrenci_kytdurum')->default(1);
             $table->date('ayrilma_tarih')->nullable();
             $table->timestamps();
         });

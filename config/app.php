@@ -167,6 +167,7 @@ return [
          */
         yajra\Datatables\DatatablesServiceProvider::class,
         Watson\Active\ActiveServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -233,6 +234,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Datatables' => yajra\Datatables\Datatables::class,
         'Active' => Watson\Active\Facades\Active::class,
+        'Image' => Intervention\Image\Facades\Image::class,
+
 
     ],
 

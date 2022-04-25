@@ -113,7 +113,7 @@
                               <div class="bs-stepper-content">
                                   <!-- your steps content here -->
                                   <form method="POST" id="useradd" action="#">
-                                      @csrf
+
                                       <div id="genel-part" class="content" role="tabpanel"
                                           aria-labelledby="genel-part-trigger">
                                           <div class="form-group">
@@ -231,7 +231,8 @@
 
                                               <div class="input-group  input-file " id="ogrenci_resim" name="ogrenci_resim">
                                                   <span class="input-group-btn">
-                                                      <button class="btn btn-default btn-choose" type="button">Resim
+                                                      <button class="btn btn-default btn-choose" id="file_button"
+                                                          type="button">Resim
                                                           Ekle</button>
                                                   </span>
                                                   <input type="text" class="form-control" name="deger_resim"
@@ -403,30 +404,63 @@
                   });
                   $('#useradd').on("submit", function(e) {
                       e.preventDefault();
+                      var form = $('#useradd')[0];
+                      var data = new FormData(form);
+                      var file_button = $('#file_button');
+                      var my_files = document.getElementById("file");
                       var reader = new FileReader();
                       var formdata = $('#useradd').serializeArray();
-                      console.log(formdata);
+                      var file_data;
+                      reader.onload = function() { //veriyi yükle
+                          file_data = reader.result;
+                      }
+                      var formData = new FormData($(this)[0]);
+                      var veri = [];
+                      jQuery.each(formdata, function(i, field) {
+                          veri[field.name] = field.value;
+                      });
+                      console.log(data);
+                      data.append("file", document.getElementById('file').files[0]);
+                      // file_button.after('<br><br><hr><br><img src="' + file_data + '" width="350px">');
+                      $.ajax({
 
-                      console.log(reader.readAsDataURL(my_files.files[0]))
-                      /* $.ajax({
-
-                          url: '{{ route('register') }}',
+                          url: "{{ route('ogrenci.store') }}",
                           type: 'POST',
-                          data: {
-                              name: formdata[1]['value'],
-                              email: formdata[2]['value'],
-                              password: formdata[3]['value'],
-                              password_confirmation: formdata[4]['value'],
-                              terms: formdata[5]['value'],
+                          contentType: false,
+                          cache: false,
+                          processData: false,
+                          data: data
+                              /* {
+                                                           resim: file_data,
 
-
-                          },
+                                                           annead: veri['annead'],
+                                                           annemes: veri['annemes'],
+                                                           annetel: veri['annetel'],
+                                                           babaad: veri['babaad'],
+                                                           babames: veri['babames'],
+                                                           babatel: veri['babatel'],
+                                                           basaripuan: veri['basaripuan'],
+                                                           birim_id: veri['birim_id'],
+                                                           bosanma: veri['bosanma'],
+                                                           deger_resim: veri['deger_resim'],
+                                                           ogrenci_aciklama: veri['ogrenci_aciklama'],
+                                                           ogrenci_adres: veri['ogrenci_adres'],
+                                                           ogrenci_adsoyad: veri['ogrenci_adsoyad'],
+                                                           ogrenci_dt: veri['ogrenci_dt'],
+                                                           ogrenci_sehir: veri['ogrenci_sehir'],
+                                                           ogrenci_tc: veri['ogrenci_tc'],
+                                                           ogrenci_tel: veri['ogrenci_tel'],
+                                                           okuldurum: veri['okuldurum'],
+                                                           yetimdurum: veri['yetimdurum'],
+                                                       } */
+                              ,
                           dataType: 'text',
-                          success: (data) => {
-                              var dat = JSON.parse(data);
+                          success: (datam) => {
+                              var dat = JSON.parse(datam);
                               $("#example1").DataTable().ajax.reload();
+                              //  file_button.after('<br><br><hr><br><img src="' + file_data + '" width="350px">');
                               $('#modalAdd').modal('hide');
-                              console.log(data);
+                              console.log(datam);
                               var Toast = Swal.mixin({
                                   toast: true,
                                   position: 'top',
@@ -460,8 +494,7 @@
                               })
                               document.getElementById("useradd").reset();
                           },
-                      }); */
-
+                      });
 
                   })
 

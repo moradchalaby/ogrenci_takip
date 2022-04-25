@@ -133,7 +133,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
     Route::prefix('ogrenci')->group(function () {
         //?Öğrenci
         // Route::get('/getBirim', [OgrenciController::class, 'getBirim'])->name('ogrenci.getBirim');
-        // Route::get('/store', [OgrenciController::class, 'store'])->name('ogrenci.store');
+        Route::post('/store', [OgrenciController::class, 'store'])->name('ogrenci.store');
         // Route::post('/create', [OgrenciController::class, 'create'])->name('ogrenci.create');
         Route::get('/', [OgrenciController::class, 'index'])->name('ogrenci.index');
         // Route::get('/hocagetir', [OgrenciController::class, 'hocagetir'])->name('ogrenci.hocagetir');

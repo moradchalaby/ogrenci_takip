@@ -5,20 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Ogrenci extends Model
+class Ogrenciokul extends Model
 {
     use HasFactory;
-    protected $table = 'ogrenci';
+    protected $table = 'ogrenciokul';
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $guarded = [];
+    protected $fillable = [
+        'id',
+        'ogrenci_id',
+        'okul_id',
 
-    public function okul_ogrenci()
-    {
 
-        return $this->hasMany('App\Okul', 'ogrenciokul', 'ogrenci_id', 'okul_id');
-    }
+    ];
 }

@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Egitim;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ogrenci;
+use App\Models\Ogrencibirim;
+use App\Models\Ogrenciokul;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
+use Image;
 
 class OgrenciController extends Controller
 {
@@ -37,7 +41,7 @@ class OgrenciController extends Controller
 
                 ->addColumn('resim', function ($row) {
 
-                    $resim = '<img alt="Avatar" class="avatar" src="' . '/dist/img/logo-yok.png' . '">';
+                    $resim = '<img alt="Avatar" class="avatar" src="' . $row['ogrenci_resim'] . '">';
 
                     return $resim;
                 })
@@ -75,9 +79,9 @@ class OgrenciController extends Controller
             ['data' => 'resim', 'name' => 'resim', 'title' => 'Resim'],
             ['data' => 'ogrenci_adsoyad', 'name' => 'ogrenci_adsoyad', 'title' => 'Name'],
             ['data' => 'babaad', 'name' => 'babaad', 'title' => 'Baba Adı'],
-            ['data' => 'babatel', 'name' => 'babaad', 'title' => 'Baba Tel'],
-            ['data' => 'annead', 'name' => 'babaad', 'title' => 'Anne Adı'],
-            ['data' => 'annetel', 'name' => 'babaad', 'title' => 'Anne Tel'],
+            ['data' => 'babatel', 'name' => 'babatel', 'title' => 'Baba Tel'],
+            ['data' => 'annead', 'name' => 'annead', 'title' => 'Anne Adı'],
+            ['data' => 'annetel', 'name' => 'annetel', 'title' => 'Anne Tel'],
             ['data' => 'action', 'name' => 'action', 'title' => 'İşlemler'],
 
         ])->lengthMenu([
@@ -114,7 +118,81 @@ class OgrenciController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->ajax()) {
+
+
+            $dataf = Ogrenci::create(
+
+                [
+                    "annead" => $request->annead,
+                    "annemes" => $request->annemes,
+                    "annetel" => $request->annetel,
+                    "babaad" => $request->babaad,
+                    "babames" => $request->babames,
+                    "babatel" => $request->babatel,
+                    "ogrenci_bosanma" => $request->bosanma,
+                    "ogrenci_aciklama" => $request->ogrenci_aciklama,
+                    "ogrenci_adres" => $request->ogrenci_adres,
+                    "ogrenci_adsoyad" => $request->ogrenci_adsoyad,
+                    "ogrenci_dt" => $request->ogrenci_dt,
+                    "ogrenci_sehir" => $request->ogrenci_sehir,
+                    "ogrenci_tc" => $request->ogrenci_tc,
+                    "ogrenci_tel" => $request->ogrenci_tel,
+                    "ogrenci_yetim" => $request->yetimdurum,
+                    'kullanici_id' => Auth::id(),
+
+                ]
+            );
+            $son = Ogrenci::latest('id')->first();
+            Ogrenciokul::create(
+                [
+                    'okul_id' => $request->okuldurum,
+                    'ogrenci_id' => $son->id,
+                    'basari' => $request->basaripuan
+                ]
+            );
+            Ogrencibirim::create(
+                [
+                    "birim_id" => $request->birim_id,
+                    'ogrenci_id' => $son->id,
+                ]
+            );
+            $name = $son->id . 'resim' . $son->kullanici_id;
+
+            /*  $request->validate([
+                'ogrenci_resim' => 'required|file|mimes:jpeg,jpg,png,svg|max:4096' // uzantı ve maks dosya boyutu için validation
+            ]); */
+            if ($_FILES["file"]["name"] != '') {
+                $test = explode('.', $_FILES["file"]["name"]);
+                $ext = end($test);
+                $name = $name . '.' . $ext;
+                if (!file_exists('dimg')) {
+                    mkdir('dimg', 0777, true);
+                }
+                $location = 'dimg/' . $name;
+
+                if ($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png') {
+                    move_uploaded_file($_FILES["file"]["tmp_name"], $location);
+                }
+            }
+            Ogrenci::updateorCreate(
+                ['id' => $son->id],
+                ['ogrenci_resim' => '/dimg' . '/' . $name]
+            );
+            // üye id veya name gibi değerlere göre bir resim adı (bu değer sabit olursa yeni gelen dosyayı eskisinin üzerine kaydeder)
+
+            // resim adı farklı yaparak eskisini silmek istiyorsanız
+            // use Illuminate\Support\Facades\Storage;
+            // Storage::delete(storage_path('app/public/avatar/'.$name.'.jpg)); // eski resmi sil
+
+            /*   $img = Image::make($request->ogrenci_resim);
+            $data['img'] = $img;
+            $img->fit(256, 256); // isterseniz resmi orantılı bir şekilde boyutlandır
+            $img->save(storage_path('app/public/dimg' . $name . '.jpg'), 80); */
+            // storage dosyasına resmi %60 kalitede kaydet
+
+            return response()->json($dataf);
+        }
     }
 
     /**
