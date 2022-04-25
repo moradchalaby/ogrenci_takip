@@ -3,7 +3,7 @@
 /public/storage
 /storage/*.key
 /vendor
-/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/views
+/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/views/*.blade
 .env
 .env.backup
 .phpunit.result.cache
