@@ -15,6 +15,8 @@ class CreateHafizbelgesizTable extends Migration
     {
         Schema::create('hafizbelgesiz', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('ogrenci_id');
+            $table->unsignedBigInteger('hafizlikdurum_id');
             $table->timestamps();
         });
     }

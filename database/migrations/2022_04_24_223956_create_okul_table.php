@@ -16,6 +16,7 @@ class CreateOkulTable extends Migration
         Schema::create('okul', function (Blueprint $table) {
             $table->id();
             $table->string('okul');
+            $table->string('okul_ad')->nullable();
             $table->timestamps();
         });
     }

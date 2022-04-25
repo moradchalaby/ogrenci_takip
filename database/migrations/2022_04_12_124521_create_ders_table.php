@@ -15,8 +15,8 @@ class CreateDersTable extends Migration
     {
         Schema::create('ders', function (Blueprint $table) {
             $table->id('ders_id');
-            $table->string('ders_ad');
-            $table->integer('birim_id');
+            $table->string('ders_ad')->nullable();
+            $table->integer('birim_id')->nullable();
             $table->integer('kullanici_id');
             $table->timestamps();
         });

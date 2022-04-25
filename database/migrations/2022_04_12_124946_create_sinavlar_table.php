@@ -15,8 +15,8 @@ class CreateSinavlarTable extends Migration
     {
         Schema::create('sinavlar', function (Blueprint $table) {
             $table->id();
-            $table->string('sinav_ad');
-            $table->date('sinav_zaman');
+            $table->string('sinav_ad')->nullable();;
+            $table->date('sinav_zaman')->nullable();;
             $table->integer('kullanici_id');
             $table->integer('ders_id');
             $table->integer('sinif_id');

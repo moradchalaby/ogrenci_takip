@@ -498,22 +498,22 @@
 
                   })
 
-                  hocagetir();
+
                   birimgetir();
-
-                  function hocagetir() {
-                      $.ajax({
-                          type: 'post',
-                          url: "{{ route('birimhoca.hocagetir') }}",
-                          data: {
-                              get_option: true
-                          },
-                          success: function(response) {
-                              document.getElementById("hoca").innerHTML = response;
-                          }
-                      });
-                  }
-
+                  /* hocagetir();
+                                    function hocagetir() {
+                                        $.ajax({
+                                            type: 'post',
+                                            url: "{{ route('birimhoca.hocagetir') }}",
+                                            data: {
+                                                get_option: true
+                                            },
+                                            success: function(response) {
+                                                document.getElementById("hoca").innerHTML = response;
+                                            }
+                                        });
+                                    }
+                   */
                   function birimgetir() {
                       $.ajax({
                           type: 'post',

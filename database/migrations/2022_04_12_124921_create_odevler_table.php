@@ -15,9 +15,9 @@ class CreateOdevlerTable extends Migration
     {
         Schema::create('odevler', function (Blueprint $table) {
             $table->id();
-            $table->string('baslik');
-            $table->date('zaman');
-            $table->date('teslim');
+            $table->string('baslik')->nullable();
+            $table->date('zaman')->nullable();;
+            $table->date('teslim')->nullable();;
             $table->integer('kullanici_id');
             $table->integer('ders_id');
             $table->integer('sinif_id');

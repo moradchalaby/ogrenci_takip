@@ -32,7 +32,7 @@ class OgrenciController extends Controller
         if (request()->ajax()) {
             $data = Ogrenci::select('*')
 
-                ->where(['ogrenci.ogrenci_kytdurum' => 1]);
+                ->where(['ogrenci.ogrenci_kytdurum' => '1']);
 
 
 
@@ -141,6 +141,7 @@ class OgrenciController extends Controller
                     "ogrenci_yetim" => $request->yetimdurum,
                     'kullanici_id' => Auth::id(),
 
+
                 ]
             );
             $son = Ogrenci::latest('id')->first();
@@ -162,7 +163,7 @@ class OgrenciController extends Controller
             /*  $request->validate([
                 'ogrenci_resim' => 'required|file|mimes:jpeg,jpg,png,svg|max:4096' // uzantı ve maks dosya boyutu için validation
             ]); */
-            if ($_FILES["file"]["name"] != '') {
+            /* if ($_FILES["file"]["name"] != '') {
                 $test = explode('.', $_FILES["file"]["name"]);
                 $ext = end($test);
                 $name = $name . '.' . $ext;
@@ -174,10 +175,10 @@ class OgrenciController extends Controller
                 if ($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png') {
                     move_uploaded_file($_FILES["file"]["tmp_name"], $location);
                 }
-            }
+            } */
             Ogrenci::updateorCreate(
                 ['id' => $son->id],
-                ['ogrenci_resim' => '/dimg' . '/' . $name]
+                ['ogrenci_resim' => '/storage/dimg' . '/' . $name . '.jpg']
             );
             // üye id veya name gibi değerlere göre bir resim adı (bu değer sabit olursa yeni gelen dosyayı eskisinin üzerine kaydeder)
 
@@ -185,10 +186,12 @@ class OgrenciController extends Controller
             // use Illuminate\Support\Facades\Storage;
             // Storage::delete(storage_path('app/public/avatar/'.$name.'.jpg)); // eski resmi sil
 
-            /*   $img = Image::make($request->ogrenci_resim);
+            $img = Image::make($request->file('file'));
             $data['img'] = $img;
-            $img->fit(256, 256); // isterseniz resmi orantılı bir şekilde boyutlandır
-            $img->save(storage_path('app/public/dimg' . $name . '.jpg'), 80); */
+            $img->fit(256, 256);
+            //  $img->path = '/dimg' . $name . '.jpg'; // isterseniz resmi orantılı bir şekilde boyutlandır
+            // isterseniz resmi orantılı bir şekilde boyutlandır
+            $img->save(storage_path('app\public\dimg' . "\\" . $name . '.jpg'), 80);
             // storage dosyasına resmi %60 kalitede kaydet
 
             return response()->json($dataf);

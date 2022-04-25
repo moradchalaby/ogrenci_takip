@@ -17,7 +17,7 @@ class CreateSinavogrenciTable extends Migration
             $table->id();
             $table->integer('ogrenci_id');
             $table->integer('sinav_id');
-            $table->string('sinav_not');
+            $table->string('sinav_not')->nullable();;
             $table->timestamps();
         });
     }

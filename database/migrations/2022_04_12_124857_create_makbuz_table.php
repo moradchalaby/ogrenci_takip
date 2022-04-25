@@ -16,12 +16,12 @@ class CreateMakbuzTable extends Migration
         Schema::create('makbuz', function (Blueprint $table) {
             $table->id();
             $table->string('ad_soyad');
-            $table->string('kullanici');
+            $table->string('kullanici_adsoyad');
             $table->double('tutar');
             $table->enum('kur', ['₺', '€', '$',]);
-            $table->string('odeme_sekli');
+            $table->enum('odeme_sekli', ['BANKA', 'NAKİT'])->default('NAKİT');
             $table->date('tarih');
-            $table->text('aciklama');
+            $table->text('aciklama')->nullable();
             $table->timestamps();
         });
     }

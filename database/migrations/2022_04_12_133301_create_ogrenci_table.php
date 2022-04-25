@@ -35,9 +35,10 @@ class CreateOgrenciTable extends Migration
             $table->string('ogrenci_belge2')->nullable();
             $table->string('ogrenci_belge3')->nullable();
             $table->text('ogrenci_aciklama')->nullable();
-            $table->integer('ogrenci_yetim')->default(0);
-            $table->integer('ogrenci_bosanma')->default(0);
-            $table->integer('ogrenci_kytdurum')->default(1);
+            $table->enum('ogrenci_yetim', ['0', '1'])->default(0);
+            $table->enum('ogrenci_bosanma', ['0', '1'])->default(0);
+            $table->enum('ogrenci_kytdurum', ['0', '1'])->default(1);
+
             $table->date('ayrilma_tarih')->nullable();
             $table->timestamps();
         });

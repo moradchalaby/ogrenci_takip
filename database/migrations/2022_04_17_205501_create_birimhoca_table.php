@@ -17,7 +17,7 @@ class CreateBirimhocaTable extends Migration
             $table->id();
             $table->integer('kullanici_id');
             $table->integer('birim_id');
-            $table->string('vazife');
+            $table->string('vazife')->nullable();;
             $table->timestamps();
         });
     }

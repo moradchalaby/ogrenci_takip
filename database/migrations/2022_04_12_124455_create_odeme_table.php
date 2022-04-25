@@ -24,7 +24,7 @@ class CreateOdemeTable extends Migration
             $table->date('odeme_tarih');
             $table->string('odeme_ay');
             $table->integer('odeme_makbuz');
-            $table->enum('odeme_sekli', ['BANKA', 'NAKİT']);
+            $table->enum('odeme_sekli', ['BANKA', 'NAKİT'])->default('NAKİT');
             $table->timestamps();
         });
     }

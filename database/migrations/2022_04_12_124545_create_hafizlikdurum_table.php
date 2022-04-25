@@ -20,7 +20,7 @@ class CreateHafizlikdurumTable extends Migration
             $table->string('hafizlik_durum');
             $table->date('bast');
             $table->date('sont');
-            $table->string('hafizlik_son');
+            $table->string('hafizlik_son')->nullable();
             $table->timestamps();
         });
     }

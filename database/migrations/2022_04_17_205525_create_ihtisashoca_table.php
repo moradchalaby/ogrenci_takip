@@ -16,7 +16,7 @@ class CreateIhtisashocaTable extends Migration
         Schema::create('ihtisashoca', function (Blueprint $table) {
             $table->id();
             $table->integer('kullanici_id');
-            $table->string('vazife');
+            $table->string('vazife')->nullable();;
 
             $table->timestamps();
         });

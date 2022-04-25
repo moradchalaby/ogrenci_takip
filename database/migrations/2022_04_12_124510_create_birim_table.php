@@ -16,7 +16,7 @@ class CreateBirimTable extends Migration
         Schema::create('birim', function (Blueprint $table) {
             $table->id('birim_id');
             $table->string('birim_ad');
-            $table->string('birim_donem');
+            $table->string('birim_donem')->nullable();
             $table->timestamps();
         });
     }

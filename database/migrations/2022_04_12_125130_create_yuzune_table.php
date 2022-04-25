@@ -16,8 +16,8 @@ class CreateYuzuneTable extends Migration
         Schema::create('yuzune', function (Blueprint $table) {
             $table->id();
             $table->string('yuzune_ad');
-            $table->string('yuzune_tur');
-            $table->string('yuzune_tur2');
+            $table->string('yuzune_tur')->nullable();;
+            $table->string('yuzune_tur2')->nullable();;
             $table->timestamps();
         });
     }

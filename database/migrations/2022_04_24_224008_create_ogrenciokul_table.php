@@ -17,8 +17,8 @@ class CreateOgrenciokulTable extends Migration
             $table->id();
             $table->integer('ogrenci_id');
             $table->integer('okul_id');
-            $table->string('aciklama');
-            $table->string('basari');
+            $table->string('aciklama')->nullable();
+            $table->string('basari')->nullable();
 
             $table->timestamps();
         });

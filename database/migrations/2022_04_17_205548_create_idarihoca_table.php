@@ -16,7 +16,7 @@ class CreateIdarihocaTable extends Migration
         Schema::create('idarihoca', function (Blueprint $table) {
             $table->id();
             $table->integer('kullanici_id');
-            $table->string('vazife');
+            $table->string('vazife')->nullable();;
             $table->timestamps();
         });
     }

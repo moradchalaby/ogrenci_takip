@@ -17,7 +17,7 @@ class CreateOdevogrenciTable extends Migration
             $table->id();
             $table->integer('ogrenci_id');
             $table->integer('odev_id');
-            $table->enum('odev_durum', ['1', '0']);
+            $table->enum('odev_durum', ['1', '0'])->default('0');;
             $table->timestamps();
         });
     }
