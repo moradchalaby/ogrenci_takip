@@ -16,6 +16,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $kullanici_id
+ * @property string $vazife
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|Bekarhoca newModelQuery()
@@ -25,6 +26,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Bekarhoca whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bekarhoca whereKullaniciId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bekarhoca whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bekarhoca whereVazife($value)
  */
 	class Bekarhoca extends \Eloquent {}
 }
@@ -57,6 +59,7 @@ namespace App\Models{
  * @property int $id
  * @property int $kullanici_id
  * @property int $birim_id
+ * @property string $vazife
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|Birimhoca newModelQuery()
@@ -67,6 +70,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Birimhoca whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Birimhoca whereKullaniciId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Birimhoca whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Birimhoca whereVazife($value)
  */
 	class Birimhoca extends \Eloquent {}
 }
@@ -106,6 +110,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $kullanici_id
+ * @property string|null $vazife
  * @property int $birim_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -117,6 +122,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikhoca whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikhoca whereKullaniciId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikhoca whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikhoca whereVazife($value)
  */
 	class Hafizlikhoca extends \Eloquent {}
 }
@@ -167,12 +173,12 @@ namespace App\Models{
 /**
  * App\Models\Kullanici
  *
- * @property int $id
- * @property string $name
- * @property string $email
+ * @property int $kullanici_id
+ * @property string $kullanici_adsoyad
+ * @property string $kullanici_mail
  * @property string|null $email_verified_at
  * @property string|null $kullanici_resim
- * @property string $password
+ * @property string $kullanici_password
  * @property string $kullanici_dt
  * @property string|null $kullanici_tc
  * @property string|null $kullanici_gsm
@@ -180,7 +186,7 @@ namespace App\Models{
  * @property string|null $kullanici_yetki
  * @property string|null $kullanici_birim
  * @property string|null $kullanici_sinif
- * @property string $kullanici_durum
+ * @property string|null $kullanici_durum
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -188,20 +194,20 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Kullanici newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Kullanici query()
  * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereEmailVerifiedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereKullaniciAdres($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereKullaniciAdsoyad($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereKullaniciBirim($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereKullaniciDt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereKullaniciDurum($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereKullaniciGsm($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereKullaniciId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereKullaniciMail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereKullaniciPassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereKullaniciResim($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereKullaniciSinif($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereKullaniciTc($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereKullaniciYetki($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Kullanici wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereUpdatedAt($value)
  */
@@ -244,6 +250,7 @@ namespace App\Models{
  * @property string|null $annemes
  * @property string|null $babatel
  * @property string|null $annetel
+ * @property string|null $ogrenci_tel
  * @property string|null $ogrenci_sehir
  * @property string|null $ogrenci_adres
  * @property string|null $ogrenci_resim
@@ -253,12 +260,16 @@ namespace App\Models{
  * @property string|null $ogrenci_belge2
  * @property string|null $ogrenci_belge3
  * @property string|null $ogrenci_aciklama
- * @property int $ogrenci_yetim
- * @property int $ogrenci_bosanma
- * @property int $ogrenci_kytdurum
+ * @property string $ogrenci_yetim
+ * @property string $ogrenci_bosanma
+ * @property string $ogrenci_kytdurum
  * @property string|null $ayrilma_tarih
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Birim[] $birim_ogrenci
+ * @property-read int|null $birim_ogrenci_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Okul[] $okul_ogrenci
+ * @property-read int|null $okul_ogrenci_count
  * @method static \Illuminate\Database\Eloquent\Builder|Ogrenci newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Ogrenci newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Ogrenci query()
@@ -286,6 +297,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Ogrenci whereOgrenciSehir($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ogrenci whereOgrenciSglk($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ogrenci whereOgrenciTc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ogrenci whereOgrenciTel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ogrenci whereOgrenciYetim($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ogrenci whereUpdatedAt($value)
  */
@@ -343,6 +355,7 @@ namespace App\Models{
  * App\Models\Okul
  *
  * @property int $id
+ * @property string $okul
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|Okul newModelQuery()
@@ -350,6 +363,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Okul query()
  * @method static \Illuminate\Database\Eloquent\Builder|Okul whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Okul whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Okul whereOkul($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Okul whereUpdatedAt($value)
  */
 	class Okul extends \Eloquent {}
@@ -429,7 +443,7 @@ namespace App\Models{
  * @property string $name
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
- * @property string|null $kullanici_resim
+ * @property string $kullanici_resim
  * @property string $password
  * @property string $kullanici_dt
  * @property string|null $kullanici_tc

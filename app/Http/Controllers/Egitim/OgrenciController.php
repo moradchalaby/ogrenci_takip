@@ -55,12 +55,11 @@ class OgrenciController extends Controller
                                         <i class="fa-solid fa-angles-right"></i>
                                       </a>';
                     } else {
-                        $btn = '
-                    <a type="button" class="btn btn-outline-warning btn-xs" data-toggle="modal" data-id="' . $row['id'] . '" data="' . strval($row) . '"
-                                          data-target="#modalAdd">
-
-                                         <i class="fa-solid fa-pen-to-square"></i>
+                        $btn = ' <a type="button" class="btn btn-success btn-xs editmodal" data-toggle="modal" data-id="' . $row['id'] . '" data-ogrenci="{"ad":"Murat","soyad":"Çelebi"}"
+                                          data-target="#modalEdit">
+                                           <i class="fa-solid fa-pen-to-square"></i>
                                       </a>
+
 
                                       <a href="/ogrenci/detay/' . $row['id'] . '" type="button" class="btn btn-outline-primary btn-xs">
 
@@ -215,9 +214,15 @@ class OgrenciController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
         //
+        if ($request->ajax()) {
+
+            $ogrenciedit = Ogrenci::find($request->id)->okul_ogrenci();
+
+            return response()->json($ogrenciedit);
+        }
     }
 
     /**
