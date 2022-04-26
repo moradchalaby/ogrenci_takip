@@ -18,12 +18,10 @@ class Ogrenci extends Model
 
     public function okul_ogrenci()
     {
-
-        return $this->hasMany('App\Models\Okul', 'ogrenciokul', 'ogrenci_id', 'okul_id');
+        return $this->belongsToMany(Okul::class, 'ogrenciokul', 'ogrenci_id', 'okul_id');
     }
     public function birim_ogrenci()
     {
-
-        return $this->hasMany('App\Models\Birim', 'ogrencibirim', 'ogrenci_id', 'birim_id');
+        return $this->belongsToMany(Birim::class, 'ogrencibirim', 'ogrenci_id', 'birim_id');
     }
 }

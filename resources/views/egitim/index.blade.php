@@ -342,6 +342,7 @@
                                           <div class="form-group">
                                               <input type="text" class="form-control" name="ogrenci_adsoyad"
                                                   id="ogrenci_adsoyad" placeholder="Adı Soyadı">
+                                              <input type="hidden" name="id" id="ogrenci_id">
                                           </div>
                                           <div class="form-group">
                                               <input type="date" class="form-control" name="ogrenci_dt" id="ogrenci_dt"
@@ -395,13 +396,13 @@
                                                   placeholder="Anne Meslek">
                                           </div>
                                           <div class="form-group row">
-                                              <select id="yetimdurum" name="yetimdurum" class="form-control col">
+                                              <select id="ogrenci_yetim" name="yetimdurum" class="form-control col">
                                                   <option value="">Yetim veya Öksüz mü?</option>
                                                   <option value="0">Hayır</option>
                                                   <option value="1">Evet</option>
 
                                               </select>
-                                              <select id="bosanma" name="bosanma" class="form-control col">
+                                              <select id="ogrenci_bosanma" name="bosanma" class="form-control col">
                                                   <option value="">Anne Baba Ayrı mı?</option>
                                                   <option value="0">Hayır</option>
                                                   <option value="1">Evet</option>
@@ -418,7 +419,7 @@
                                       <div id="veli-part" class="content" role="tabpanel"
                                           aria-labelledby="veli-part-trigger">
                                           <div class="form-group">
-                                              <select id="birim" name="birim_id" class="form-control">
+                                              <select id="birime" name="birim_id" class="form-control">
                                               </select>
 
                                           </div>
@@ -451,17 +452,20 @@
                                       <div id="egitim-part" class="content" role="tabpanel"
                                           aria-labelledby="egitim-part-trigger">
                                           <div class="form-group">
+                                              <img id="resim" src="" alt="">
+                                          </div>
+                                          <div class="form-group">
 
-                                              <div class="input-group  input-file " id="ogrenci_resim"
+                                              <div class="input-groupr  input-filer " id="ogrenci_resim"
                                                   name="ogrenci_resim">
-                                                  <span class="input-group-btn">
+                                                  <span class="input-groupr-btn">
                                                       <button class="btn btn-default btn-choose" id="file_button"
                                                           type="button">Resim
                                                           Ekle</button>
                                                   </span>
                                                   <input type="text" class="form-control" name="deger_resim"
                                                       placeholder="Bir Dosya Seçiniz 'Max=2MB'" />
-                                                  <span class="input-group-btn">
+                                                  <span class="input-groupr-btn">
                                                       <button class="btn btn-warning btn-reset"
                                                           type="button">Temizle</button>
                                                   </span>
@@ -532,34 +536,37 @@
       <script src="/dist/js/tolower.js"></script>
       <script>
           $(document).on("click", ".editmodal", function() {
-              var myBookId = $(this).data('ogrenci');
-              console.log(myBookId);
-              /* $(".modal-body #bookId").val(myBookId) */
-              ;
-              // As pointed out in comments,
-              // it is unnecessary to have to manually call the modal.
-              // $('#addBookDialog').modal('show');
-          });
-          /*  $(document).ready(function() {
-
-                   $('#bookId').val($(this).data('id'));
-                   $('#addBookDialog').modal('show');
-               });
-           }); */
-          $(document).on("click", ".editmodal", function() {
               var id = $(this).data('id');
+
               $.ajax({
                   type: 'post',
                   url: "{{ route('ogrenci.edit') }}",
+                  dataType: 'json',
                   data: {
                       id: id
                   },
-                  success: function(response) {
-                      var dat = JSON.stringify(response);
+                  success: function(ogrenciedit) {
+                      var dat = JSON.stringify(ogrenciedit);
+                      var datim = JSON.parse(dat);
+
+
+                      Object.keys(datim).forEach(function(key) {
+                          // var value = jsonData[key];
+                          if ($('#' + key).length) {
+                              $(`#useredit #${key}`).val(datim[key]);
+                          }
+                      });
                       console.log('success: ' + dat);
+                      $('#useredit #okuldurum').val(`${datim.okul_id}`);
+                      $('#useredit #birime').val(`${datim.birim_id}`);
+                      $('#useredit #resim').attr('src', datim.ogrenci_resim);
                   },
-                  error: function(response) {
-                      console.log('error: ' + response);
+                  error: function(ogrenciedit) {
+                      var dat = JSON.stringify(ogrenciedit);
+                      var datim = JSON.parse(dat);
+
+
+                      console.log('error: ' + dat);
                   },
               });
           });
@@ -610,6 +617,32 @@
                           $(this).find('input').css("cursor", "pointer");
                           $(this).find('input').mousedown(function() {
                               $(this).parents('.input-file').prev().click();
+                              return false;
+                          });
+                          return element;
+                      }
+                  }
+              );
+              $(".input-filer").before(
+                  function() {
+                      if (!$(this).prev().hasClass('inputr-ghost')) {
+                          var element = $(
+                              "<input type='file' id='filer' class='inputr-ghost form-control' style='visibility:hidden; height:0'>"
+                          );
+                          element.attr("name", $(this).attr("name"));
+                          element.change(function() {
+                              element.next(element).find('input').val((element.val()).split('\\').pop());
+                          });
+                          $(this).find("button.btn-choose").click(function() {
+                              element.click();
+                          });
+                          $(this).find("button.btn-reset").click(function() {
+                              element.val(null);
+                              $(this).parents(".input-filer").find('input').val('');
+                          });
+                          $(this).find('input').css("cursor", "pointer");
+                          $(this).find('input').mousedown(function() {
+                              $(this).parents('.input-filer').prev().click();
                               return false;
                           });
                           return element;
@@ -690,31 +723,7 @@
                   contentType: false,
                   cache: false,
                   processData: false,
-                  data: data
-                      /* {
-                                                   resim: file_data,
-
-                                                   annead: veri['annead'],
-                                                   annemes: veri['annemes'],
-                                                   annetel: veri['annetel'],
-                                                   babaad: veri['babaad'],
-                                                   babames: veri['babames'],
-                                                   babatel: veri['babatel'],
-                                                   basaripuan: veri['basaripuan'],
-                                                   birim_id: veri['birim_id'],
-                                                   bosanma: veri['bosanma'],
-                                                   deger_resim: veri['deger_resim'],
-                                                   ogrenci_aciklama: veri['ogrenci_aciklama'],
-                                                   ogrenci_adres: veri['ogrenci_adres'],
-                                                   ogrenci_adsoyad: veri['ogrenci_adsoyad'],
-                                                   ogrenci_dt: veri['ogrenci_dt'],
-                                                   ogrenci_sehir: veri['ogrenci_sehir'],
-                                                   ogrenci_tc: veri['ogrenci_tc'],
-                                                   ogrenci_tel: veri['ogrenci_tel'],
-                                                   okuldurum: veri['okuldurum'],
-                                                   yetimdurum: veri['yetimdurum'],
-                                               } */
-                      ,
+                  data: data,
                   dataType: 'text',
                   success: (datam) => {
                       var dat = JSON.parse(datam);
@@ -758,9 +767,79 @@
               });
 
           })
+          $('#useredit').on("submit", function(e) {
+              e.preventDefault();
+              var form = $('#useredit')[0];
+              var data = new FormData(form);
+              var file_button = $('#file_button');
+              var my_files = document.getElementById("filer");
+              var reader = new FileReader();
+              var formdata = $('#useredit').serializeArray();
+              var file_data;
+              reader.onload = function() { //veriyi yükle
+                  file_data = reader.result;
+              }
+              var formData = new FormData($(this)[0]);
+              var veri = [];
+              jQuery.each(formdata, function(i, field) {
+                  veri[field.name] = field.value;
+              });
+              console.log(data);
+              data.append("file", document.getElementById('filer').files[0]);
+              // file_button.after('<br><br><hr><br><img src="' + file_data + '" width="350px">');
+              $.ajax({
+
+                  url: "{{ route('ogrenci.update') }}",
+                  type: 'POST',
+                  contentType: false,
+                  cache: false,
+                  processData: false,
+                  data: data,
+                  dataType: 'text',
+                  success: (datam) => {
+                      var dat = JSON.parse(datam);
+                      $("#example1").DataTable().ajax.reload();
+                      //  file_button.after('<br><br><hr><br><img src="' + file_data + '" width="350px">');
+                      $('#modalEdit').modal('hide');
+                      console.log(datam);
+                      var Toast = Swal.mixin({
+                          toast: true,
+                          position: 'top',
+                          showConfirmButton: false,
+                          timer: 3000
+                      });
+                      Toast.fire({
+                          icon: 'success',
+                          title: dat["ogrenci_adsoyad"] + '<br>  İşlem Başarılı <br>',
+                      })
+
+                      document.getElementById("useradd").reset();
+                  },
+                  error: function(data) {
+                      var dat = JSON.parse(data);
+                      $('#modalEdit').modal('hide');
 
 
-          birimgetir();
+                      var Toast = Swal.mixin({
+                          toast: true,
+                          position: 'top',
+                          showConfirmButton: false,
+                          timer: 3000
+                      });
+                      Toast.fire({
+                          icon: 'error',
+                          title: dat["name"]
+
+                              +
+                              '<br> İşlem başarısız <br>',
+                      })
+                      document.getElementById("useradd").reset();
+                  },
+              });
+
+          })
+
+
           /* hocagetir();
                             function hocagetir() {
                                 $.ajax({
@@ -775,7 +854,10 @@
                                 });
                             }
            */
-          function birimgetir() {
+          birimgetir('#useredit #birime');
+          birimgetir('#useradd #birim');
+
+          function birimgetir(id) {
               $.ajax({
                   type: 'post',
                   url: "{{ route('birimhoca.birimgetir') }}",
@@ -783,7 +865,7 @@
                       get_option: true
                   },
                   success: function(response) {
-                      document.getElementById("birim").innerHTML = response;
+                      $(id).html(response);
                   }
               });
           }

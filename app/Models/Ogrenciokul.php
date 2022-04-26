@@ -14,11 +14,5 @@ class Ogrenciokul extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'id',
-        'ogrenci_id',
-        'okul_id',
-
-
-    ];
+    protected $guarded = [];
 }

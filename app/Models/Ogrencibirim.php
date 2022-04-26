@@ -14,11 +14,5 @@ class Ogrencibirim extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'id',
-        'ogrenci_id',
-        'birim_id',
-
-
-    ];
+    protected $guarded = [];
 }
