@@ -22,6 +22,7 @@ use App\Http\Controllers\Personel\HafizlikhocaController;
 use App\Http\Controllers\Personel\TeknikhocaController;
 use App\Http\Controllers\Personel\IdarihocaController;
 use App\Http\Controllers\Egitim\OgrenciController;
+use App\Http\Controllers\Egitim\HafizliController;
 use App\Http\Controllers\Yapi\BirimController;
 use App\Http\Controllers\YetkilerController;
 use App\Http\Controllers\Auth\LoginController;
@@ -141,9 +142,20 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         // Route::get('/hocagetir', [OgrenciController::class, 'hocagetir'])->name('ogrenci.hocagetir');
         // Route::post('/birimgetir', [OgrenciController::class, 'birimgetir'])->name('ogrenci.birimgetir');
     });
+    Route::prefix('hafizlik')->group(function () {
+        //?Öğrenci
+        // Route::get('/getBirim', [OgrenciController::class, 'getBirim'])->name('ogrenci.getBirim');
+        // Route::post('/store', [OgrenciController::class, 'store'])->name('hafizlik.store');
+        //Route::post('/edit', [OgrenciController::class, 'edit'])->name('hafizlik.edit');
+        // Route::post('/update', [OgrenciController::class, 'update'])->name('hafizlik.update');
+        // Route::post('/create', [OgrenciController::class, 'create'])->name('ogrenci.create');
+        Route::any('/', [HafizliController::class, 'index'])->name('hafizlik.index');
+        // Route::get('/hocagetir', [OgrenciController::class, 'hocagetir'])->name('ogrenci.hocagetir');
+        // Route::post('/birimgetir', [OgrenciController::class, 'birimgetir'])->name('ogrenci.birimgetir');
+    });
     Route::get('/routes', [RoutesController::class, 'showApplicationRoutes'])->name('routes.index');
 });
-Auth::routes();
+
 /* Route::get('/login/redirect', function () {
     return redirect(route('auth.login'));
 })->name('login');

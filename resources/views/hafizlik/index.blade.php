@@ -2,7 +2,9 @@
 
   @section('head')
       <!-- BS Stepper -->
-      <link rel="stylesheet" href="../../plugins/bs-stepper/css/bs-stepper.min.css">
+      <link rel="stylesheet" href="/plugins/bs-stepper/css/bs-stepper.min.css">
+      <!-- daterange picker -->
+      <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
   @endsection
   @section('content')
       <!-- Content Wrapper. Contains page content -->
@@ -34,6 +36,21 @@
 
                           <div class="card">
                               <div class="card-header">
+                                  <form action="">
+                                      <div class="form-group">
+                                          <label>Date range:</label>
+
+                                          <div class="input-group">
+                                              <div class="input-group-prepend">
+                                                  <span class="input-group-text">
+                                                      <i class="far fa-calendar-alt"></i>
+                                                  </span>
+                                              </div>
+                                              <input type="text" class="form-control float-right" id="reservation">
+                                          </div>
+                                          <!-- /.input group -->
+                                      </div>
+                                  </form>
                                   <h3 class="card-title">{!! $veri['name'] !!} Tam Liste</h3>
                                   <div class="card-tools">
                                       <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
@@ -43,6 +60,7 @@
 
                                   </div>
                               </div>
+
                               <!-- /.card-header -->
                               <div class="card-body">
 
@@ -110,7 +128,7 @@
 
 
                               </div>
-                              <div class="bs-stepper-content">
+                              {{-- <div class="bs-stepper-content">
                                   <!-- your steps content here -->
                                   <form method="POST" id="useradd" action="#">
 
@@ -509,370 +527,412 @@
                   <!-- /.modal-dialog -->
               </div>
           </div>
-      </div>
-      <!-- /.modal -->
-  @endsection
-  @section('css')
-  @endsection
-  @section('js')
-  @endsection
-  @section('script')
-      <!-- DataTables  & Plugins -->
-      <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
-      <script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-      <script src="/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-      <script src="/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-      <script src="/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-      <script src="/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-      <script src="/plugins/jszip/jszip.min.js"></script>
-      <script src="/plugins/pdfmake/pdfmake.min.js"></script>
-      <script src="/plugins/pdfmake/vfs_fonts.js"></script>
-      <script src="/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-      <script src="/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-      <script src="/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-      <script src="/plugins/inputmask/jquery.inputmask.min.js"></script>
-      <!-- BS-Stepper -->
-      <script src="/plugins/bs-stepper/js/bs-stepper.min.js"></script>
-      <script src="/dist/js/tolower.js"></script>
-      <script>
-          $(document).on("click", ".editmodal", function() {
-              var id = $(this).data('id');
+      </div> --}}
+                              <!-- /.modal -->
+                          @endsection
+                          @section('css')
+                          @endsection
+                          @section('js')
+                          @endsection
+                          @section('script')
+                              <!-- DataTables  & Plugins -->
+                              <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
+                              <script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+                              <script src="/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+                              <script src="/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+                              <script src="/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+                              <script src="/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+                              <script src="/plugins/jszip/jszip.min.js"></script>
+                              <script src="/plugins/pdfmake/pdfmake.min.js"></script>
+                              <script src="/plugins/pdfmake/vfs_fonts.js"></script>
+                              <script src="/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+                              <script src="/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+                              <script src="/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+                              <script src="/plugins/inputmask/jquery.inputmask.min.js"></script>
+                              <script src="/plugins/moment/moment.js"></script>
 
-              $.ajax({
-                  type: 'post',
-                  url: "{{ route('ogrenci.edit') }}",
-                  dataType: 'json',
-                  data: {
-                      id: id
-                  },
-                  success: function(ogrenciedit) {
-                      var dat = JSON.stringify(ogrenciedit);
-                      var datim = JSON.parse(dat);
+                              <!-- date-range-picker -->
+                              <script src="/plugins/daterangepicker/daterangepicker.js"></script>
+                              <!-- BS-Stepper -->
+                              <script src="/plugins/bs-stepper/js/bs-stepper.min.js"></script>
+                              <script src="/dist/js/tolower.js"></script>
+                              <script>
+                                  $('#reservation').daterangepicker()
+                                  //Date range picker with time picker
+                                  $('#reservationtime').daterangepicker({
+                                      timePicker: true,
+                                      timePickerIncrement: 30,
+                                      locale: {
+                                          format: 'MM/DD/YYYY hh:mm A'
+                                      }
+                                  })
+                                  //Date range as a button
+                                  $('#daterange-btn').daterangepicker({
+                                          ranges: {
+                                              'Today': [moment(), moment()],
+                                              'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                                              'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                                              'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                                              'This Month': [moment().startOf('month'), moment().endOf('month')],
+                                              'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf(
+                                                  'month')]
+                                          },
+                                          startDate: moment().subtract(29, 'days'),
+                                          endDate: moment()
+                                      },
+                                      function(start, end) {
+                                          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+                                      }
+                                  )
+                              </script>
+                              {{-- <script>
+                                  $(document).on("click", ".editmodal", function() {
+                                      var id = $(this).data('id');
 
-
-                      Object.keys(datim).forEach(function(key) {
-                          // var value = jsonData[key];
-                          if ($('#' + key).length) {
-                              $(`#useredit #${key}`).val(datim[key]);
-                          }
-                      });
-                      console.log('success: ' + dat);
-                      $('#useredit #okuldurum').val(`${datim.okul_id}`);
-                      $('#useredit #birime').val(`${datim.birim_id}`);
-                      $('#useredit #resim').attr('src', datim.ogrenci_resim);
-                  },
-                  error: function(ogrenciedit) {
-                      var dat = JSON.stringify(ogrenciedit);
-                      var datim = JSON.parse(dat);
-
-
-                      console.log('error: ' + dat);
-                  },
-              });
-          });
-      </script>
-      <script>
-          function tckimlikkontorolu(tcno) {
-              var tckontrol, toplam;
-              tckontrol = tcno;
-              tcno = tcno.value;
-              toplam = Number(tcno.substring(0, 1)) + Number(tcno.substring(1, 2)) +
-                  Number(tcno.substring(2, 3)) + Number(tcno.substring(3, 4)) +
-                  Number(tcno.substring(4, 5)) + Number(tcno.substring(5, 6)) +
-                  Number(tcno.substring(6, 7)) + Number(tcno.substring(7, 8)) +
-                  Number(tcno.substring(8, 9)) + Number(tcno.substring(9, 10));
-              strtoplam = String(toplam);
-              onunbirlerbas = strtoplam.substring(strtoplam.length, strtoplam.length - 1);
-
-              if (onunbirlerbas == tcno.substring(10, 11)) {
-                  $('#ogrenci_tc').removeClass('is-invalid');
-                  $('#ogrenci_tc').addClass('is-valid');
+                                      $.ajax({
+                                          type: 'post',
+                                          url: "{{ route('ogrenci.edit') }}",
+                                          dataType: 'json',
+                                          data: {
+                                              id: id
+                                          },
+                                          success: function(ogrenciedit) {
+                                              var dat = JSON.stringify(ogrenciedit);
+                                              var datim = JSON.parse(dat);
 
 
-              } else {
-                  $('#ogrenci_tc').removeClass('is-valid');
-                  $('#ogrenci_tc').addClass('is-invalid');
-              }
-          }
-          $('[data-mask]').inputmask()
-
-          function bs_input_file() {
-              $(".input-file").before(
-                  function() {
-                      if (!$(this).prev().hasClass('input-ghost')) {
-                          var element = $(
-                              "<input type='file' id='file' class='input-ghost form-control' style='visibility:hidden; height:0'>"
-                          );
-                          element.attr("name", $(this).attr("name"));
-                          element.change(function() {
-                              element.next(element).find('input').val((element.val()).split('\\').pop());
-                          });
-                          $(this).find("button.btn-choose").click(function() {
-                              element.click();
-                          });
-                          $(this).find("button.btn-reset").click(function() {
-                              element.val(null);
-                              $(this).parents(".input-file").find('input').val('');
-                          });
-                          $(this).find('input').css("cursor", "pointer");
-                          $(this).find('input').mousedown(function() {
-                              $(this).parents('.input-file').prev().click();
-                              return false;
-                          });
-                          return element;
-                      }
-                  }
-              );
-              $(".input-filer").before(
-                  function() {
-                      if (!$(this).prev().hasClass('inputr-ghost')) {
-                          var element = $(
-                              "<input type='file' id='filer' class='inputr-ghost form-control' style='visibility:hidden; height:0'>"
-                          );
-                          element.attr("name", $(this).attr("name"));
-                          element.change(function() {
-                              element.next(element).find('input').val((element.val()).split('\\').pop());
-                          });
-                          $(this).find("button.btn-choose").click(function() {
-                              element.click();
-                          });
-                          $(this).find("button.btn-reset").click(function() {
-                              element.val(null);
-                              $(this).parents(".input-filer").find('input').val('');
-                          });
-                          $(this).find('input').css("cursor", "pointer");
-                          $(this).find('input').mousedown(function() {
-                              $(this).parents('.input-filer').prev().click();
-                              return false;
-                          });
-                          return element;
-                      }
-                  }
-              );
-          }
-          $(function() {
-              bs_input_file();
-          });
-      </script>
-      <script>
-          // BS-Stepper Init
-          document.addEventListener('DOMContentLoaded', function() {
-              window.stepper1 = new Stepper(document.querySelector('.bs-stepper1'))
-              window.stepper2 = new Stepper(document.querySelector('.bs-stepper2'))
-          })
-      </script>
-      <script>
-          (function($, DataTable) {
-
-              // Datatable global configuration
-              $.extend(true, DataTable.defaults, {
-                  language: {
-                      "url": "/dist/js/tr.json"
-                  },
-
-                  "buttons": ["copy", "csv", "excel", "pdf", {
-                      extend: 'print',
-
-                      exportOptions: {
-                          columns: ':visible'
-                      }
-                  }, "colvis"],
-                  "responsive": true,
-                  "lengthMenu": [
-                      [-1, 10, 25, 50],
-                      ["Tümü", 10, 25, 50]
-                  ],
-                  "autoWidth": true,
-
-              });
-
-          })(jQuery, jQuery.fn.dataTable);
-      </script>
-
-      {!! $html->scripts() !!}
-      <script>
-          $(".reset").click(function() {
-              $("#useredit").trigger("reset");
-          });
-          $.ajaxSetup({
-              headers: {
-                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-              }
-          });
-          $('#useradd').on("submit", function(e) {
-              e.preventDefault();
-              var form = $('#useradd')[0];
-              var data = new FormData(form);
-              var file_button = $('#file_button');
-              var my_files = document.getElementById("file");
-              var reader = new FileReader();
-              var formdata = $('#useradd').serializeArray();
-              var file_data;
-              reader.onload = function() { //veriyi yükle
-                  file_data = reader.result;
-              }
-              var formData = new FormData($(this)[0]);
-              var veri = [];
-              jQuery.each(formdata, function(i, field) {
-                  veri[field.name] = field.value;
-              });
-              console.log(data);
-              data.append("file", document.getElementById('file').files[0]);
-              // file_button.after('<br><br><hr><br><img src="' + file_data + '" width="350px">');
-              $.ajax({
-
-                  url: "{{ route('ogrenci.store') }}",
-                  type: 'POST',
-                  contentType: false,
-                  cache: false,
-                  processData: false,
-                  data: data,
-                  dataType: 'text',
-                  success: (datam) => {
-                      var dat = JSON.parse(datam);
-                      $("#example1").DataTable().ajax.reload();
-                      //  file_button.after('<br><br><hr><br><img src="' + file_data + '" width="350px">');
-                      $('#modalAdd').modal('hide');
-                      console.log(datam);
-                      var Toast = Swal.mixin({
-                          toast: true,
-                          position: 'top',
-                          showConfirmButton: false,
-                          timer: 3000
-                      });
-                      Toast.fire({
-                          icon: 'success',
-                          title: dat["name"] + '<br>  İşlem Başarılı <br>',
-                      })
-
-                      document.getElementById("useradd").reset();
-                  },
-                  error: function(data) {
-                      var dat = JSON.parse(data);
-                      $('#modalAdd').modal('hide');
+                                              Object.keys(datim).forEach(function(key) {
+                                                  // var value = jsonData[key];
+                                                  if ($('#' + key).length) {
+                                                      $(`#useredit #${key}`).val(datim[key]);
+                                                  }
+                                              });
+                                              console.log('success: ' + dat);
+                                              $('#useredit #okuldurum').val(`${datim.okul_id}`);
+                                              $('#useredit #birime').val(`${datim.birim_id}`);
+                                              $('#useredit #resim').attr('src', datim.ogrenci_resim);
+                                          },
+                                          error: function(ogrenciedit) {
+                                              var dat = JSON.stringify(ogrenciedit);
+                                              var datim = JSON.parse(dat);
 
 
-                      var Toast = Swal.mixin({
-                          toast: true,
-                          position: 'top',
-                          showConfirmButton: false,
-                          timer: 3000
-                      });
-                      Toast.fire({
-                          icon: 'error',
-                          title: dat["name"]
+                                              console.log('error: ' + dat);
+                                          },
+                                      });
+                                  });
+                              </script> --}}
+                              {{-- <script>
+                                  function tckimlikkontorolu(tcno) {
+                                      var tckontrol, toplam;
+                                      tckontrol = tcno;
+                                      tcno = tcno.value;
+                                      toplam = Number(tcno.substring(0, 1)) + Number(tcno.substring(1, 2)) +
+                                          Number(tcno.substring(2, 3)) + Number(tcno.substring(3, 4)) +
+                                          Number(tcno.substring(4, 5)) + Number(tcno.substring(5, 6)) +
+                                          Number(tcno.substring(6, 7)) + Number(tcno.substring(7, 8)) +
+                                          Number(tcno.substring(8, 9)) + Number(tcno.substring(9, 10));
+                                      strtoplam = String(toplam);
+                                      onunbirlerbas = strtoplam.substring(strtoplam.length, strtoplam.length - 1);
 
-                              +
-                              '<br> İşlem başarısız <br>',
-                      })
-                      document.getElementById("useradd").reset();
-                  },
-              });
-
-          })
-          $('#useredit').on("submit", function(e) {
-
-              e.preventDefault();
-
-              var form = $('#useredit')[0];
-              var data = new FormData(form);
-              var file_button = $('#file_button');
-              var my_files = document.getElementById("filer");
-              var reader = new FileReader();
-
-              var file_data;
-              reader.onload = function() { //veriyi yükle
-                  file_data = reader.result;
-              }
-              formData = new FormData($(this)[0]);
-              var veri = [];
-              jQuery.each(formdata, function(i, field) {
-                  veri[field.name] = field.value;
-              });
-              console.log(data);
-              data.append("file", document.getElementById('filer').files[0]);
-              // file_button.after('<br><br><hr><br><img src="' + file_data + '" width="350px">');
-              $.ajax({
-
-                  url: "{{ route('ogrenci.update') }}",
-                  type: 'POST',
-                  contentType: false,
-                  cache: false,
-                  processData: false,
-                  data: data,
-                  dataType: 'text',
-                  success: (datam) => {
-                      var dat = JSON.parse(datam);
-                      $("#example1").DataTable().ajax.reload();
-                      //  file_button.after('<br><br><hr><br><img src="' + file_data + '" width="350px">');
-                      $('#modalEdit').modal('hide');
-                      console.log(datam);
-                      var Toast = Swal.mixin({
-                          toast: true,
-                          position: 'top',
-                          showConfirmButton: false,
-                          timer: 3000
-                      });
-                      Toast.fire({
-                          icon: 'success',
-                          title: dat["ogrenci_adsoyad"] + '<br>  İşlem Başarılı <br>',
-                      })
-
-                      document.getElementById("useradd").reset();
-                  },
-                  error: function(data) {
-                      var dat = JSON.parse(data);
-                      $('#modalEdit').modal('hide');
+                                      if (onunbirlerbas == tcno.substring(10, 11)) {
+                                          $('#ogrenci_tc').removeClass('is-invalid');
+                                          $('#ogrenci_tc').addClass('is-valid');
 
 
-                      var Toast = Swal.mixin({
-                          toast: true,
-                          position: 'top',
-                          showConfirmButton: false,
-                          timer: 3000
-                      });
-                      Toast.fire({
-                          icon: 'error',
-                          title: dat["name"]
+                                      } else {
+                                          $('#ogrenci_tc').removeClass('is-valid');
+                                          $('#ogrenci_tc').addClass('is-invalid');
+                                      }
+                                  }
+                                  $('[data-mask]').inputmask()
 
-                              +
-                              '<br> İşlem başarısız <br>',
-                      })
-                      document.getElementById("useradd").reset();
-                  },
-              });
+                                  function bs_input_file() {
+                                      $(".input-file").before(
+                                          function() {
+                                              if (!$(this).prev().hasClass('input-ghost')) {
+                                                  var element = $(
+                                                      "<input type='file' id='file' class='input-ghost form-control' style='visibility:hidden; height:0'>"
+                                                  );
+                                                  element.attr("name", $(this).attr("name"));
+                                                  element.change(function() {
+                                                      element.next(element).find('input').val((element.val()).split('\\').pop());
+                                                  });
+                                                  $(this).find("button.btn-choose").click(function() {
+                                                      element.click();
+                                                  });
+                                                  $(this).find("button.btn-reset").click(function() {
+                                                      element.val(null);
+                                                      $(this).parents(".input-file").find('input').val('');
+                                                  });
+                                                  $(this).find('input').css("cursor", "pointer");
+                                                  $(this).find('input').mousedown(function() {
+                                                      $(this).parents('.input-file').prev().click();
+                                                      return false;
+                                                  });
+                                                  return element;
+                                              }
+                                          }
+                                      );
+                                      $(".input-filer").before(
+                                          function() {
+                                              if (!$(this).prev().hasClass('inputr-ghost')) {
+                                                  var element = $(
+                                                      "<input type='file' id='filer' class='inputr-ghost form-control' style='visibility:hidden; height:0'>"
+                                                  );
+                                                  element.attr("name", $(this).attr("name"));
+                                                  element.change(function() {
+                                                      element.next(element).find('input').val((element.val()).split('\\').pop());
+                                                  });
+                                                  $(this).find("button.btn-choose").click(function() {
+                                                      element.click();
+                                                  });
+                                                  $(this).find("button.btn-reset").click(function() {
+                                                      element.val(null);
+                                                      $(this).parents(".input-filer").find('input').val('');
+                                                  });
+                                                  $(this).find('input').css("cursor", "pointer");
+                                                  $(this).find('input').mousedown(function() {
+                                                      $(this).parents('.input-filer').prev().click();
+                                                      return false;
+                                                  });
+                                                  return element;
+                                              }
+                                          }
+                                      );
+                                  }
+                                  $(function() {
+                                      bs_input_file();
+                                  });
+                              </script> --}}
+                              {{-- <script>
+                                  // BS-Stepper Init
+                                  document.addEventListener('DOMContentLoaded', function() {
+                                      window.stepper1 = new Stepper(document.querySelector('.bs-stepper1'))
+                                      window.stepper2 = new Stepper(document.querySelector('.bs-stepper2'))
+                                  })
+                              </script> --}}
+                              <script>
+                                  (function($, DataTable) {
 
-          })
+                                      // Datatable global configuration
+                                      $.extend(true, DataTable.defaults, {
+
+                                          language: {
+                                              "url": "/dist/js/tr.json"
+                                          },
+
+                                          "buttons": ["copy", "csv", "excel", "pdf", {
+                                              extend: 'print',
+
+                                              exportOptions: {
+                                                  columns: ':visible'
+                                              }
+                                          }, "colvis"],
+                                          "responsive": true,
+                                          "lengthMenu": [
+                                              [-1, 10, 25, 50],
+                                              ["Tümü", 10, 25, 50]
+                                          ],
+                                          "autoWidth": true,
+
+                                      });
+
+                                  })(jQuery, jQuery.fn.dataTable);
+
+                                  $('.datepicker').on('change', function() {
+                                      var from = $("#startDate").val();
+                                      var to = $("#endDate").val();
+                                      if (from && to) {
+                                          myDataTable.draw();
+                                      }
+                                  });
+                              </script>
+
+                              {!! $html->scripts() !!}
+                              {{-- <script>
+                                  $(".reset").click(function() {
+                                      $("#useredit").trigger("reset");
+                                  });
+                                  $.ajaxSetup({
+                                      headers: {
+                                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                      }
+                                  });
+                                  $('#useradd').on("submit", function(e) {
+                                      e.preventDefault();
+                                      var form = $('#useradd')[0];
+                                      var data = new FormData(form);
+                                      var file_button = $('#file_button');
+                                      var my_files = document.getElementById("file");
+                                      var reader = new FileReader();
+                                      var formdata = $('#useradd').serializeArray();
+                                      var file_data;
+                                      reader.onload = function() { //veriyi yükle
+                                          file_data = reader.result;
+                                      }
+                                      var formData = new FormData($(this)[0]);
+                                      var veri = [];
+                                      jQuery.each(formdata, function(i, field) {
+                                          veri[field.name] = field.value;
+                                      });
+                                      console.log(data);
+                                      data.append("file", document.getElementById('file').files[0]);
+                                      // file_button.after('<br><br><hr><br><img src="' + file_data + '" width="350px">');
+                                      $.ajax({
+
+                                          url: "{{ route('ogrenci.store') }}",
+                                          type: 'POST',
+                                          contentType: false,
+                                          cache: false,
+                                          processData: false,
+                                          data: data,
+                                          dataType: 'text',
+                                          success: (datam) => {
+                                              var dat = JSON.parse(datam);
+                                              $("#example1").DataTable().ajax.reload();
+                                              //  file_button.after('<br><br><hr><br><img src="' + file_data + '" width="350px">');
+                                              $('#modalAdd').modal('hide');
+                                              console.log(datam);
+                                              var Toast = Swal.mixin({
+                                                  toast: true,
+                                                  position: 'top',
+                                                  showConfirmButton: false,
+                                                  timer: 3000
+                                              });
+                                              Toast.fire({
+                                                  icon: 'success',
+                                                  title: dat["name"] + '<br>  İşlem Başarılı <br>',
+                                              })
+
+                                              document.getElementById("useradd").reset();
+                                          },
+                                          error: function(data) {
+                                              var dat = JSON.parse(data);
+                                              $('#modalAdd').modal('hide');
 
 
-          /* hocagetir();
-                            function hocagetir() {
-                                $.ajax({
-                                    type: 'post',
-                                    url: "{{ route('birimhoca.hocagetir') }}",
-                                    data: {
-                                        get_option: true
-                                    },
-                                    success: function(response) {
-                                        document.getElementById("hoca").innerHTML = response;
-                                    }
-                                });
-                            }
-           */
-          birimgetir('#useredit #birime');
-          birimgetir('#useradd #birim');
+                                              var Toast = Swal.mixin({
+                                                  toast: true,
+                                                  position: 'top',
+                                                  showConfirmButton: false,
+                                                  timer: 3000
+                                              });
+                                              Toast.fire({
+                                                  icon: 'error',
+                                                  title: dat["name"]
 
-          function birimgetir(id) {
-              $.ajax({
-                  type: 'post',
-                  url: "{{ route('birimhoca.birimgetir') }}",
-                  data: {
-                      get_option: true
-                  },
-                  success: function(response) {
-                      $(id).html(response);
-                  }
-              });
-          }
-      </script>
-  @endsection
+                                                      +
+                                                      '<br> İşlem başarısız <br>',
+                                              })
+                                              document.getElementById("useradd").reset();
+                                          },
+                                      });
+
+                                  })
+                                  $('#useredit').on("submit", function(e) {
+
+                                      e.preventDefault();
+
+                                      var form = $('#useredit')[0];
+                                      var data = new FormData(form);
+                                      var file_button = $('#file_button');
+                                      var my_files = document.getElementById("filer");
+                                      var reader = new FileReader();
+
+                                      var file_data;
+                                      reader.onload = function() { //veriyi yükle
+                                          file_data = reader.result;
+                                      }
+                                      formData = new FormData($(this)[0]);
+                                      var veri = [];
+                                      jQuery.each(formdata, function(i, field) {
+                                          veri[field.name] = field.value;
+                                      });
+                                      console.log(data);
+                                      data.append("file", document.getElementById('filer').files[0]);
+                                      // file_button.after('<br><br><hr><br><img src="' + file_data + '" width="350px">');
+                                      $.ajax({
+
+                                          url: "{{ route('ogrenci.update') }}",
+                                          type: 'POST',
+                                          contentType: false,
+                                          cache: false,
+                                          processData: false,
+                                          data: data,
+                                          dataType: 'text',
+                                          success: (datam) => {
+                                              var dat = JSON.parse(datam);
+                                              $("#example1").DataTable().ajax.reload();
+                                              //  file_button.after('<br><br><hr><br><img src="' + file_data + '" width="350px">');
+                                              $('#modalEdit').modal('hide');
+                                              console.log(datam);
+                                              var Toast = Swal.mixin({
+                                                  toast: true,
+                                                  position: 'top',
+                                                  showConfirmButton: false,
+                                                  timer: 3000
+                                              });
+                                              Toast.fire({
+                                                  icon: 'success',
+                                                  title: dat["ogrenci_adsoyad"] + '<br>  İşlem Başarılı <br>',
+                                              })
+
+                                              document.getElementById("useradd").reset();
+                                          },
+                                          error: function(data) {
+                                              var dat = JSON.parse(data);
+                                              $('#modalEdit').modal('hide');
+
+
+                                              var Toast = Swal.mixin({
+                                                  toast: true,
+                                                  position: 'top',
+                                                  showConfirmButton: false,
+                                                  timer: 3000
+                                              });
+                                              Toast.fire({
+                                                  icon: 'error',
+                                                  title: dat["name"]
+
+                                                      +
+                                                      '<br> İşlem başarısız <br>',
+                                              })
+                                              document.getElementById("useradd").reset();
+                                          },
+                                      });
+
+                                  })
+
+
+                                  /* hocagetir();
+                                                    function hocagetir() {
+                                                        $.ajax({
+                                                            type: 'post',
+                                                            url: "{{ route('birimhoca.hocagetir') }}",
+                                                            data: {
+                                                                get_option: true
+                                                            },
+                                                            success: function(response) {
+                                                                document.getElementById("hoca").innerHTML = response;
+                                                            }
+                                                        });
+                                                    }
+                                   */
+                                  birimgetir('#useredit #birime');
+                                  birimgetir('#useradd #birim');
+
+                                  function birimgetir(id) {
+                                      $.ajax({
+                                          type: 'post',
+                                          url: "{{ route('birimhoca.birimgetir') }}",
+                                          data: {
+                                              get_option: true
+                                          },
+                                          success: function(response) {
+                                              $(id).html(response);
+                                          }
+                                      });
+                                  }
+                              </script> --}}
+                          @endsection

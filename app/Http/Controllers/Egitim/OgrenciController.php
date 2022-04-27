@@ -58,7 +58,7 @@ class OgrenciController extends Controller
                                         <i class="fa-solid fa-angles-right"></i>
                                       </a>';
                     } else {
-                        $btn = ' <a type="button" class="btn btn-success btn-xs editmodal" data-toggle="modal" data-id="' . $row['id'] . '" data-ogrenci="{"ad":"Murat","soyad":"Çelebi"}"
+                        $btn = ' <a type="button" class="btn btn-success reset btn-xs editmodal" data-toggle="modal" data-id="' . $row['id'] . '"
                                           data-target="#modalEdit">
                                            <i class="fa-solid fa-pen-to-square"></i>
                                       </a>
@@ -77,7 +77,19 @@ class OgrenciController extends Controller
         }
 
         $html = $builder->columns([
-            ['data' => 'id', 'name' => 'id', 'title' => 'Id'],
+            [
+                'defaultContent' => '',
+                'data'           => 'DT_RowIndex',
+                'name'           => 'DT_RowIndex',
+                'title'          => '',
+                'render'         => null,
+                'orderable'      => false,
+                'searchable'     => false,
+                'exportable'     => false,
+                'printable'      => true,
+                'footer'         => '',
+            ],
+
             ['data' => 'resim', 'name' => 'resim', 'title' => 'Resim'],
             ['data' => 'ogrenci_adsoyad', 'name' => 'ogrenci_adsoyad', 'title' => 'Name'],
             ['data' => 'babaad', 'name' => 'babaad', 'title' => 'Baba Adı'],
@@ -228,13 +240,16 @@ class OgrenciController extends Controller
         if ($requeste->ajax()) {
 
             $ogrenciedit
-                = DB::table('ogrenci')->where('ogrenci.id', '=', $requeste->id)
-                ->join('ogrenciokul',  'ogrenci.id', '=', 'ogrenciokul.ogrenci_id')
-                ->join('ogrencibirim',  'ogrenci.id', '=', 'ogrencibirim.ogrenci_id')
-                ->join('okul', 'okul.id', '=', 'ogrenciokul.okul_id')
-                ->join('birim', 'birim.birim_id', '=', 'ogrencibirim.birim_id')->select('ogrenci.*', 'ogrenciokul.*', 'okul.*', 'ogrencibirim.*', 'birim.*')
-                ->first();
+                = DB::table('ogrenci')->select('*')->where('ogrenci.id', $requeste->id)
+                ->rightJoin('ogrenciokul',  'ogrenci.id', '=', 'ogrenciokul.ogrenci_id')
+                ->rightJoin('okul', 'okul.id', '=', 'ogrenciokul.okul_id')
+                ->rightJoin('ogrencibirim',  'ogrenci.id', '=', 'ogrencibirim.ogrenci_id')
+                ->rightJoin('birim', 'birim.birim_id', '=', 'ogrencibirim.birim_id')
 
+
+                ->select('*')
+
+                ->first();
 
             return response()->json($ogrenciedit);
         }
