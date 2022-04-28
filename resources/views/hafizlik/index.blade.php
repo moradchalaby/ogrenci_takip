@@ -557,13 +557,17 @@
                               <script src="/plugins/bs-stepper/js/bs-stepper.min.js"></script>
                               <script src="/dist/js/tolower.js"></script>
                               <script>
-                                  $('#reservation').daterangepicker()
                                   //Date range picker with time picker
                                   $('#reservationtime').daterangepicker({
                                       timePicker: true,
                                       timePickerIncrement: 30,
                                       locale: {
-                                          format: 'MM/DD/YYYY hh:mm A'
+                                          format: 'YYYY-MM-DD hh:mm A'
+                                      },
+                                      function(start, end) {
+                                          // $('#dateRange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                                          //$(document).trigger('myCustomEvent');
+                                          console.log('aasd')
                                       }
                                   })
                                   //Date range as a button
@@ -574,8 +578,10 @@
                                               'Last 7 Days': [moment().subtract(6, 'days'), moment()],
                                               'Last 30 Days': [moment().subtract(29, 'days'), moment()],
                                               'This Month': [moment().startOf('month'), moment().endOf('month')],
-                                              'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf(
-                                                  'month')]
+                                              'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month')
+                                                  .endOf(
+                                                      'month')
+                                              ]
                                           },
                                           startDate: moment().subtract(29, 'days'),
                                           endDate: moment()
@@ -740,16 +746,50 @@
 
                                   })(jQuery, jQuery.fn.dataTable);
 
-                                  $('.datepicker').on('change', function() {
-                                      var from = $("#startDate").val();
-                                      var to = $("#endDate").val();
-                                      if (from && to) {
-                                          myDataTable.draw();
-                                      }
-                                  });
+                                  function myCallback(start, end) {
+                                      //$('#reservation span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                                      alert(start + ' - ' + end); //etc, your code here
+                                  }
+                                  // attach daterangepicker plugin
+
+                                  /*
+                                                                    $('#reservation').on('apply.daterangepicker', function(ev, picker) {
+                                                                        var from = $("#startDate").val();
+                                                                        var to = $("#endDate").val();
+                                                                        if (from && to) {
+                                                                            console.log(from + ' - ' + to);
+
+                                                                        }
+                                                                    });*/
                               </script>
 
                               {!! $html->scripts() !!}
+                              <script>
+                                  $.ajaxSetup({
+                                      headers: {
+                                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                      }
+                                  });
+                                  $('#reservation').daterangepicker({
+                                      opens: 'left'
+                                  }, function(start, end, label) {
+                                      $("#example1").DataTable({
+                                          "serverSide": true,
+                                          "ajax": {
+                                              "url": "{{ route('hafizlik.index') }}",
+                                              "type": "POST",
+                                              "data": {
+                                                  'bast': start.format('YYYY-MM-DD'),
+                                                  'sont': end.format('YYYY-MM-DD')
+                                              },
+                                              success: (datam) => {
+                                                  $("#example1").DataTable().ajax.reload();
+                                              }
+                                          },
+                                          "destroy": true,
+                                      });
+                                  });
+                              </script>
                               {{-- <script>
                                   $(".reset").click(function() {
                                       $("#useredit").trigger("reset");
