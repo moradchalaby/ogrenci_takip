@@ -52,20 +52,19 @@ class HafizliController extends Controller
             echo '<br>';
             echo $value->gunler;
             echo '<br><br><br>';
-        }
+        }dd($request);
+        exit;
         exit; */
         //tarihli dersleri ekle ye ayrı bir dizi olarak ekleyecez
-        $ekle = [
-            ['data' => 'id', 'name' => 'id', 'title' => 'Id'],
-            ['data' => 'resim', 'name' => 'resim', 'title' => 'Resim'],
-            ['data' => 'adsoyad', 'name' => 'adsoyad', 'title' => 'Name'],
 
-        ];
-        $variable =  ['2022-04-01' => '20', '2022-04-02' => '21', '2022-04-03' => '22', '2022-04-04' => '23'];
-        $raw = ['resim', 'action'];
-
-        $bast = '2020-06-16';
-        $sont = '2020-06-19';
+        if ($request->tarihar != null) {
+            $tarihar = explode(' - ', $request->tarihar);
+        } else {
+            $tarihar = [date("Y-m-d"), date("Y-m-d")];
+        };
+        $bast = date("Y-m-d", strtotime($tarihar[0]));
+        $sont =
+            date("Y-m-d", strtotime($tarihar[1]));
         $beign = new DateTime($bast);
         $end = new DateTime($sont);
         $end = $end->modify('+1 day');
@@ -75,34 +74,9 @@ class HafizliController extends Controller
             $interval,
             $end
         );
-        foreach ($daterange as $date) {
 
-            $gun = $date->format('Y-m-d');
-            array_push($ekle, ['data' => $gun, 'name' => $gun, 'title' => $gun]);
-        }
-        $html = $builder->columns($ekle)->lengthMenu([
-            [-1, 10, 25, 50],
-            ["Tümü", 10, 25, 50]
-        ],)->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
         if ($request->ajax()) {
-            $bast = $request->bast ? null : '2020-06-16';
-            $sont = $request->sont ? null : '2020-06-19';
 
-
-            $beign = new DateTime($bast);
-            $end = new DateTime($sont);
-            $end = $end->modify('+1 day');
-            $interval = new DateInterval('P1D');
-            $daterange = new DatePeriod($beign, $interval, $end);
-            foreach ($daterange as $date) {
-
-                $gun = $date->format('Y-m-d');
-                array_push($ekle, ['data' => $gun, 'name' => $gun, 'title' => $gun]);
-            }
-            $html = $builder->columns($ekle)->lengthMenu([
-                [-1, 10, 25, 50],
-                ["Tümü", 10, 25, 50]
-            ],)->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
 
 
             $data = Ogrenci::join('ogrencibirim',  'ogrenci.id', '=', 'ogrencibirim.ogrenci_id')
@@ -172,11 +146,40 @@ class HafizliController extends Controller
 
             return  $dt->make(true);
         }
+        $ekle = [
+            ['data' => 'id', 'name' => 'id', 'title' => 'Id'],
+            ['data' => 'resim', 'name' => 'resim', 'title' => 'Resim'],
+            ['data' => 'adsoyad', 'name' => 'adsoyad', 'title' => 'Name'],
 
-        $dizi = ['data' => 'buzz', 'name' => 'buzz', 'title' => 'Foo'];
+        ];
+
+        $raw = [
+            'resim', 'action'
+        ];
+
+
+
+        foreach ($daterange as $date) {
+
+            $gun = $date->format('Y-m-d');
+            array_push($ekle, ['data' => $gun, 'name' => $gun, 'title' => $gun]);
+        }
+        $html = $builder->ajax([
+            'url' => route('hafizlik.index'),
+            'type' => 'GET',
+            'data' => "function(d) { d.tarihar = '{$bast} - {$sont} ';
+        }",
+        ])->columns($ekle)->lengthMenu([
+            [-1, 10, 25, 50],
+            ["Tümü", 10, 25, 50]
+        ],)->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
+
+
+
+
         $veri['title'] = 'Öğrenciler';
         $veri['name'] = 'Ogrenci';
-
+        $veri['bast'] = $bast;
         /* dd($html);
         exit; */
 

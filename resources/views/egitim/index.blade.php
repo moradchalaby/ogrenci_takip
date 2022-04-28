@@ -16,7 +16,7 @@
                       </div>
                       <div class="col-sm-6">
                           <ol class="breadcrumb float-sm-right">
-                              <li class="breadcrumb-item"><a href="#">Home</a></li>
+                              <li class="breadcrumb-item"><a href="#">Anasayfaw</a></li>
                               <li class="breadcrumb-item active">{!! $veri['name'] !!}</li>
                           </ol>
                       </div>
@@ -777,7 +777,7 @@
               var form = $('#useredit')[0];
               var data = new FormData(form);
               var file_button = $('#file_button');
-              var my_files = document.getElementById("filer");
+              /* var my_files = document.getElementById("filer");
               var reader = new FileReader();
 
               var file_data;
@@ -788,7 +788,7 @@
               var veri = [];
               jQuery.each(formdata, function(i, field) {
                   veri[field.name] = field.value;
-              });
+              }); */
               console.log(data);
               data.append("file", document.getElementById('filer').files[0]);
               // file_button.after('<br><br><hr><br><img src="' + file_data + '" width="350px">');

@@ -36,35 +36,23 @@
 
                           <div class="card">
                               <div class="card-header">
-                                  <form action="">
-                                      <div class="form-group">
-                                          <label>Date range:</label>
 
-                                          <div class="input-group">
-                                              <div class="input-group-prepend">
-                                                  <span class="input-group-text">
-                                                      <i class="far fa-calendar-alt"></i>
-                                                  </span>
-                                              </div>
-                                              <input type="text" class="form-control float-right" id="reservation">
-                                          </div>
-                                          <!-- /.input group -->
-                                      </div>
-                                  </form>
                                   <h3 class="card-title">{!! $veri['name'] !!} Tam Liste</h3>
                                   <div class="card-tools">
                                       <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
-                                          data-target="#modalAdd">
-                                          Yeni Ekle
+                                          data-target="#modalFilter">
+                                          Filtrele
                                       </button>
 
                                   </div>
                               </div>
 
                               <!-- /.card-header -->
-                              <div class="card-body">
+                              <div class="card-body table-container">
 
                                   {!! $html->table() !!}
+
+
                               </div>
                               <!-- /.card-body -->
                           </div>
@@ -79,230 +67,84 @@
           <!-- /.content -->
       </div>
 
-      <div class="modal fade" id="modalAdd">
+      <div class="modal fade" id="modalFilter">
           <div class="modal-dialog ">
               <div class="modal-content">
                   <div class="modal-header">
-                      <h4 class="modal-title">Yeni {!! $veri['name'] !!} Ekle</h4>
+                      <h4 class="modal-title">Filtreler</h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                       </button>
                   </div>
                   <div class="modal-body">
-                      <div class="col-md-12">
-                          <div class="bs-stepper bs-stepper1">
-                              <div class="bs-stepper-header inline-block" role="tablist">
-                                  <!-- your steps here -->
-                                  <div class="step" data-target="#genel-part">
-                                      <button type="button" class="step-trigger" role="tab" aria-controls="genel-part"
-                                          id="genel-part-trigger">
-                                          <span class="bs-stepper-circle bg-info">1</span>
-                                          <span class="bs-stepper-label">Öğrenci</span>
-                                      </button>
-                                  </div>
-                                  <div class="line"></div>
-                                  <div class="step" data-target="#iletisim-part">
-                                      <button type="button" class="step-trigger" role="tab" aria-controls="iletisim-part"
-                                          id="iletisim-part-trigger">
-                                          <span class="bs-stepper-circle bg-info">2</span>
-                                          <span class="bs-stepper-label">Veli</span>
-                                      </button>
-                                  </div>
-                                  <div class="line"></div>
-                                  <div class="step" data-target="#veli-part">
-                                      <button type="button" class="step-trigger" role="tab" aria-controls="veli-part"
-                                          id="veli-part-trigger">
-                                          <span class="bs-stepper-circle bg-info">3</span>
-                                          <span class="bs-stepper-label">Eğitim</span>
-                                      </button>
-                                  </div>
-                                  <br>
-                                  <div class="line"></div>
-                                  <div class="step" data-target="#egitim-part">
-                                      <button type="button" class="step-trigger" role="tab" aria-controls="egitim-part"
-                                          id="egitim-part-trigger">
-                                          <span class="bs-stepper-circle bg-info">4</span>
-                                          <span class="bs-stepper-label">Belgeler</span>
-                                      </button>
-                                  </div>
+                      <form method="POST" id="useredit" action="{{ route('hafizlik.indexpost') }}">
+                          @csrf
+                          <div class="form-group">
+                              <label>Tarih Aralığı:</label>
 
-
+                              <div class="input-group">
+                                  <div class="input-group-prepend">
+                                      <span class="input-group-text">
+                                          <i class="far fa-calendar-alt"></i>
+                                      </span>
+                                  </div>
+                                  <input type="text" class="form-control float-right" name="tarihar" id="reservation">
                               </div>
-                              {{-- <div class="bs-stepper-content">
-                                  <!-- your steps content here -->
-                                  <form method="POST" id="useradd" action="#">
-
-                                      <div id="genel-part" class="content" role="tabpanel"
-                                          aria-labelledby="genel-part-trigger">
-                                          <div class="form-group">
-                                              <input type="text" class="form-control" name="ogrenci_adsoyad"
-                                                  id="ogrenci_adsoyad" placeholder="Adı Soyadı">
-                                          </div>
-                                          <div class="form-group">
-                                              <input type="date" class="form-control" name="ogrenci_dt" id="ogrenci_dt"
-                                                  placeholder="Doğum Tarihi">
-                                          </div>
-                                          <div class="form-group">
-                                              <input type="text" class="form-control" name="ogrenci_tc" id="ogrenci_tc"
-                                                  placeholder="TC No" onblur="tckimlikkontorolu(this);" maxlength="11">
-
-                                          </div>
-
-                                          <div class="form-group">
-                                              <input type="text" class="form-control" name="ogrenci_tel" id="ogrenci_tel"
-                                                  placeholder="Tel No" data-inputmask='"mask": "(999) 999-9999"' data-mask>
-                                          </div>
-                                          <div class="form-group">
-                                              <input type="text" class="form-control" name="ogrenci_sehir"
-                                                  id="ogrenci_sehir" placeholder="Şehir">
-                                          </div>
-                                          <div class="form-group">
-                                              <textarea class="form-control" name="ogrenci_adres" id="ogrenci_adres" placeholder="Adres" cols="10"
-                                                  rows="2"></textarea>
-
-                                          </div>
-
-                                          <button type="button" class="btn btn-outline-info"
-                                              onclick="stepper1.next()">Sonraki</button>
-                                      </div>
-                                      <div id="iletisim-part" class="content" role="tabpanel"
-                                          aria-labelledby="iletisim-part-trigger">
-                                          <div class="form-group row">
-                                              <input type="text" class="form-control col" name="babaad" id="babaad"
-                                                  placeholder="Baba Adı">
-
-                                              <input type="text" class="form-control col" name="babatel" id="babatel"
-                                                  placeholder="Baba Tel No" data-inputmask='"mask": "(999) 999-9999"'
-                                                  data-mask>
-                                          </div>
-                                          <div class="form-group">
-                                              <input type="text" class="form-control" name="babames" id="babames"
-                                                  placeholder="Baba Meslek">
-                                          </div>
-                                          <div class="form-group row">
-                                              <input type="text" class="form-control col" name="annead" id="annead"
-                                                  placeholder="Anne Adı">
-                                              <input type="text" class="form-control col" name="annetel" id="annetel"
-                                                  placeholder="Anne Tel No">
-                                          </div>
-                                          <div class="form-group">
-                                              <input type="text" class="form-control" name="annemes" id="annemes"
-                                                  placeholder="Anne Meslek">
-                                          </div>
-                                          <div class="form-group row">
-                                              <select id="yetimdurum" name="yetimdurum" class="form-control col">
-                                                  <option value="">Yetim veya Öksüz mü?</option>
-                                                  <option value="0">Hayır</option>
-                                                  <option value="1">Evet</option>
-
-                                              </select>
-                                              <select id="bosanma" name="bosanma" class="form-control col">
-                                                  <option value="">Anne Baba Ayrı mı?</option>
-                                                  <option value="0">Hayır</option>
-                                                  <option value="1">Evet</option>
-
-                                              </select>
-
-                                          </div>
-                                          <button type="button" class="btn btn-outline-info"
-                                              onclick="stepper1.previous()">Önceki</button>
-                                          <button type="button" class="btn btn-outline-info"
-                                              onclick="stepper1.next()">Sonraki</button>
-
-                                      </div>
-                                      <div id="veli-part" class="content" role="tabpanel"
-                                          aria-labelledby="veli-part-trigger">
-                                          <div class="form-group">
-                                              <select id="birim" name="birim_id" class="form-control">
-                                              </select>
-
-                                          </div>
-                                          <div class="form-group">
-                                              <select id="okuldurum" name="okuldurum" class="form-control">
-                                                  <option value="">Okul Durumunu Seçiniz</option>
-                                                  <option value="1">Orta Okul</option>
-                                                  <option value="2">Örgün Lise</option>
-                                                  <option value="3">Açık Lise</option>
-                                                  <option value="4">Üniversite</option>
-                                              </select>
-
-                                          </div>
-                                          <div class="form-group">
-                                              <input type="text" class="form-control" name="basaripuan" id="basaripuan"
-                                                  placeholder="Başarı Puanı">
-                                          </div>
-                                          <div class="form-group">
-                                              <textarea class="form-control" name="ogrenci_aciklama" id="ogrenci_aciklama" placeholder="Özel Durum" cols="10"
-                                                  rows="2"></textarea>
-
-                                          </div>
-                                          <button type="button" class="btn btn-outline-info"
-                                              onclick="stepper1.previous()">Önceki</button>
-                                          <button type="button" class="btn btn-outline-info"
-                                              onclick="stepper1.next()">Sonraki</button>
-
-                                      </div>
-
-                                      <div id="egitim-part" class="content" role="tabpanel"
-                                          aria-labelledby="egitim-part-trigger">
-                                          <div class="form-group">
-
-                                              <div class="input-group  input-file " id="ogrenci_resim" name="ogrenci_resim">
-                                                  <span class="input-group-btn">
-                                                      <button class="btn btn-default btn-choose" id="file_button"
-                                                          type="button">Resim
-                                                          Ekle</button>
-                                                  </span>
-                                                  <input type="text" class="form-control" name="deger_resim"
-                                                      placeholder="Bir Dosya Seçiniz 'Max=2MB'" />
-                                                  <span class="input-group-btn">
-                                                      <button class="btn btn-warning btn-reset"
-                                                          type="button">Temizle</button>
-                                                  </span>
-
-                                              </div>
-                                              <br>
-                                              <button type="button" class="btn btn-outline-info"
-                                                  onclick="stepper1.previous()">Önceki</button>
-                                              <button type="submit" class="btn btn-success">Kaydet</button>
-                                          </div>
-
-
-
-
-                                      </div>
-                                  </form>
-                              </div>
+                              <!-- /.input group -->
                           </div>
-                          <!-- /.card-body -->
-
-
-                          <div class="modal-footer justify-content-between">
-
-
-                              Visit <a href="https://github.com/Johann-S/bs-stepper/#how-to-use-it">bs-stepper
-                                  documentation</a>
-                              for
-                              more examples and information about the plugin.
-
-                              <!-- /.col -->
-
-
-
-
+                          <div class="form-group">
+                              <input type="text" class="form-control" name="ogrenci_adsoyad" id="ogrenci_adsoyad"
+                                  placeholder="Adı Soyadı">
+                              <input type="hidden" name="id" id="ogrenci_id">
+                          </div>
+                          <div class="form-group">
+                              <input type="date" class="form-control" name="ogrenci_dt" id="ogrenci_dt"
+                                  placeholder="Doğum Tarihi">
+                          </div>
+                          <div class="form-group">
+                              <input type="text" class="form-control" name="ogrenci_tc" id="ogrenci_tc"
+                                  placeholder="TC No" onblur="tckimlikkontorolu(this);" maxlength="11">
 
                           </div>
 
-                      </div>
-                      <!-- /.modal-content -->
+                          <div class="form-group">
+                              <input type="text" class="form-control" name="ogrenci_tel" id="ogrenci_tel"
+                                  placeholder="Tel No" data-inputmask='"mask": "(999) 999-9999"' data-mask>
+                          </div>
+                          <div class="form-group">
+                              <input type="text" class="form-control" name="ogrenci_sehir" id="ogrenci_sehir"
+                                  placeholder="Şehir">
+                          </div>
+                          <div class="form-group">
+                              <textarea class="form-control" name="ogrenci_adres" id="ogrenci_adres" placeholder="Adres" cols="10"
+                                  rows="2"></textarea>
+
+                          </div>
+
+                          <button type="submit" class="btn btn-outline-info" onclick="">Filtrele</button>
+
+                      </form>
                   </div>
+                  <div class="modal-footer justify-content-between">
+
+
+                      modal footer
+
+
+
+
+                  </div>
+
+
+                  <!-- /.modal-content -->
+
                   <!-- /.modal-dialog -->
               </div>
           </div>
       </div>
       <!-- /.modal -->
 
-      <div class="modal fade" id="modalEdit">
+      {{-- }} <div class="modal fade" id="modalEdit">
           <div class="modal-dialog ">
               <div class="modal-content">
                   <div class="modal-header">
@@ -528,70 +370,70 @@
               </div>
           </div>
       </div> --}}
-                              <!-- /.modal -->
-                          @endsection
-                          @section('css')
-                          @endsection
-                          @section('js')
-                          @endsection
-                          @section('script')
-                              <!-- DataTables  & Plugins -->
-                              <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
-                              <script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-                              <script src="/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-                              <script src="/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-                              <script src="/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-                              <script src="/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-                              <script src="/plugins/jszip/jszip.min.js"></script>
-                              <script src="/plugins/pdfmake/pdfmake.min.js"></script>
-                              <script src="/plugins/pdfmake/vfs_fonts.js"></script>
-                              <script src="/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-                              <script src="/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-                              <script src="/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-                              <script src="/plugins/inputmask/jquery.inputmask.min.js"></script>
-                              <script src="/plugins/moment/moment.js"></script>
+      <!-- /.modal -->
+  @endsection
+  @section('css')
+  @endsection
+  @section('js')
+  @endsection
+  @section('script')
+      <!-- DataTables  & Plugins -->
+      <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
+      <script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+      <script src="/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+      <script src="/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+      <script src="/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+      <script src="/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+      <script src="/plugins/jszip/jszip.min.js"></script>
+      <script src="/plugins/pdfmake/pdfmake.min.js"></script>
+      <script src="/plugins/pdfmake/vfs_fonts.js"></script>
+      <script src="/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+      <script src="/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+      <script src="/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+      <script src="/plugins/inputmask/jquery.inputmask.min.js"></script>
+      <script src="/plugins/moment/moment.js"></script>
 
-                              <!-- date-range-picker -->
-                              <script src="/plugins/daterangepicker/daterangepicker.js"></script>
-                              <!-- BS-Stepper -->
-                              <script src="/plugins/bs-stepper/js/bs-stepper.min.js"></script>
-                              <script src="/dist/js/tolower.js"></script>
-                              <script>
-                                  //Date range picker with time picker
-                                  $('#reservationtime').daterangepicker({
-                                      timePicker: true,
-                                      timePickerIncrement: 30,
-                                      locale: {
-                                          format: 'YYYY-MM-DD hh:mm A'
-                                      },
-                                      function(start, end) {
-                                          // $('#dateRange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-                                          //$(document).trigger('myCustomEvent');
-                                          console.log('aasd')
-                                      }
-                                  })
-                                  //Date range as a button
-                                  $('#daterange-btn').daterangepicker({
-                                          ranges: {
-                                              'Today': [moment(), moment()],
-                                              'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                                              'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                                              'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                                              'This Month': [moment().startOf('month'), moment().endOf('month')],
-                                              'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month')
-                                                  .endOf(
-                                                      'month')
-                                              ]
-                                          },
-                                          startDate: moment().subtract(29, 'days'),
-                                          endDate: moment()
-                                      },
-                                      function(start, end) {
-                                          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
-                                      }
-                                  )
-                              </script>
-                              {{-- <script>
+      <!-- date-range-picker -->
+      <script src="/plugins/daterangepicker/daterangepicker.js"></script>
+      <!-- BS-Stepper -->
+      <script src="/plugins/bs-stepper/js/bs-stepper.min.js"></script>
+      <script src="/dist/js/tolower.js"></script>
+      <script>
+          //Date range picker with time picker
+          $('#reservationtime').daterangepicker({
+              timePicker: true,
+              timePickerIncrement: 30,
+              locale: {
+                  format: 'YYYY-MM-DD hh:mm A'
+              },
+              function(start, end) {
+                  // $('#dateRange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                  //$(document).trigger('myCustomEvent');
+                  console.log('aasd')
+              }
+          })
+          //Date range as a button
+          $('#daterange-btn').daterangepicker({
+                  ranges: {
+                      'Today': [moment(), moment()],
+                      'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                      'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                      'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                      'This Month': [moment().startOf('month'), moment().endOf('month')],
+                      'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month')
+                          .endOf(
+                              'month')
+                      ]
+                  },
+                  startDate: moment().subtract(29, 'days'),
+                  endDate: moment()
+              },
+              function(start, end) {
+                  $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+              }
+          )
+      </script>
+      {{-- <script>
                                   $(document).on("click", ".editmodal", function() {
                                       var id = $(this).data('id');
 
@@ -628,7 +470,7 @@
                                       });
                                   });
                               </script> --}}
-                              {{-- <script>
+      {{-- <script>
                                   function tckimlikkontorolu(tcno) {
                                       var tckontrol, toplam;
                                       tckontrol = tcno;
@@ -711,86 +553,95 @@
                                       bs_input_file();
                                   });
                               </script> --}}
-                              {{-- <script>
+      {{-- <script>
                                   // BS-Stepper Init
                                   document.addEventListener('DOMContentLoaded', function() {
                                       window.stepper1 = new Stepper(document.querySelector('.bs-stepper1'))
                                       window.stepper2 = new Stepper(document.querySelector('.bs-stepper2'))
                                   })
                               </script> --}}
-                              <script>
-                                  (function($, DataTable) {
+      <script>
+          (function($, DataTable) {
 
-                                      // Datatable global configuration
-                                      $.extend(true, DataTable.defaults, {
+              // Datatable global configuration
+              $.extend(true, DataTable.defaults, {
 
-                                          language: {
-                                              "url": "/dist/js/tr.json"
-                                          },
+                  language: {
+                      "url": "/dist/js/tr.json"
+                  },
 
-                                          "buttons": ["copy", "csv", "excel", "pdf", {
-                                              extend: 'print',
+                  "buttons": ["copy", "csv", "excel", "pdf", {
+                      extend: 'print',
 
-                                              exportOptions: {
-                                                  columns: ':visible'
-                                              }
-                                          }, "colvis"],
-                                          "responsive": true,
-                                          "lengthMenu": [
-                                              [-1, 10, 25, 50],
-                                              ["Tümü", 10, 25, 50]
-                                          ],
-                                          "autoWidth": true,
+                      exportOptions: {
+                          columns: ':visible'
+                      }
+                  }, "colvis"],
+                  "responsive": true,
+                  "lengthMenu": [
+                      [-1, 10, 25, 50],
+                      ["Tümü", 10, 25, 50]
+                  ],
+                  "autoWidth": true,
 
-                                      });
+              });
 
-                                  })(jQuery, jQuery.fn.dataTable);
+          })(jQuery, jQuery.fn.dataTable);
 
-                                  function myCallback(start, end) {
-                                      //$('#reservation span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-                                      alert(start + ' - ' + end); //etc, your code here
-                                  }
-                                  // attach daterangepicker plugin
+          function myCallback(start, end) {
+              //$('#reservation span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+              alert(start + ' - ' + end); //etc, your code here
+          }
+          // attach daterangepicker plugin
 
-                                  /*
-                                                                    $('#reservation').on('apply.daterangepicker', function(ev, picker) {
-                                                                        var from = $("#startDate").val();
-                                                                        var to = $("#endDate").val();
-                                                                        if (from && to) {
-                                                                            console.log(from + ' - ' + to);
+          /*
+                                            $('#reservation').on('apply.daterangepicker', function(ev, picker) {
+                                                var from = $("#startDate").val();
+                                                var to = $("#endDate").val();
+                                                if (from && to) {
+                                                    console.log(from + ' - ' + to);
 
-                                                                        }
-                                                                    });*/
-                              </script>
+                                                }
+                                            });*/
+      </script>
 
-                              {!! $html->scripts() !!}
-                              <script>
-                                  $.ajaxSetup({
-                                      headers: {
-                                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                      }
-                                  });
-                                  $('#reservation').daterangepicker({
-                                      opens: 'left'
-                                  }, function(start, end, label) {
-                                      $("#example1").DataTable({
-                                          "serverSide": true,
-                                          "ajax": {
-                                              "url": "{{ route('hafizlik.index') }}",
-                                              "type": "POST",
-                                              "data": {
-                                                  'bast': start.format('YYYY-MM-DD'),
-                                                  'sont': end.format('YYYY-MM-DD')
-                                              },
-                                              success: (datam) => {
-                                                  $("#example1").DataTable().ajax.reload();
-                                              }
-                                          },
-                                          "destroy": true,
-                                      });
-                                  });
-                              </script>
-                              {{-- <script>
+      {!! $html->scripts() !!}
+
+
+      <script>
+          function refreshTable() {
+              $('div.table-container').fadeOut();
+              $('div.table-container').load("{{ route('hafizlik.index') }}", function() {
+                  $('div.table-container').html('{!! $html->table() !!}');
+                  $('div.table-container').fadeIn();
+              });
+          }
+          $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          });
+          $('#reservation').daterangepicker(function(start, end, label) {
+
+              /*  $("#example1").DataTable({
+
+                   "ajax": {
+                       "url": "{{ route('hafizlik.index') }}",
+                       "type": "POST",
+                       "data": {
+                           'bast': start.format('YYYY-MM-DD'),
+                           'sont': end.format('YYYY-MM-DD')
+                       },
+                       success: (datam) => {
+                           refreshTable();
+                           console.log(datam);
+                       }
+                   },
+                   "destroy": true,
+               }); */
+          });
+      </script>
+      {{-- <script>
                                   $(".reset").click(function() {
                                       $("#useredit").trigger("reset");
                                   });
@@ -975,4 +826,4 @@
                                       });
                                   }
                               </script> --}}
-                          @endsection
+  @endsection
