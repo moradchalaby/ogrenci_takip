@@ -33,6 +33,7 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="/dist/css/custom.css">
+
     @yield('head')
 </head>
 
@@ -73,8 +74,10 @@
 
     <!-- jQuery -->
     <script src="/plugins/jquery/jquery.min.js"></script>
+
     <!-- Bootstrap -->
     <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
     <!-- jQuery UI -->
     <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
     <!-- AdminLTE App -->

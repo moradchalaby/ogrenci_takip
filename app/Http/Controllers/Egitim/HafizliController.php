@@ -22,18 +22,21 @@ class HafizliController extends Controller
      */
     public function index(Request $request, Builder $builder)
     {
-        /*  $data = Ogrenci::join('ogrencibirim',  'ogrenci.id', '=', 'ogrencibirim.ogrenci_id')
+
+        /*   $data = Ogrenci::join('ogrencibirim',  'ogrenci.id', '=', 'ogrencibirim.ogrenci_id')
             ->join('birim', 'birim.birim_id', '=', 'ogrencibirim.birim_id')
             ->join('hafizlikdurum',  'ogrenci.id', '=', 'hafizlikdurum.ogrenci_id')
-            ->join('hfzlkders', 'ogrenci.id', '=', 'hfzlkders.ogrenci_id')
+            ->crossJoin('hfzlkders')
 
 
 
 
-            ->where(['ogrenci.ogrenci_kytdurum' => '1'])
+            ->where(['ogrenci.ogrenci_kytdurum' => '1'], ['ogrenci.id', '=', 'hfzlkders.ogrenci_id'])
             ->orderBy('hfzlkders.hafizlik_tarih')
+
             ->select(
                 'ogrenci.id as id',
+                'ogrenci.ogrenci_resim',
                 'ogrenci.ogrenci_adsoyad as adsoyad',
 
 
@@ -42,18 +45,25 @@ class HafizliController extends Controller
                 'hafizlikdurum.bast as bast',
                 'hafizlikdurum.sont as sont',
                 'hafizlikdurum.hafizlik_son as sonders',
-                DB::raw('GROUP_CONCAT(hfzlkders.hafizlik_ders) AS dersler'),
-                DB::raw('GROUP_CONCAT(hfzlkders.hafizlik_topl) AS say'),
-                DB::raw('GROUP_CONCAT(hfzlkders.hafizlik_tarih) AS gunler')
-            )->whereBetween('hfzlkders.hafizlik_tarih', ['2020-06-16', '2020-06-19'])
+                DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.hafizlik_ders ELSE NULL END
+                     ORDER BY hfzlkders.id ASC SEPARATOR ",") AS dersler '),
+                DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.hafizlik_topl ELSE NULL END
+                     ORDER BY hfzlkders.id ASC SEPARATOR ",") AS say'),
+                DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.hafizlik_tarih ELSE NULL END
+                     ORDER BY hfzlkders.id ASC SEPARATOR ",") AS gunler'),
+                DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.id ELSE NULL END
+                     ORDER BY hfzlkders.id ASC SEPARATOR ",") AS dersId')
+
+            )->whereBetween('hfzlkders.hafizlik_tarih', ['2020-06-14', '2020-06-20'])
             ->groupBy('ogrenci.id')->get();
-        foreach ($data as $key => $value) {
+        print_r($data);
+        exit;
+                     foreach ($data as $key => $value) {
             echo $key;
             echo '<br>';
             echo $value->gunler;
             echo '<br><br><br>';
-        }dd($request);
-        exit;
+        }
         exit; */
         //tarihli dersleri ekle ye ayrı bir dizi olarak ekleyecez
 
@@ -82,13 +92,14 @@ class HafizliController extends Controller
             $data = Ogrenci::join('ogrencibirim',  'ogrenci.id', '=', 'ogrencibirim.ogrenci_id')
                 ->join('birim', 'birim.birim_id', '=', 'ogrencibirim.birim_id')
                 ->join('hafizlikdurum',  'ogrenci.id', '=', 'hafizlikdurum.ogrenci_id')
-                ->join('hfzlkders', 'ogrenci.id', '=', 'hfzlkders.ogrenci_id')
+                ->crossJoin('hfzlkders')
 
 
 
 
-                ->where(['ogrenci.ogrenci_kytdurum' => '1'])
+                ->where(['ogrenci.ogrenci_kytdurum' => '1'], ['ogrenci.id', '=', 'hfzlkders.ogrenci_id'])
                 ->orderBy('hfzlkders.hafizlik_tarih')
+
                 ->select(
                     'ogrenci.id as id',
                     'ogrenci.ogrenci_resim',
@@ -100,30 +111,37 @@ class HafizliController extends Controller
                     'hafizlikdurum.bast as bast',
                     'hafizlikdurum.sont as sont',
                     'hafizlikdurum.hafizlik_son as sonders',
-                    DB::raw('GROUP_CONCAT(hfzlkders.hafizlik_ders) AS dersler'),
-                    DB::raw('GROUP_CONCAT(hfzlkders.hafizlik_topl) AS say'),
-                    DB::raw('GROUP_CONCAT(hfzlkders.hafizlik_tarih) AS gunler')
+                    DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.hafizlik_ders ELSE NULL END
+                     ORDER BY hfzlkders.id ASC SEPARATOR ",") AS dersler '),
+                    DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.hafizlik_topl ELSE NULL END
+                     ORDER BY hfzlkders.id ASC SEPARATOR ",") AS say'),
+                    DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.hafizlik_tarih ELSE NULL END
+                     ORDER BY hfzlkders.id ASC SEPARATOR ",") AS gunler'),
+                    DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.id ELSE NULL END
+                     ORDER BY hfzlkders.id ASC SEPARATOR ",") AS dersId')
+
                 )->whereBetween('hfzlkders.hafizlik_tarih', [$bast, $sont])
                 ->groupBy('ogrenci.id')->get();
-
 
             $dt = DataTables::of($data)
                 ->addIndexColumn()
 
                 ->addColumn('resim', function ($row) {
 
-                    $resim = '<img alt="Avatar" class="avatar" src="' . $row['ogrenci_resim'] . '">';
+                    $resim = "<img alt=\"Avatar\" class=\"avatar\" src=\"{$row['ogrenci_resim']}\">";
 
                     return $resim;
                 });
 
-
+            $raw = [
+                'resim', 'action'
+            ];
             foreach ($daterange as $date) {
 
                 $gun = $date->format('Y-m-d');
 
                 $dt->addColumn($gun, function ($row) use ($gun) {
-
+                    $dersid = explode(',', $row['dersId']);
                     $gunler = explode(',', $row['gunler']);
                     $dersler = explode(',', $row['dersler']);
                     if (in_array($gun, $gunler)) {
@@ -131,12 +149,21 @@ class HafizliController extends Controller
 
                         $tekrar =   array_count_values($gunler);
                         $say = $tekrar[$gun];
-                        $ders =  $dersler[array_search($gun, $gunler)];
+                        $ders =  ' <a type="button" class=" badge bg-info  col-6" data-toggle="modal" data-id="' .
+                            $dersid[array_search($gun, $gunler)] .
+                            '"data-target="#modalEdit">' .
+                            $dersler[array_search($gun, $gunler)] .
+                            '</a>';
                         for ($i = 1; $i < $say; $i++) {
-                            $ders = $ders  . ',' .   $dersler[array_search($gun, $gunler) + $i];
+                            $ders = $ders  .
+                                ' <a type="button" class=" badge  bg-info   col-6" data-toggle="modal" data-id="' .
+                                $dersid[array_search($gun, $gunler) + $i] .
+                                '"data-target="#modalEdit">' .
+                                $dersler[array_search($gun, $gunler) + $i] .
+                                '</a>';
                         }
                     } else {
-                        $ders = 'yok';
+                        $ders = '';
                     }
                     return $ders;
                 });
@@ -153,9 +180,7 @@ class HafizliController extends Controller
 
         ];
 
-        $raw = [
-            'resim', 'action'
-        ];
+
 
 
 
