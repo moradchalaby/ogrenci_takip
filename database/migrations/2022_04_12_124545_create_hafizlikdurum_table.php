@@ -21,6 +21,8 @@ class CreateHafizlikdurumTable extends Migration
             $table->date('bast');
             $table->date('sont');
             $table->string('hafizlik_son')->nullable();
+            $table->integer('hoca')->nullable();
+            $table->string('donus_suresi')->nullable();
             $table->timestamps();
         });
     }

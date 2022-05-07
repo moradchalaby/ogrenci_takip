@@ -181,7 +181,15 @@
                             </li>
                         @endcan
 
-
+                        @can('yetkili', 'hafizlik')
+                            <li class="nav-item">
+                                <a href="{{ route('hafizlik.index') }}"
+                                    class="nav-link {{ active('hafizlik.index') }}">
+                                    <i class="fa-solid fa-row nav-icon"></i>
+                                    <p>Tüm Öğrenci Hafızlık Listesi </p>
+                                </a>
+                            </li>
+                        @endcan
 
 
                         @can('egitim', 'egitim')

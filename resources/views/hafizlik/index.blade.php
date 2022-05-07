@@ -11,19 +11,7 @@
       <div class="content-wrapper">
           <!-- Content Header (Page header) -->
           <section class="content-header">
-              <div class="container-fluid">
-                  <div class="row mb-2">
-                      <div class="col-sm-6">
-                          <h1>{!! $veri['title'] !!}</h1>
-                      </div>
-                      <div class="col-sm-6">
-                          <ol class="breadcrumb float-sm-right">
-                              <li class="breadcrumb-item"><a href="#">Home</a></li>
-                              <li class="breadcrumb-item active">{!! $veri['name'] !!}</li>
-                          </ol>
-                      </div>
-                  </div>
-              </div><!-- /.container-fluid -->
+
           </section>
 
 
@@ -50,7 +38,7 @@
                               <!-- /.card-header -->
                               <div class="card-body table-container">
 
-                                  {!! $html->table() !!}
+                                  {!! $html->table(['class' => 'stripe table table-bordered table-striped']) !!}
 
 
                               </div>
@@ -77,7 +65,7 @@
                       </button>
                   </div>
                   <div class="modal-body">
-                      <form method="POST" id="useredit" action="{{ route('hafizlik.indexpost') }}">
+                      <form method="POST" id="filter" action="{{ route('hafizlik.indexpost') }}">
                           @csrf
                           <div class="form-group">
                               <label>Tarih Aralığı:</label>
@@ -93,33 +81,23 @@
                               <!-- /.input group -->
                           </div>
                           <div class="form-group">
-                              <input type="text" class="form-control" name="ogrenci_adsoyad" id="ogrenci_adsoyad"
-                                  placeholder="Adı Soyadı">
-                              <input type="hidden" name="id" id="ogrenci_id">
+                              <input type="text" class="form-control" name="kota" id="kota" placeholder="Kota">
                           </div>
                           <div class="form-group">
-                              <input type="date" class="form-control" name="ogrenci_dt" id="ogrenci_dt"
-                                  placeholder="Doğum Tarihi">
+                              <input type="text" class="form-control" name="sayfa" id="sayfa" placeholder="Sayfa">
                           </div>
                           <div class="form-group">
-                              <input type="text" class="form-control" name="ogrenci_tc" id="ogrenci_tc"
-                                  placeholder="TC No" onblur="tckimlikkontorolu(this);" maxlength="11">
+                              <select id="birim" name="birim_id" class="form-control">
+                              </select>
+
+                          </div>
+                          <div class="form-group">
+                              <select id="hoca" name="hoca_id" class="form-control">
+                              </select>
 
                           </div>
 
-                          <div class="form-group">
-                              <input type="text" class="form-control" name="ogrenci_tel" id="ogrenci_tel"
-                                  placeholder="Tel No" data-inputmask='"mask": "(999) 999-9999"' data-mask>
-                          </div>
-                          <div class="form-group">
-                              <input type="text" class="form-control" name="ogrenci_sehir" id="ogrenci_sehir"
-                                  placeholder="Şehir">
-                          </div>
-                          <div class="form-group">
-                              <textarea class="form-control" name="ogrenci_adres" id="ogrenci_adres" placeholder="Adres" cols="10"
-                                  rows="2"></textarea>
 
-                          </div>
 
                           <button type="submit" class="btn btn-outline-info" onclick="">Filtrele</button>
 
@@ -142,15 +120,7 @@
               </div>
           </div>
       </div>
-      <a href="#" data-toggle="tooltip" title="Some tooltip text!">Hover over me</a>
 
-      <!-- Generated markup by the plugin -->
-      <div class="tooltip bs-tooltip-top" role="tooltip">
-          <div class="arrow"></div>
-          <div class="tooltip-inner">
-              Some tooltip text!
-          </div>
-      </div>
       <!-- /.modal -->
 
       {{-- }} <div class="modal fade" id="modalEdit">
@@ -399,6 +369,7 @@
       <script src="/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
       <script src="/plugins/datatables-buttons/js/buttons.print.min.js"></script>
       <script src="/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
       <script src="/plugins/inputmask/jquery.inputmask.min.js"></script>
       <script src="/plugins/moment/moment.js"></script>
 
@@ -589,7 +560,10 @@
                           columns: ':visible'
                       }
                   }, "colvis"],
-                  "responsive": true,
+                  scrollY: "900px",
+                  scrollX: true,
+                  scrollCollapse: true,
+
                   "lengthMenu": [
                       [-1, 10, 25, 50],
                       ["Tümü", 10, 25, 50]
@@ -599,28 +573,46 @@
               });
 
           })(jQuery, jQuery.fn.dataTable);
-
-          function myCallback(start, end) {
-              //$('#reservation span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-              alert(start + ' - ' + end); //etc, your code here
-          }
-          // attach daterangepicker plugin
-
-          /*
-                                            $('#reservation').on('apply.daterangepicker', function(ev, picker) {
-                                                var from = $("#startDate").val();
-                                                var to = $("#endDate").val();
-                                                if (from && to) {
-                                                    console.log(from + ' - ' + to);
-
-                                                }
-                                            });*/
       </script>
 
       {!! $html->scripts() !!}
 
 
       <script>
+          $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          });
+          hocagetir('#filter #hoca');
+
+          function hocagetir(id) {
+              $.ajax({
+                  type: 'post',
+                  url: "{{ route('hafizlik.hocagetir') }}",
+                  data: {
+                      get_option: true
+                  },
+                  success: function(response) {
+                      $(id).html(response);
+                  }
+              });
+          }
+          birimgetir('#filter #birim');
+
+          function birimgetir(id) {
+              $.ajax({
+                  type: 'post',
+                  url: "{{ route('hafizlik.birimgetir') }}",
+                  data: {
+                      get_option: true
+                  },
+                  success: function(response) {
+                      $(id).html(response);
+                  }
+              });
+          }
+
           function refreshTable() {
               $('div.table-container').fadeOut();
               $('div.table-container').load("{{ route('hafizlik.index') }}", function() {
@@ -633,25 +625,7 @@
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }
           });
-          $('#reservation').daterangepicker(function(start, end, label) {
-
-              /*  $("#example1").DataTable({
-
-                   "ajax": {
-                       "url": "{{ route('hafizlik.index') }}",
-                       "type": "POST",
-                       "data": {
-                           'bast': start.format('YYYY-MM-DD'),
-                           'sont': end.format('YYYY-MM-DD')
-                       },
-                       success: (datam) => {
-                           refreshTable();
-                           console.log(datam);
-                       }
-                   },
-                   "destroy": true,
-               }); */
-          });
+          $('#reservation').daterangepicker();
       </script>
       {{-- <script>
                                   $(".reset").click(function() {
@@ -808,20 +782,8 @@
                                   })
 
 
-                                  /* hocagetir();
-                                                    function hocagetir() {
-                                                        $.ajax({
-                                                            type: 'post',
-                                                            url: "{{ route('birimhoca.hocagetir') }}",
-                                                            data: {
-                                                                get_option: true
-                                                            },
-                                                            success: function(response) {
-                                                                document.getElementById("hoca").innerHTML = response;
-                                                            }
-                                                        });
-                                                    }
-                                   */
+
+                                   /*  */
                                   birimgetir('#useredit #birime');
                                   birimgetir('#useradd #birim');
 
