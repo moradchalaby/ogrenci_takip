@@ -81,10 +81,23 @@
                               <!-- /.input group -->
                           </div>
                           <div class="form-group">
-                              <input type="text" class="form-control" name="kota" id="kota" placeholder="Kota">
+                              <input type="text" class="form-control" name="kota" id="kota" value="{{ $veri['kota'] }}"
+                                  placeholder="Kota">
                           </div>
                           <div class="form-group">
-                              <input type="text" class="form-control" name="sayfa" id="sayfa" placeholder="Sayfa">
+                              <input type="text" class="form-control" name="sayfa" id="sayfa"
+                                  value="{{ $veri['sayfa'] }}" placeholder="Sayfa">
+                          </div>
+                          <div class="form-group">
+                              <select id="durum" name="durum" class="form-control">
+                                  <option value="">Hafızlık Tüm Durumlar</option>
+                                  <option value="Ham">Ham</option>
+                                  <option value="Has">Has</option>
+                                  <option value="Hafız">Hafız</option>
+                                  <option value="Yüzüne">Yüzüne</option>
+                                  <option value="Komisyon">Komisyon</option>
+                              </select>
+
                           </div>
                           <div class="form-group">
                               <select id="birim" name="birim_id" class="form-control">
@@ -104,10 +117,60 @@
                       </form>
                   </div>
                   <div class="modal-footer justify-content-between">
+                  </div>
 
 
-                      modal footer
+                  <!-- /.modal-content -->
 
+                  <!-- /.modal-dialog -->
+              </div>
+          </div>
+      </div>
+      <div class="modal fade" id="modalDurum">
+          <div class="modal-dialog ">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h4 class="modal-title"> <span>Hafızlık Durum Değişikliği</span></h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      <form method="POST" id="durumEdit" action="">
+
+                          <div class="form-group">
+                              <label for="recipient-name" class="col-form-label">Hafızlık Durumu</label>
+                              <select class="form-control" name="hafizlik_durum" id="hafizlik_durum">
+                              </select>
+                              <!-- /.input group -->
+                          </div>
+                          <div class="form-group">
+                              <label for="recipient-name" class="col-form-label">Dönüş Başlama Tarihi</label>
+
+                              <input type="date" class="form-control" name="bast" id="bast" value="" required="">
+
+                          </div>
+                          <div class="form-group">
+                              <label for="recipient-name" class="col-form-label">Dönüş Süresi</label>
+
+                              <input type="text" class="form-control" name="donus_suresi" id="donus_suresi" value=""
+                                  required="">
+
+                          </div>
+                          <div class="form-group">
+                              <label for="recipient-name" class="col-form-label">Sayfa</label>
+
+                              <input type="text" class="form-control" name="sayfa" id="sayfa" value="" required="">
+
+                          </div>
+
+
+
+                          <button type="submit" class="btn btn-outline-primary" onclick="">Kaydet</button>
+
+                      </form>
+                  </div>
+                  <div class="modal-footer justify-content-between">
 
 
 
@@ -379,22 +442,113 @@
       <script src="/plugins/bs-stepper/js/bs-stepper.min.js"></script>
       <script src="/dist/js/tolower.js"></script>
       <script>
-          $(function() {
-              $('[data-toggle="popover"]').popover()
-          })
-          //Date range picker with time picker
-          $('#reservationtime').daterangepicker({
-              timePicker: true,
-              timePickerIncrement: 30,
-              locale: {
-                  format: 'YYYY-MM-DD hh:mm A'
-              },
-              function(start, end) {
-                  // $('#dateRange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-                  //$(document).trigger('myCustomEvent');
-                  console.log('aasd')
-              }
-          })
+          $(document).on("click", ".editDurum", function() {
+              var id = $(this).data('id');
+
+              $.ajax({
+                  type: 'post',
+                  url: "{{ route('hafizlik.durum') }}",
+                  dataType: 'json',
+                  data: {
+                      id: id
+                  },
+                  success: function(ogrenciedit) {
+                      var dat = JSON.stringify(ogrenciedit);
+                      var datim = JSON.parse(dat);
+
+                      $('#hafizlik_durum')
+                          .find('option')
+                          .remove()
+                          .end()
+
+                      if (datim.hafizlik_durum.includes('Has')) {
+
+                          $('#hafizlik_durum').append(
+                              `<option value="Ham" >Ham</option>`
+                          );
+
+                          $('#hafizlik_durum').append(
+                              `<option value="${parseInt(datim.hafizlik_durum.split('.')[0])+1}.Has" >${parseInt(datim.hafizlik_durum.split(".")[0])+1}.Has</option>`
+                          );
+                          $('#hafizlik_durum').append(
+                              `<option value="${datim.hafizlik_durum}" >${datim.hafizlik_durum}</option>`
+                          );
+                          $('#hafizlik_durum').append(
+                              '<option value="Hafız(1)" >Hafız(1)</option>'
+                          );
+
+                      } else if (datim.hafizlik_durum.includes('Ham')) {
+
+                          $('#hafizlik_durum').append(
+                              '<option value="1.Has" >1.Has</option>'
+                          );
+                          $('#hafizlik_durum').append(
+                              '<option value="Hafız(1)" >Hafız(1)</option>'
+                          );
+                          $('#hafizlik_durum').append(
+                              `<option value="Ham" >Ham</option>`
+                          );
+                      } else if (datim.hafizlik_durum.includes('Hafız')) {
+
+                          $('#hafizlik_durum').append(
+                              '<option value="' + 'Hafız(' + (parseInt(datim.hafizlik_durum.split(
+                                      /[()]/)[1]) +
+                                  1) +
+                              ')" >' + 'Hafız(' + (parseInt(datim.hafizlik_durum.split(/[()]/)[1]) +
+                                  1) +
+                              ')</option>'
+                          );
+                          $('#hafizlik_durum').append(
+                              `<option value="${datim.hafizlik_durum}" >${datim.hafizlik_durum}</option>`
+                          );
+                      } else if (datim.hafizlik_durum.includes('Yüzüne')) {
+
+                          $('#hafizlik_durum').append(
+                              `<option value="Ham" >Ham</option>`
+                          );
+                          $('#hafizlik_durum').append(
+                              `<option value="Komisyon" >Komisyon</option>`
+                          );
+                          $('#hafizlik_durum').append(
+                              `<option value="Yüzüne" >Yüzüne</option>`
+                          );
+                      }
+                      $('#modalDurum .modal-title').text(datim.ogrenci_adsoyad)
+                      Object.keys(datim).forEach(function(key) {
+                          // var value = jsonData[key];
+                          if ($('#' + key).length) {
+                              $(`#durumEdit #${key}`).val(datim[key]);
+                          }
+                      });
+
+                      $('#durumEdit #sayfa').val(`${datim.hafizlik_son.split('/')[0]}`);
+
+
+                      $("#hafizlik_durum option[value=" + datim.hafizlik_durum + "]").attr("selected",
+                          "selected");
+                      var baslangic = new Date(datim.bast),
+                          bitis = new Date(),
+                          fark = new Date(bitis - baslangic),
+                          gun = Math.floor(fark / 1000 / 60 / 60 / 24);
+                      if (gun >= datim.donus_suresi) {
+                          $('#modalDurum [data-id="' + datim.id + '"] .modal-footer').html(
+                              `<span class="text-danger">${gun-datim.donus_suresi} gün geçti. </span`);
+                      } else {
+                          $('#modalDurum [data-id="' + datim.id + '"] .modal-footer').html(
+                              `<span class="text-success">${datim.donus_suresi-gun} gün kaldı. </span`
+                          );
+                      }
+
+                  },
+                  error: function(ogrenciedit) {
+                      var dat = JSON.stringify(ogrenciedit);
+                      var datim = JSON.parse(dat);
+
+
+                      console.log('error: ' + dat);
+                  },
+              });
+          });
           //Date range as a button
           $('#daterange-btn').daterangepicker({
                   ranges: {
@@ -412,6 +566,8 @@
                   endDate: moment()
               },
               function(start, end) {
+                  start = {{ $veri['bast'] }};
+                  sont = {{ $veri['sont'] }}
                   $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
               }
           )
@@ -594,10 +750,14 @@
                       get_option: true
                   },
                   success: function(response) {
+                      console.log(response);
                       $(id).html(response);
+                      $(id + " option[value={{ $veri['hoca'] }}]").attr("selected", "selected");
+
                   }
               });
           }
+
           birimgetir('#filter #birim');
 
           function birimgetir(id) {
@@ -609,6 +769,7 @@
                   },
                   success: function(response) {
                       $(id).html(response);
+                      $(id + " option[value={{ $veri['birim'] }}]").attr("selected", "selected");
                   }
               });
           }
@@ -625,7 +786,15 @@
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }
           });
-          $('#reservation').daterangepicker();
+          $('#reservation').daterangepicker({
+              locale: {
+                  format: 'YYYY/MM/DD',
+
+              },
+              startDate: "{{ $veri['bast'] }}",
+              endDate: "{{ $veri['sont'] }}",
+          });
+          $("#durum option[value={{ $veri['durum'] }}]").attr("selected", "selected");
       </script>
       {{-- <script>
                                   $(".reset").click(function() {

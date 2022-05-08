@@ -124,6 +124,8 @@ class HafizlikController extends Controller
                     'hafizlikdurum.bast as bast',
                     'hafizlikdurum.sont as sont',
                     'hafizlikdurum.hafizlik_son as sonders',
+                    DB::raw("SUBSTRING_INDEX(hafizlikdurum.hafizlik_son, '/', 1) AS sayfa"),
+
                     DB::raw('SUM(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.hafizlik_topl ELSE 0 END )  say '),
                     DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.hafizlik_ders ELSE NULL END
                      ORDER BY hfzlkders.id ASC SEPARATOR ",") AS dersler '),
@@ -136,7 +138,15 @@ class HafizlikController extends Controller
 
                 )
                 ->groupBy('ogrenci.id')->when($request->kota != null, function ($q) use ($request) {
-                    return $q->having('say', '>', $request->kota);
+                    return $q->havingRaw("say >= {$request->kota}");
+                }, function ($q) {
+                    return $q;
+                })->when($request->sayfa != null, function ($q) use ($request) {
+                    return $q->havingRaw("sayfa >= {$request->sayfa}");
+                }, function ($q) {
+                    return $q;
+                })->when($request->durum != null, function ($q) use ($request) {
+                    return $q->where("hafizlikdurum.hafizlik_durum", "like", "%{$request->durum}%");
                 }, function ($q) {
                     return $q;
                 })->get();
@@ -155,14 +165,15 @@ class HafizlikController extends Controller
                 })
                 ->addColumn('hfzlkdurum', function ($row) {
 
+                    $durum = ' <a  class="editDurum" data-toggle="modal" data-id="' . $row['id'] . '"data-target="#modalDurum">' . $row['durum']
+                        . '</a>';
 
-
-                    return $row['durum'];
+                    return $durum;
                 })
 
                 ->addColumn('sayfa', function ($row) {
-                    $sayfalar = explode('/', $row['sonders']);
-                    $sayfa = $sayfalar[0];
+                    //$sayfalar = explode('/', $row['sayfa']);
+                    $sayfa = $row['sayfa'];
 
 
                     return intval($sayfa);
@@ -194,7 +205,7 @@ class HafizlikController extends Controller
                 });
 
             $raw = [
-                'resim', 'action'
+                'resim', 'action', 'hfzlkdurum', 'toplam', 'sayfa', 'hoca'
             ];
             foreach ($daterange as $date) {
 
@@ -261,6 +272,7 @@ class HafizlikController extends Controller
             d.hoca_id = '{$request->hoca_id}';
             d.kota = '{$request->kota}';
             d.sayfa = '{$request->sayfa}';
+            d.durum = '{$request->durum}';
         }",
         ])->columns($ekle);
         if ($request->responsive) {
@@ -279,6 +291,12 @@ class HafizlikController extends Controller
         $veri['title'] = 'Öğrenciler';
         $veri['name'] = 'Ogrenci';
         $veri['bast'] = $bast;
+        $veri['sont'] = $sont;
+        $veri['kota'] = $request->kota;
+        $veri['sayfa'] = $request->sayfa;
+        $veri['hoca'] = $request->hoca_id;
+        $veri['birim'] = $request->birim_id;
+        $veri['durum'] = $request->durum;
         /* dd($html);
         exit; */
 
@@ -315,7 +333,30 @@ class HafizlikController extends Controller
             return response()->json($gonder);
         }
     }
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function durum(Request $request)
+    {
+        //
+        if ($request->ajax()) {
 
+            $ogrenciedit
+                = DB::table('hafizlikdurum')->select('*')->where('ogrenci_id', $request->id)
+                ->rightJoin('ogrenci',  'ogrenci.id', '=', 'hafizlikdurum.ogrenci_id')
+
+
+
+                ->select('*')
+
+                ->first();
+
+            return response()->json($ogrenciedit);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *

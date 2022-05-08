@@ -146,7 +146,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         //?Öğrenci
         // Route::get('/getBirim', [OgrenciController::class, 'getBirim'])->name('ogrenci.getBirim');
         // Route::post('/store', [OgrenciController::class, 'store'])->name('hafizlik.store');
-        //Route::post('/edit', [OgrenciController::class, 'edit'])->name('hafizlik.edit');
+        Route::post('/durum', [HafizlikController::class, 'durum'])->name('hafizlik.durum');
         // Route::post('/update', [OgrenciController::class, 'update'])->name('hafizlik.update');
         // Route::post('/create', [OgrenciController::class, 'create'])->name('ogrenci.create');
         Route::post('/', [HafizlikController::class, 'index'])->name('hafizlik.indexpost');
