@@ -89,6 +89,8 @@
     <!-- AdminLTE for demo purposes -->
     <script src="/dist/js/demo.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="plugins/moment/moment.js"></script>
+    <script src="plugins/moment/locale/tr.js"></script>
 
     @yield('script')
 

@@ -7,6 +7,7 @@ use App\Models\Birim;
 use App\Models\Hafizlikhoca;
 use App\Models\Ogrenci;
 use App\Models\User;
+use Carbon\Carbon;
 use DateInterval;
 use DatePeriod;
 use DateTime;
@@ -28,7 +29,9 @@ class HafizlikController extends Controller
 
         $birim_id = $request->birim_id;
         $hoca_id = $request->hoca_id;
+
         if ($request->tarihar != null) {
+
             $tarihar = explode(' - ', $request->tarihar);
         } else {
             $tarihar = [date("Y-m-d"), date("Y-m-d")];
@@ -110,7 +113,7 @@ class HafizlikController extends Controller
 
 
 
-                ->orderBy('hfzlkders.hafizlik_tarih')
+                ->orderBy('ogrenci.ogrenci_adsoyad', 'asc')
 
                 ->select(
                     'ogrenci.id as id',
@@ -122,13 +125,14 @@ class HafizlikController extends Controller
                     'hafizlikdurum.hafizlik_durum as durum',
                     'hafizlikdurum.hoca as hoca',
                     'hafizlikdurum.bast as bast',
+                    'hafizlikdurum.donus_suresi as donus',
                     'hafizlikdurum.sont as sont',
                     'hafizlikdurum.hafizlik_son as sonders',
                     DB::raw("SUBSTRING_INDEX(hafizlikdurum.hafizlik_son, '/', 1) AS sayfa"),
 
                     DB::raw('SUM(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.hafizlik_topl ELSE 0 END )  say '),
                     DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.hafizlik_ders ELSE NULL END
-                     ORDER BY hfzlkders.id ASC SEPARATOR ",") AS dersler '),
+                     ORDER BY hfzlkders.id ASC SEPARATOR "*") AS dersler '),
                     /* DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.hafizlik_topl ELSE NULL END
                      WITH ROLLUP) AS say'), */
                     DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.hafizlik_tarih ELSE NULL END
@@ -154,6 +158,12 @@ class HafizlikController extends Controller
 
             $dt = DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('adsoyad', function ($row) {
+                    $name = ' <span style="display:none;">' . $row['adsoyad'] . '</span> <a  class="ekleDers text-navy" data-toggle="modal" data-id="' . $row['id'] . '"data-target="#modalDersekle">' . $row['adsoyad']
+                        . '</a> ';
+
+                    return $name;
+                })
                 ->addColumn('hoca', function ($row) {
                     $hoca = '-';
                     if ($row['hoca'] != null) {
@@ -163,10 +173,24 @@ class HafizlikController extends Controller
 
                     return $hoca;
                 })
-                ->addColumn('hfzlkdurum', function ($row) {
 
+                ->addColumn('hfzlkdurum', function ($row) {
                     $durum = ' <a  class="editDurum" data-toggle="modal" data-id="' . $row['id'] . '"data-target="#modalDurum">' . $row['durum']
-                        . '</a>';
+                        . '</a> ';
+
+                    $simdiki_tarih = Carbon::now();
+                    $ileriki_tarih = Carbon::parse($row['bast'])->addDay(intval($row['donus']));
+                    $gun_farki    = $simdiki_tarih->diffInDays($ileriki_tarih, false);
+
+                    if ($gun_farki  <= 0) {
+                        $durum = $durum . '<br> <span class="text-danger">' . $gun_farki . ' gün geçti </span>';
+                    } else {
+                        $durum = $durum .
+                            '<br> <span class="text-info">' . $gun_farki . ' gün kaldı </span>';
+                    }
+
+
+
 
                     return $durum;
                 })
@@ -205,6 +229,7 @@ class HafizlikController extends Controller
                 });
 
             $raw = [
+                'adsoyad',
                 'resim', 'action', 'hfzlkdurum', 'toplam', 'sayfa', 'hoca'
             ];
             foreach ($daterange as $date) {
@@ -214,20 +239,20 @@ class HafizlikController extends Controller
                 $dt->addColumn($gun, function ($row) use ($gun) {
                     $dersid = explode(',', $row['dersId']);
                     $gunler = explode(',', $row['gunler']);
-                    $dersler = explode(',', $row['dersler']);
+                    $dersler = explode('*', $row['dersler']);
                     if (in_array($gun, $gunler)) {
 
 
                         $tekrar =   array_count_values($gunler);
                         $say = $tekrar[$gun];
-                        $ders =  ' <a type="button" class=" badge bg-info  col-6" data-toggle="modal" data-id="' .
+                        $ders =  ' <a class=" btn-xs bg-info  col-6 user-select-none" data-toggle="modal" data-id="' .
                             $dersid[array_search($gun, $gunler)] .
                             '"data-target="#modalEdit">' .
                             $dersler[array_search($gun, $gunler)] .
                             '</a>';
                         for ($i = 1; $i < $say; $i++) {
                             $ders = $ders  .
-                                ' <a type="button" class=" badge  bg-info   col-6" data-toggle="modal" data-id="' .
+                                ' <a  class=" btn-xs  bg-info   col-6 user-select-none" data-toggle="modal" data-id="' .
                                 $dersid[array_search($gun, $gunler) + $i] .
                                 '"data-target="#modalEdit">' .
                                 $dersler[array_search($gun, $gunler) + $i] .
@@ -245,7 +270,8 @@ class HafizlikController extends Controller
             return  $dt->make(true);
         }
         $ekle = [
-            ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'Id'],
+
+            ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'Id', "orderDataType" => "dom-text"],
             ['data' => 'resim', 'name' => 'resim', 'title' => 'Resim'],
             ['data' => 'adsoyad', 'name' => 'adsoyad', 'title' => 'Ad Soyad'],
             ['data' => 'hoca', 'name' => 'hoca', 'title' => 'Hocası'],
@@ -265,8 +291,9 @@ class HafizlikController extends Controller
             array_push($ekle, ['data' => $gun, 'name' => $gun, 'title' => $gun]);
         }
         $html = $builder->ajax([
-            'url' => route('hafizlik.index'),
-            'type' => 'GET',
+
+            'url' => route('hafizlik.indexpost'),
+            'type' => 'Post',
             'data' => "function(d) { d.tarihar = '{$bast} - {$sont} ';
             d.birim_id = '{$request->birim_id}';
             d.hoca_id = '{$request->hoca_id}';
@@ -283,7 +310,15 @@ class HafizlikController extends Controller
         $html->lengthMenu([
             [-1, 10, 25, 50],
             ["Tümü", 10, 25, 50]
-        ],)->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
+        ],)->serverSide(false)->search([
+            "caseInsensitive" => true
+        ])->parameters([
+            'columnDefs' => [
+                ['targets' => [2], "type" => "locale-compare"],
+
+
+            ]
+        ])->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
 
 
 
@@ -355,6 +390,134 @@ class HafizlikController extends Controller
                 ->first();
 
             return response()->json($ogrenciedit);
+        }
+    }
+    public function dersekle(Request $request)
+    {
+        //
+        if ($request->ajax()) {
+
+            if (str_contains($request->hafizlik_durum, 'Hafız')) {
+                if (in_array('0', $request->hafizlik_hizb) && !in_array('FN', $request->hafizlik_cuz) && sizeof($request->hafizlik_cuz) == 1) {
+                    $topl = sizeof($request->hafizlik_cuz);
+                    $ders =  '20/'
+                        . implode(",", $request->hafizlik_cuz);
+                    $hocasayfa = 20;
+                } elseif (in_array('0', $request->hafizlik_hizb) && !in_array('FN', $request->hafizlik_cuz) && sizeof($request->hafizlik_cuz) > 1) {
+                    $ders =
+                        '20/' . implode(",", $request->hafizlik_cuz);
+
+                    $hocasayfa = 20 * sizeof($request->hafizlik_cuz);
+                    $topl = sizeof($request->hafizlik_cuz);
+                } elseif (in_array('FN', $request->hafizlik_cuz) && sizeof($request->hafizlik_cuz) > 1) {
+                    $topl = $request->hafizlik_cuz[2] - $request->hafizlik_cuz[1] + 1;
+                    $ders = 'FN/' . $request->hafizlik_cuz[1] . '-' .
+                        $request->hafizlik_cuz[2];
+                    $hocasayfa = $topl * 20;
+                } elseif (!in_array('0', $request->hafizlik_hizb)) {
+                    $topl = 0.25 * sizeof($request->hafizlik_hizb);
+                    $ders = '20/' . $request->hafizlik_cuz[0] . '-';
+                    foreach ($request->hafizlik_hizb as  $value) {
+
+
+                        $ders .= $value[0] . ',';
+                    }
+                    $hocasayfa = $topl * 20;
+                }
+                /*  if (str_contains($request->hafizlik_cuz, '30')) {
+                    $durum = 'Hafız(' . (explode('(', $request->hafizlik_durum[1][1]) + 1) . ')';
+                } */
+                $sayfaders = 20;
+                $ders = rtrim($ders, ", ");
+                $sond = '20/' . $request->hafizlik_cuz[count($request->hafizlik_cuz) - 1];
+            } elseif (str_contains($request->hafizlik_durum, 'Has')) {
+                $topl = sizeof($request->cuz) / 2 ^ intval(substr($request->hafizlik_durum, 0, 1));
+                $ders = $request->hafizlik_sayfa . '/' . implode(",", $request->hafizlik_cuz);
+                $sond = $request->hafizlik_sayfa . '/' . end($request->hafizlik_cuz);
+            } elseif (str_contains($request->hafizlik_durum, 'Ham')) {
+                $topl = sizeof($request->cuz);
+                $ders = $request->hafizlik_sayfa . '/' . implode(",", $request->hafizlik_cuz);
+                $sond = $request->hafizlik_sayfa . '/' . end($request->hafizlik_cuz);
+            }
+
+
+            $dersekle
+                = DB::table('hfzlkders')->insert([
+                    "ogrenci_id" => $request->ogrenci_id,
+                    "kullanici_id" => $request->hoca_id,
+                    "hafizlik_sayfa" => $sayfaders,
+                    "hafizlik_cuz" => implode(",", $request->hafizlik_cuz),
+                    "hafizlik_ders" => $ders,
+                    "hafizlik_topl" => $topl,
+                    "hafizlik_tarih" => $request->hafizlik_tarih,
+                    "hafizlik_hata" => $request->hafizlik_hata,
+                    "hafizlik_usul" => $request->hafizlik_usul,
+                    "hafizlik_durum" => $request->hafizlik_durum,
+
+                ]);
+            $sonders = DB::table('hafizlikdurum')->where('ogrenci_id', $request->ogrenci_id)->update(
+
+                [
+                    "hafizlik_son" => $sond,
+
+
+
+
+                ]
+            );
+
+            return response()->json($dersekle);
+        }
+    }
+    public function ders(Request $request)
+    {
+        //
+        if ($request->ajax()) {
+
+            $ogrenciedit
+                = DB::table('hfzlkders')->select('*')->orderBy('hfzlkders.id', 'desc')->where('hfzlkders.ogrenci_id', $request->id)
+                ->rightJoin('hafizlikdurum', function ($join) use ($request) {
+                    $join->on('hfzlkders.ogrenci_id', '=', 'hafizlikdurum.ogrenci_id');
+                }, null, null, 'FULL')
+                ->rightJoin('ogrenci',  'ogrenci.id', '=', 'hfzlkders.ogrenci_id')
+
+
+
+                ->select(
+                    'ogrenci.id as ogrenci_id',
+                    'ogrenci.ogrenci_adsoyad as adsoyad',
+                    'hfzlkders.kullanici_id as hoca',
+                    'hfzlkders.hafizlik_cuz as cuz',
+                    'hfzlkders.hafizlik_sayfa as sayfa',
+                    'hfzlkders.hafizlik_usul as usul',
+                    'hfzlkders.hafizlik_hata as hata',
+                    'hafizlikdurum.hafizlik_durum as durum'
+                )->first();
+
+            return response()->json($ogrenciedit);
+        }
+    }
+    public function durumguncel(Request $request)
+    {
+        //
+
+        if ($request->ajax()) {
+
+
+            $dataf = DB::table('hafizlikdurum')->where('ogrenci_id', $request->ogrenci_id)->update(
+
+                [
+                    "hafizlik_durum" => $request->hafizlik_durum,
+                    "bast" => $request->bast,
+                    "donus_suresi" => $request->donus_suresi,
+
+
+
+                ]
+            );
+
+
+            return response()->json($dataf);
         }
     }
     /**
