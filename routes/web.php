@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CalenderController;
 use App\Http\Controllers\Personel\PersonelController;
 use App\Http\Controllers\Personel\BirimhocaController;
+use App\Http\Controllers\Personel\BirimsorumluController;
 use App\Http\Controllers\Personel\BekarhocaController;
 use App\Http\Controllers\Personel\MuhtelifhocaController;
 use App\Http\Controllers\Personel\IhtisashocaController;
@@ -22,10 +23,15 @@ use App\Http\Controllers\Personel\HafizlikhocaController;
 use App\Http\Controllers\Personel\TeknikhocaController;
 use App\Http\Controllers\Personel\IdarihocaController;
 use App\Http\Controllers\Egitim\OgrenciController;
+use App\Http\Controllers\Egitim\BirimOgrenciController;
+
 use App\Http\Controllers\Egitim\HafizlikController;
+use App\Http\Controllers\Egitim\BirimHafizlikController;
+
 use App\Http\Controllers\Yapi\BirimController;
 use App\Http\Controllers\YetkilerController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\RoutesController;
 
 
@@ -51,7 +57,9 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
 
     Route::prefix('personel')->group(function () {
         Route::get('/', [PersonelController::class, 'index'])->name('personel.index');
+        Route::post('/edit', [PersonelController::class, 'edit'])->name('personel.edit');
         Route::get('/getEmployees', [PersonelController::class, 'getEmployees'])->name('personel.getEmployees');
+        Route::post('/update', [PersonelController::class, 'update'])->name('personel.update');
     });
 
     Route::prefix('birimhoca')->group(function () {
@@ -63,7 +71,14 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::post('/hocagetir', [BirimhocaController::class, 'hocagetir'])->name('birimhoca.hocagetir');
         Route::post('/birimgetir', [BirimhocaController::class, 'birimgetir'])->name('birimhoca.birimgetir');
     });
-
+    Route::prefix('birimsorumlu')->group(function () {
+        //?IhtisasHoca
+        Route::get('/getBirim', [BirimsorumluController::class, 'getBirim'])->name('birimsorumlu.getBirim');
+        Route::post('/birimehocaekle', [BirimsorumluController::class, 'create'])->name('birimsorumlu.create');
+        Route::get('/', [BirimsorumluController::class, 'index'])->name('birimsorumlu.index');
+        Route::post('/hocagetir', [BirimsorumluController::class, 'hocagetir'])->name('birimsorumlu.hocagetir');
+        Route::post('/birimgetir', [BirimsorumluController::class, 'birimgetir'])->name('birimsorumlu.birimgetir');
+    });
 
     Route::prefix('bekarhoca')->group(function () {
         //?BekarHoca
@@ -105,6 +120,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
     });
 
 
+
     Route::prefix('teknikhoca')->group(function () {
         //?TeknikHoca
         Route::get('/getBirim', [TeknikhocaController::class, 'getBirim'])->name('teknikhoca.getBirim');
@@ -142,20 +158,46 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         // Route::get('/hocagetir', [OgrenciController::class, 'hocagetir'])->name('ogrenci.hocagetir');
         // Route::post('/birimgetir', [OgrenciController::class, 'birimgetir'])->name('ogrenci.birimgetir');
     });
-    Route::prefix('hafizlik')->group(function () {
+    Route::prefix('birimogrenci')->group(function () {
         //?Öğrenci
-        // Route::get('/getBirim', [OgrenciController::class, 'getBirim'])->name('ogrenci.getBirim');
-        // Route::post('/store', [OgrenciController::class, 'store'])->name('hafizlik.store');
+
+        Route::post('/store', [BirimOgrenciController::class, 'store'])->name('birimogrenci.store');
+        Route::post('/edit', [BirimOgrenciController::class, 'edit'])->name('birimogrenci.edit');
+        Route::post('/update', [BirimOgrenciController::class, 'update'])->name('birimogrenci.update');
+
+        Route::get('/', [BirimOgrenciController::class, 'index'])->name('birimogrenci.index');
+    });
+    Route::prefix('hafizlik')->group(function () {
+        //?hafizlik
+
         Route::post('/durum', [HafizlikController::class, 'durum'])->name('hafizlik.durum');
         Route::post('/ders', [HafizlikController::class, 'ders'])->name('hafizlik.ders');
         Route::post('/dersekle', [HafizlikController::class, 'dersekle'])->name('hafizlik.dersekle');
-        // Route::post('/update', [OgrenciController::class, 'update'])->name('hafizlik.update');
-        // Route::post('/create', [OgrenciController::class, 'create'])->name('ogrenci.create');
+        Route::post('/dersguncelle', [HafizlikController::class, 'dersguncelle'])->name('hafizlik.dersguncelle');
+
         Route::post('/durumguncel', [HafizlikController::class, 'durumguncel'])->name('hafizlik.durumguncel');
+        Route::post('/hocaguncel', [HafizlikController::class, 'hocaguncel'])->name('hafizlik.hocaguncel');
         Route::post('/', [HafizlikController::class, 'index'])->name('hafizlik.indexpost');
         Route::get('/', [HafizlikController::class, 'index'])->name('hafizlik.index');
         Route::post('/hocagetir', [HafizlikController::class, 'hocagetir'])->name('hafizlik.hocagetir');
+        Route::post('/birimhocagetir', [HafizlikController::class, 'birimhocagetir'])->name('hafizlik.birimhoca');
         Route::post('/birimgetir', [HafizlikController::class, 'birimgetir'])->name('hafizlik.birimgetir');
+    });
+    Route::prefix('birimhafizlik')->group(function () {
+        //?hafizlik
+
+        Route::post('/durum', [BirimHafizlikController::class, 'durum'])->name('birimhafizlik.durum');
+        Route::post('/ders', [BirimHafizlikController::class, 'ders'])->name('birimhafizlik.ders');
+        Route::post('/dersekle', [BirimHafizlikController::class, 'dersekle'])->name('birimhafizlik.dersekle');
+        Route::post('/dersguncelle', [BirimHafizlikController::class, 'dersguncelle'])->name('birimhafizlik.dersguncelle');
+
+        Route::post('/durumguncel', [BirimHafizlikController::class, 'durumguncel'])->name('birimhafizlik.durumguncel');
+        Route::post('/hocaguncel', [BirimHafizlikController::class, 'hocaguncel'])->name('birimhafizlik.hocaguncel');
+        Route::post('/', [BirimHafizlikController::class, 'index'])->name('birimhafizlik.indexpost');
+        Route::get('/', [BirimHafizlikController::class, 'index'])->name('birimhafizlik.index');
+        Route::post('/hocagetir', [BirimHafizlikController::class, 'hocagetir'])->name('birimhafizlik.hocagetir');
+        Route::post('/birimhocagetir', [BirimHafizlikController::class, 'birimhocagetir'])->name('birimhafizlik.birimhoca');
+        Route::post('/birimgetir', [BirimHafizlikController::class, 'birimgetir'])->name('birimhafizlik.birimgetir');
     });
     Route::get('/routes', [RoutesController::class, 'showApplicationRoutes'])->name('routes.index');
 });

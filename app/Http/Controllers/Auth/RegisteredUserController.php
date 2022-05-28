@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Intervention\Image\Facades\Image;
 
 class RegisteredUserController extends Controller
 {
@@ -40,22 +41,52 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        if ($request->ajax()) {
 
-        $roleuser = RoleUser::create([
-            'role_id' => 12,
-            'user_id' => $user->id
-        ]);
-        if ($roleuser) {
+            $user = User::create([
+                'name' => $request['name'],
+                'email' => $request['email'],
+                'kullanici_dt' => $request['kullanici_dt'],
+                'kullanici_tc' => $request['kullanici_tc'],
+                'kullanici_gsm' => $request['kullanici_gsm'],
+                'kullanici_adres' => $request['kullanici_adres'],
+
+
+                'password' => Hash::make($request['password']),
+            ]);
+            RoleUser::create([
+                'role_id' => 6,
+                'user_id' => $user->id,
+            ]);
+
+            $name = $user->id . 'resimHoca';
+
+            dd($request['kullanici_id']);
+            if ($request->file('file') != null) {
+
+
+
+                $img = Image::make($request->file('file'));
+
+                $img->fit(256, 256);
+                //  $img->path = '/dimg' . $name . '.jpg'; // isterseniz resmi orantılı bir şekilde boyutlandır
+                // isterseniz resmi orantılı bir şekilde boyutlandır
+                $img->save(storage_path('app\public\dimg' . "\\" . $name . '.jpg'), 80);
+                // storage dosyasına resmi %60 kalitede kaydet
+                User::updateOrCreate(
+                    ['id' => $user->id],
+                    ['kullanici_resim' => '/storage/dimg' . '/' . $name . '.jpg']
+                );
+            }
+            /* if ($roleuser) {
             event(new Registered($user));
 
-            Auth::login($user);
+           // Auth::login($user);
 
             return redirect(RouteServiceProvider::HOME);
+        } */
+
+            return response()->json($user);
         }
     }
 }

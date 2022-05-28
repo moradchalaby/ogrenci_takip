@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHraporTable extends Migration
+class CreateBirimsorumluTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreateHraporTable extends Migration
      */
     public function up()
     {
-        Schema::create('hrapor', function (Blueprint $table) {
+        Schema::create('birimsorumlu', function (Blueprint $table) {
             $table->id();
             $table->integer('kullanici_id');
-            $table->integer('ogrenci_id');
-
-            $table->string('hrapor_sayfa');
-            $table->string('hrapor_ders');
-            $table->date('hrapor_tarih');
+            $table->integer('birim_id');
+            $table->string('vazife')->nullable();;
             $table->timestamps();
         });
     }
@@ -32,6 +29,6 @@ class CreateHraporTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hrapor');
+        Schema::dropIfExists('birimsorumlu');
     }
 }

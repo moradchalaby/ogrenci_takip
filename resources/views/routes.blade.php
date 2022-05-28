@@ -44,6 +44,7 @@
                                              <th>Name</th>
                                              <th>Action</th>
                                              <th>Middleware</th>
+                                             <th>Button</th>
 
                                          </tr>
                                      </thead>
@@ -74,6 +75,9 @@
                                                  </td>
                                                  <td>
                                                      {{ $route['middleware'] }}
+                                                 </td>
+                                                 <td>
+
                                                  </td>
 
                                              </tr>

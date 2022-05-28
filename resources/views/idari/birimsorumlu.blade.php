@@ -1,6 +1,4 @@
   @extends('layouts.app')
-
-
   @section('content')
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
@@ -42,7 +40,6 @@
                               </div>
                               <!-- /.card-header -->
                               <div class="card-body">
-
                                   {!! $html->table() !!}
                               </div>
                               <!-- /.card-body -->
@@ -68,17 +65,11 @@
                       </button>
                   </div>
                   <div class="modal-body">
-                      <form method="POST" id="useradd" action="#">
+                      <form id="birimhocaekle" action="">
                           @csrf
                           <div class="input-group mb-3">
-                              <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
-                                  name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-
-                              @error('name')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                              @enderror
+                              <select id="hoca" name="kullanici_id" class="form-control">
+                              </select>
                               <div class="input-group-append">
                                   <div class="input-group-text">
                                       <span class="fas fa-user"></span>
@@ -86,51 +77,15 @@
                               </div>
                           </div>
                           <div class="input-group mb-3">
-                              <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                                  name="email" value="{{ old('email') }}" required autocomplete="email">
+                              <select id="birim" name="birim_id" class="form-control">
+                              </select>
+                              <div class="input-group-append">
+                                  <div class="input-group-text">
+                                      <span class="fas fa-user"></span>
+                                  </div>
+                              </div>
+                          </div>
 
-                              @error('email')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                              @enderror
-                              <div class="input-group-append">
-                                  <div class="input-group-text">
-                                      <span class="fas fa-envelope"></span>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="input-group mb-3">
-                              <input id="password" type="password"
-                                  class="form-control @error('password') is-invalid @enderror" name="password" required
-                                  autocomplete="new-password">
-
-                              @error('password')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                              @enderror
-                              <div class="input-group-append">
-                                  <div class="input-group-text">
-                                      <span class="fas fa-lock"></span>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="input-group mb-3">
-                              <input id="password-confirm" type="password" class="form-control"
-                                  name="password_confirmation" required autocomplete="new-password">
-                              <div class="input-group-append">
-                                  <div class="input-group-text">
-                                      <span class="fas fa-lock"></span>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="icheck-primary">
-                              <input type="checkbox" id="agreeTerms" name="terms" value="agree">
-                              <label for="agreeTerms">
-                                  I agree to the <a href="#">terms</a>
-                              </label>
-                          </div>
                           <div class="modal-footer justify-content-between">
 
 
@@ -212,20 +167,19 @@
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }
           });
-          $('#useradd').on("submit", function(e) {
+          $('#birimhocaekle').on("submit", function(e) {
+              console.log('çalıştı')
               e.preventDefault();
-              var formdata = $('#useradd').serializeArray();
-              //console.log(formdata);
+              var formdata = $('#birimhocaekle').serializeArray();
+              console.log(formdata);
               $.ajax({
 
-                  url: '{{ route('register') }}',
+                  url: "{{ route('birimsorumlu.create') }}",
                   type: 'POST',
                   data: {
-                      name: formdata[1]['value'],
-                      email: formdata[2]['value'],
-                      password: formdata[3]['value'],
-                      password_confirmation: formdata[4]['value'],
-                      terms: formdata[5]['value'],
+                      kullanici_id: formdata[1]['value'],
+                      birim_id: formdata[2]['value'],
+
 
 
                   },
@@ -246,7 +200,8 @@
                           title: dat["name"] + '<br>  İşlem Başarılı <br>',
                       })
 
-                      document.getElementById("useradd").reset();
+                      document.getElementById("birimhocaekle").reset();
+                      window.location.href = "yetki/" + formdata[1]['value'];
                   },
                   error: function(data) {
                       var dat = JSON.parse(data);
@@ -272,5 +227,41 @@
 
 
           })
+      </script>
+
+      <script>
+          $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          });
+          hocagetir();
+          birimgetir();
+
+          function hocagetir() {
+              $.ajax({
+                  type: 'post',
+                  url: "{{ route('birimsorumlu.hocagetir') }}",
+                  data: {
+                      get_option: true
+                  },
+                  success: function(response) {
+                      document.getElementById("hoca").innerHTML = response;
+                  }
+              });
+          }
+
+          function birimgetir() {
+              $.ajax({
+                  type: 'post',
+                  url: "{{ route('birimsorumlu.birimgetir') }}",
+                  data: {
+                      get_option: true
+                  },
+                  success: function(response) {
+                      document.getElementById("birim").innerHTML = response;
+                  }
+              });
+          }
       </script>
   @endsection

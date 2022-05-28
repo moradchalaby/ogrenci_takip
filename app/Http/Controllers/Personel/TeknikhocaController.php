@@ -78,7 +78,7 @@ class TeknikhocaController extends Controller
         $veri['name'] = 'Teknik Personel';
 
 
-        return view('personel.teknik', compact('html', 'veri'));
+        return view('idari.teknik', compact('html', 'veri'));
     }
     public function hocagetir(Request $request)
     {

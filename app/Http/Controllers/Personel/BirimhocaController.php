@@ -29,17 +29,18 @@ class BirimhocaController extends Controller
     public function index(Request $request, Builder $builder)
     {
 
-        $veri['title'] = 'Birim Sorumluları';
-        $veri['name'] = 'Birim Sorumlusu';
+        $veri['title'] = 'Birim Hocaları';
+        $veri['name'] = 'Birim Hocaları';
 
 
         if (request()->ajax()) {
             $data
-                = User::select('users.*', 'birimhoca.*')
-                ->join('birimhoca', 'birimhoca.kullanici_id', '=', 'users.id')
+                = User::select('users.*')
+                ->rightJoin('birimhoca', 'birimhoca.kullanici_id', '=', 'users.id')
+                ->rightJoin('birim', 'birim.birim_id', '=', 'birimhoca.birim_id')
 
 
-                ->select('users.*', 'users.id', 'users.email', 'users.kullanici_resim');
+                ->select('users.*', 'users.id', 'users.email', 'users.kullanici_resim', 'birim.birim_ad as birim');
 
 
 
@@ -69,9 +70,8 @@ class BirimhocaController extends Controller
             ['data' => 'id', 'name' => 'id', 'title' => 'Id'],
             ['data' => 'resim', 'name' => 'resim', 'title' => 'Resim'],
             ['data' => 'name', 'name' => 'name', 'title' => 'Name'],
-            ['data' => 'email', 'name' => 'email', 'title' => 'Email'],
+            ['data' => 'birim', 'name' => 'birim', 'title' => 'Birim'],
             ['data' => 'action', 'name' => 'action', 'title' => 'İşlemler'],
-            ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Updated At'],
         ])->lengthMenu([
             [-1, 10, 25, 50],
             ["Tümü", 10, 25, 50]
@@ -82,7 +82,7 @@ class BirimhocaController extends Controller
 
 
 
-        return view('personel.birim', compact('html', 'veri'));
+        return view('idari.birim', compact('html', 'veri'));
     }
     public function hocagetir(Request $request)
     {
@@ -129,8 +129,8 @@ class BirimhocaController extends Controller
         //
         if ($request->ajax()) {
 
-            $data = Birimhoca::updateOrCreate(
-                ['birim_id' => $request->birim_id],
+            $data = Birimhoca::create(
+
                 [
                     'kullanici_id' => $request->kullanici_id,
                     'birim_id' => $request->birim_id,

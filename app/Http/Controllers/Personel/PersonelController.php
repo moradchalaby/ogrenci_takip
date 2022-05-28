@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Models\Role;
 use App\Models\Birimhoca;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Request as FacadesRequest;
+use Image;
 use \Yajra\Datatables\Datatables;
 use Yajra\DataTables\Html\Builder;
+use Yajra\DataTables\Html\Editor\Fields\Select;
 
 class PersonelController extends Controller
 {
@@ -28,17 +31,56 @@ class PersonelController extends Controller
     public function index(Request $request, Builder $builder)
     {
 
+        /*  */
+        /*  ->select(
+
+                'users.id as id',
+                'users.name as name',
+                'users.email as email',
+                'users.kullanici_resim as resim',
+
+                'roles.*'
+            ) */
+        /*
+        foreach ($data->getRelation('name') as $key => $value) {
+            echo $key;
+            echo '<br>';
+            echo $value;
+        } */
+
+
         if (request()->ajax()) {
-            $data
-                = User::select('users.*')
+            $data = User::leftJoin(
+                'role_user',
+                'role_user.user_id',
+                '=',
+                'users.id'
+            )
+                ->leftJoin(
+                    'roles',
+                    'roles.id',
+                    '=',
+                    'role_user.role_id'
+                )
+                ->select(
+                    'users.id as id',
+                    'users.name as name',
+                    'users.email as email',
+                    'users.kullanici_gsm as gsm',
 
+                    'roles.name as roll',
 
-                ->select('users.*', 'users.id', 'users.email', 'users.kullanici_resim');
-
+                    DB::raw('GROUP_CONCAT(CASE WHEN role_user.user_id = users.id AND roles.vazife_id = 1 THEN roles.name ELSE NULL END
+                     ORDER BY users.id ASC SEPARATOR ", ") AS rolum ')
+                )->groupBy('users.id')->get();
 
 
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->addColumn('vazife', function ($row) {
+                    $vazife = $row['rolum'];
+                    return $vazife;
+                })
                 ->addColumn('resim', function ($row) {
 
                     $resim = '<img alt="Avatar" class="avatar" src="' . $row['kullanici_resim'] . '">';
@@ -47,8 +89,7 @@ class PersonelController extends Controller
                 })
                 ->addColumn('action', function ($row) {
 
-                    $btn = '<a type="button" class="btn btn-success btn-xs" data-toggle="modal" data-id="' . $row['id'] . '" data="' . strval($row) . '"
-                                          data-target="#modalAdd">
+                    $btn = '<a type="button" class="btn btn-success btn-xs editmodal" data-toggle="modal" data-id="' . $row['id'] . '" data-target="#modalEdit">
 
                                           Düzenle
                                       </a>
@@ -68,12 +109,24 @@ class PersonelController extends Controller
             ['data' => 'resim', 'name' => 'resim', 'title' => 'Resim'],
             ['data' => 'name', 'name' => 'name', 'title' => 'Name'],
             ['data' => 'email', 'name' => 'email', 'title' => 'Email'],
+            ['data' => 'vazife', 'name' => 'vazife', 'title' => 'Vazife'],
             ['data' => 'action', 'name' => 'action', 'title' => 'İşlemler'],
-            ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Updated At'],
+
         ])->lengthMenu([
             [-1, 10, 25, 50],
             ["Tümü", 10, 25, 50]
-        ],)
+        ],)->parameters([
+            'columnDefs' => [
+                ["targets" => [4], "className" => "truncate"],
+                ['targets' => [0],  "type" => "numeric"]
+
+            ],
+            'createdRow' => 'function(row){
+       $(row).find(".truncate").each(function(){
+          $(this).attr("title", this.innerText);
+       });
+  }'
+        ])
 
             ->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
         $veri['title'] = 'Personeller';
@@ -81,7 +134,7 @@ class PersonelController extends Controller
 
 
 
-        return view('personel.index', compact('html', 'veri'));
+        return view('idari.index', compact('html', 'veri'));
     }
 
     /**
@@ -100,7 +153,7 @@ class PersonelController extends Controller
 
             return response()->json($data);
         }
-        return view('personel.birim');
+        return view('idari.birim');
     }
 
     /**
@@ -142,9 +195,23 @@ class PersonelController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $requeste)
     {
         //
+
+        if ($requeste->ajax()) {
+
+            $ogrenciedit
+                = DB::table('users')->select('*')->where('users.id', $requeste->id)
+
+
+
+                ->select('*')
+
+                ->first();
+
+            return response()->json($ogrenciedit);
+        }
     }
 
     /**
@@ -154,9 +221,44 @@ class PersonelController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
+        if ($request->ajax()) {
+
+            $userkay = DB::table('users')->where('id', $request['kullanici_id'])->update([
+                'name' => $request['name'],
+                'email' => $request['email'],
+                'kullanici_dt' => $request['kullanici_dt'],
+                'kullanici_tc' => $request['kullanici_tc'],
+                'kullanici_gsm' => $request['kullanici_gsm'],
+                'kullanici_adres' => $request['kullanici_adres'],
+
+
+            ]);
+
+
+            $name = $request['kullanici_id'] . 'resimHoca';
+
+
+
+            if ($request->file('file') != null) {
+
+
+
+                $img = Image::make($request->file('file'));
+
+                $img->fit(256, 256);
+                //  $img->path = '/dimg' . $name . '.jpg'; // isterseniz resmi orantılı bir şekilde boyutlandır
+                // isterseniz resmi orantılı bir şekilde boyutlandır
+                $img->save(storage_path('app\public\dimg' . "\\" . $name . '.jpg'), 80);
+                // storage dosyasına resmi %60 kalitede kaydet
+                DB::table('users')->where('id', '=', $request['kullanici_id'])->update(
+                    ['kullanici_resim' => '/storage/dimg' . '/' . $name . '.jpg']
+                );
+            }
+            return response()->json($userkay);
+        }
     }
 
     /**

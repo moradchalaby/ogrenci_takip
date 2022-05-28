@@ -54,6 +54,7 @@
             @include('layouts.sidebar')
 
 
+
             @yield('content')
         @endif
         <!-- Control Sidebar -->

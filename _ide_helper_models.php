@@ -40,6 +40,8 @@ namespace App\Models{
  * @property string|null $birim_donem
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Birimsorumlu[] $birimsorumlu
+ * @property-read int|null $birimsorumlu_count
  * @method static \Illuminate\Database\Eloquent\Builder|Birim newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Birim newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Birim query()
@@ -73,6 +75,30 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Birimhoca whereVazife($value)
  */
 	class Birimhoca extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Birimsorumlu
+ *
+ * @property int $id
+ * @property int $kullanici_id
+ * @property int $birim_id
+ * @property string|null $vazife
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Birim|null $birim
+ * @method static \Illuminate\Database\Eloquent\Builder|Birimsorumlu newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Birimsorumlu newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Birimsorumlu query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Birimsorumlu whereBirimId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Birimsorumlu whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Birimsorumlu whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Birimsorumlu whereKullaniciId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Birimsorumlu whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Birimsorumlu whereVazife($value)
+ */
+	class Birimsorumlu extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -459,6 +485,7 @@ namespace App\Models{
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $roles
  * @property-read int|null $roles_count
+ * @property-read \App\Models\Birimsorumlu|null $sorumlu
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
  * @property-read int|null $tokens_count
  * @method static \Database\Factories\UserFactory factory(...$parameters)

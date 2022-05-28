@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Egitim;
 
 use App\Http\Controllers\Controller;
+use App\Models\Birimsorumlu;
 use App\Models\Ogrenci;
 use App\Models\Ogrencibirim;
 use App\Models\Ogrenciokul;
@@ -16,7 +17,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
 use Image;
 
-class OgrenciController extends Controller
+class BirimOgrenciController extends Controller
 {
 
     public function __construct()
@@ -31,10 +32,14 @@ class OgrenciController extends Controller
      */
     public function index(Request $request, Builder $builder)
     {
+        $birim_id = Birimsorumlu::where('kullanici_id', Auth::user()->id)->first()->birim_id;
 
         if (request()->ajax()) {
             $data = Ogrenci::select('*')
-
+                ->rightJoin('ogrencibirim', function ($join) use ($birim_id) {
+                    $join->on('ogrenci.id', '=', 'ogrencibirim.ogrenci_id')
+                        ->where('ogrencibirim.birim_id', '=', $birim_id);
+                })
                 ->where(['ogrenci.ogrenci_kytdurum' => '1']);
 
 
@@ -109,7 +114,7 @@ class OgrenciController extends Controller
 
 
 
-        return view('idari.egitim.index', compact('html', 'veri'));
+        return view('birim.egitim.index', compact('html', 'veri'));
     }
 
 

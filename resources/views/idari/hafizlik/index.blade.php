@@ -103,7 +103,7 @@
                                   value="{{ $veri['sayfa'] }}" placeholder="Sayfa">
                           </div>
                           <div class="form-group">
-                              <select id="durum" name="durum" class="select2">
+                              <select id="durum" name="durum" class="form-control select2" style="width: 100%;">
                                   <option value="">Hafızlık Tüm Durumlar</option>
                                   <option value="Ham">Ham</option>
                                   <option value="Has">Has</option>
@@ -114,12 +114,12 @@
 
                           </div>
                           <div class="form-group">
-                              <select id="birim" name="birim_id" class="select2">
+                              <select id="birim" name="birim_id" class="form-control select2" style="width: 100%;">
                               </select>
 
                           </div>
                           <div class="form-group">
-                              <select id="hoca" name="hoca_id" class="select2">
+                              <select id="hoca" name="hoca_id" class="form-control select2" style="width: 100%;">
                               </select>
 
                           </div>
@@ -201,6 +201,144 @@
               </div>
           </div>
       </div>
+      <div class="modal fade" id="modalHoca">
+          <div class="modal-dialog ">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h4 class="modal-title"> <span>Hoca Değişikliği</span></h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      <form method="POST" id="hocaEdit" action="">
+
+                          <div class="form-group">
+                              <input type="hidden" id="ogrenci_id" name="ogrenci_id">
+                              <label for="recipient-name" class="col-form-label">Hoca</label>
+                              <select name="birimHoca_id" id="birimHoca" class="form-control select2" style="width: 100%;">
+
+                              </select>
+
+                          </div>
+
+
+
+                          <button type="submit" class="btn btn-outline-primary" onclick="">Kaydet</button>
+
+                      </form>
+                  </div>
+                  <div class="modal-footer justify-content-between">
+
+                      <ul>
+                          <li>Öğrencinin zimmetli olduğu hoca seçilir.</li>
+
+                      </ul>
+
+                  </div>
+
+
+                  <!-- /.modal-content -->
+
+                  <!-- /.modal-dialog -->
+              </div>
+          </div>
+      </div>
+      <div class="modal fade" id="modalDersduzenle">
+          <div class="modal-dialog ">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h4 class="modal-title"> </h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      <form method="POST" id="duzenleDers" action="">
+                          @csrf
+
+                          <input type="hidden" class="form-control" name="hafizlik_durum" id="durum">
+
+                          <input type="hidden" id="ogrenci_id" name="ogrenci_id">
+                          <input type="hidden" id="ders_id" name="ders_id">
+
+                          <div class="row">
+                              <div class="form-group col-6">
+                                  <label for="recipient-name" class="col-form-label">Tarih</label>
+
+                                  <input type="date" class="form-control" name="hafizlik_tarih" id="tarih" value=""
+                                      required="">
+
+                              </div>
+                              <div class="form-group col-6">
+                                  <label for="recipient-name" class="col-form-label">Hoca</label>
+                                  <select name="hoca_id" id="hoca" class="form-control select2" style="width: 100%;">
+
+                                  </select>
+                              </div>
+                          </div>
+                          <div class="row">
+                              <div class="form-group col-6" id="dersrow">
+
+                              </div>
+                              <div class="form-group col-6">
+                                  <label for="recipient-name" class="col-form-label">Cüz</label>
+
+                                  <select class="form-control select2" name="hafizlik_cuz[]" id="cuzs" multiple="multiple"
+                                      style="width: 100%;">
+                                  </select>
+                              </div>
+                              <div class="form-group col-4">
+
+                              </div>
+                          </div>
+
+
+                          <div class="row">
+                              <div class="form-group col-6">
+                                  <label for="recipient-name" class="col-form-label">Ders Durumu</label>
+                                  <select name="hafizlik_hata" class="form-control select2" id="yanlis"
+                                      style="width: 100%;">
+                                      <option selected>Yanlışsız</option>
+                                      <option>1 Yanlış</option>
+                                      <option>2 Yanlış</option>
+                                  </select>
+                              </div>
+                              <div class="form-group col-6">
+                                  <label for="recipient-name" class="col-form-label">Okuma Usulü</label>
+                                  <select name="hafizlik_usul" class="form-control select2" id="usul" style="width: 100%;">
+                                      <option selected>Hadr</option>
+                                      <option>Tedvir</option>
+                                      <option>Tahkik</option>
+                                  </select>
+                              </div>
+                          </div>
+
+
+                          <div class="custom-control custom-checkbox">
+
+                              <input class="custom-control-input custom-control-input-danger" type="checkbox"
+                                  id="customCheckbox4" name="sil">
+                              <label for="customCheckbox4" class="custom-control-label">Dersi Sil</label>
+                          </div>
+                          <button type="submit" class="btn btn-outline-primary" onclick="">Kaydet</button>
+                      </form>
+
+
+                  </div>
+                  <div class="modal-footer justify-content-between">
+
+                      <ul>
+                          <li>Fatiha-Nas Talebelerinde Fatiha-Nas Seçildikten sonra verdiği ilk ve son cüzü giriniz.</li>
+                          <li>Talebe Eğer Hizb değil de tam cüz verdiyse Tam cüz seçeneğini seçiniz.</li>
+                      </ul>
+
+                  </div>
+
+                  <!-- /.modal-dialog -->
+              </div>
+          </div>
+      </div>
       <div class="modal fade" id="modalDersekle">
           <div class="modal-dialog ">
               <div class="modal-content">
@@ -212,7 +350,7 @@
                   </div>
                   <div class="modal-body">
                       <form method="POST" id="ekleDers" action="">
-
+                          @csrf
 
                           <input type="hidden" class="form-control" name="hafizlik_durum" id="durum">
 
@@ -228,22 +366,20 @@
                               </div>
                               <div class="form-group col-6">
                                   <label for="recipient-name" class="col-form-label">Hoca</label>
-                                  <select name="hoca_id" class="form-control select2-purple" id="hoca" style="width: 100%;">
+                                  <select name="hoca_id" id="hoca" class="form-control select2" style="width: 100%;">
 
                                   </select>
                               </div>
                           </div>
                           <div class="row">
                               <div class="form-group col-6" id="dersrow">
-                                  <label for="recipient-name" class="col-form-label">Sayfa</label>
 
-                                  <select class="select2" name="hafizlik_sayfa" id="sayfas" style="width: 100%;">
-                                  </select>
                               </div>
                               <div class="form-group col-6">
                                   <label for="recipient-name" class="col-form-label">Cüz</label>
 
-                                  <select class="form-control select2" name="hafizlik_cuz[]" id="cuzs" style="width: 100%;">
+                                  <select class="form-control select2" name="hafizlik_cuz[]" id="cuzs" multiple="multiple"
+                                      style="width: 100%;">
                                   </select>
                               </div>
                               <div class="form-group col-4">
@@ -319,20 +455,19 @@
       <script src="/plugins/bs-stepper/js/bs-stepper.min.js"></script>
       <script src="/dist/js/tolower.js"></script>
       <!-- Select2 -->
-
+      {{-- hafizlik durum Edit baş --}}
       <script>
           $(document).ready(function() {
-
-
-              $('#sayfas,#hoca, #yanlis, #usul').select2({
-                  theme: 'bootstrap4'
-              });
               moment.locale("tr")
+              //!hafizlik durum Edit
               $(document).on("click", ".editDurum", function() {
                   var id = $(this).data('id');
                   var sayfa = $(this).data('sayfa');
                   $.ajax({
                       type: 'post',
+                      beforeSend: function(xhr) {
+                          document.getElementById("modalDurum").style.filter = "blur(10px)";
+                      },
                       url: "{{ route('hafizlik.durum') }}",
                       dataType: 'json',
                       data: {
@@ -404,7 +539,7 @@
                           $('#modalDurum .modal-title').text(datim.ogrenci_adsoyad + ' ' +
                               datim.ogrenci_id);
                           Object.keys(datim).forEach(function(key) {
-                              // var value = jsonData[key];
+
                               if ($('#' + key).length) {
                                   $(`#durumEdit #${key}`).val(datim[key]);
                               }
@@ -412,7 +547,7 @@
 
                           $('#durumEdit #sayfa').val(`${datim.hafizlik_son.split('/')[0]}`);
 
-
+                          $("#hafizlik_durum").val(datim.hafizlik_durum);
                       },
                       error: function(ogrenciedit) {
                           var dat = JSON.stringify(ogrenciedit);
@@ -422,11 +557,39 @@
                           console.log('error: ' + dat);
                       },
 
+                  }).done(function(data) {
+                      document.getElementById("modalDurum").style.filter = "blur(0px)";
+
                   });
 
-                  $("#hafizlik_durum").val(datim.hafizlik_durum);
+
 
               });
+          });
+      </script>
+      {{-- hafizlik durum Edit bitiş --}}
+      {{-- Hoca değiş Edit baş --}}
+      <script>
+          $(document).ready(function() {
+              moment.locale("tr")
+              //!hafizlik durum Edit
+              $(document).on("click", ".editHoca", function() {
+                  var birim_id = $(this).data('birim');
+                  var ogrenci_id = $(this).data('ogrenci');
+                  var id = $(this).data('id');
+                  console.log(ogrenci_id);
+                  $("#hocaEdit #ogrenci_id").val(ogrenci_id);
+                  birimhocagetir('#hocaEdit #birimHoca', id, birim_id);
+
+
+
+              });
+          });
+      </script>
+      {{-- Hoca değiş Edit bitiş --}}
+      {{-- daterange baş --}}
+      <script>
+          $(document).ready(function() {
               //Date range as a button
               $('#daterange-btn').daterangepicker({
                       ranges: {
@@ -483,31 +646,52 @@
                   }
               )
 
-
-
           });
       </script>
+      {{-- daterange bitiş --}}
+      {{-- ekleders modal baş --}}
       <script>
           $(document).on("click", ".ekleDers", function() {
+              $.ajaxSetup({
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              });
+
               var id = $(this).data('id');
 
+              console.log(id);
 
 
               $.ajax({
                   type: 'post',
+                  beforeSend: function(xhr) {
+                      document.getElementById("modalDersekle").style.filter = "blur(10px)";
+                  },
+
                   url: "{{ route('hafizlik.ders') }}",
+
                   dataType: 'json',
                   data: {
-                      id: id
+                      ogrenci_id: id
+
                   },
                   success: function(ogrenciedit) {
                       var dat = JSON.stringify(ogrenciedit);
                       var datim = JSON.parse(dat);
+                      console.log(datim)
+                      $("#ekleDers #cuzs").empty().trigger('change');
+
+
+                      $('#ekleDers #cuzs').select2({
+                          theme: 'bootstrap4'
+                      });
+
 
                       if (datim.durum.includes('Hafız')) {
-                          /*    $(" select").attr("multiple"); */
+
                           $('#ekleDers #cuzs').append(new Option('Fatiha-Nas', 'FN'));
-                          $('#ekleDers #cuzs').prop('multiple', true);
+
                           $('#ekleDers #dersrow').html(
 
                               `  <label for = 'recipient-name' class = 'col-form-label' > Hizb </label>
@@ -523,11 +707,36 @@
 
                               `
                           )
+                          $('#modalDersekle .modal-footer').html(`
+                         <ul>
+                          <li>Fatiha-Nas Talebelerinde Fatiha-Nas Seçildikten sonra verdiği ilk ve son cüzü giriniz.</li>
+                          <li>Talebe Eğer Hizb değil de tam cüz verdiyse Tam cüz seçeneğini seçiniz.</li>
+                      </ul>
 
-                          $('#hizb').select2({
+                            `)
+                          $('#ekleDers #hizb').select2({
                               theme: 'bootstrap4'
                           });
-                          $('#cuzs').select2({
+
+
+                      } else {
+                          $('#ekleDers #dersrow').html(
+
+                              ` <label for="recipient-name" class="col-form-label">Sayfa</label>
+
+                                  <select class="select2" name="hafizlik_sayfa" id="sayfas" style="width: 100%;">
+                                  </select>
+
+                              `
+                          )
+                          $('#modalDersekle .modal-footer').html(`
+                             <ul>
+                          <li>Birden fazla ders verildiği takdirde çoklu cüz seçimi yapılabilir.</li>
+
+                      </ul>
+
+                            `)
+                          $('#ekleDers #sayfas').select2({
                               theme: 'bootstrap4'
                           });
 
@@ -538,10 +747,7 @@
 
                           $('#ekleDers #sayfas').append(new Option(index + 1, index + 1));
                       }
-                      for (let index = 0; index < c; index++) {
 
-                          $('#ekleDers #cuzs').append(new Option(index + 1, index + 1));
-                      }
 
                       hocagetir('#ekleDers #hoca', datim.hoca);
 
@@ -549,21 +755,199 @@
                           datim.cuz + ' - ' +
                           'Ders Ekle');
                       Object.keys(datim).forEach(function(key) {
-                          // var value = jsonData[key];
+
                           if ($('#' + key).length) {
                               $(`#ekleDers #${key}`).val(datim[key]);
                           }
                       });
                       var today = moment().format('YYYY-MM-DD');
-                      $('#tarih').val(today);
-                      if (datim.cuz == 30 && !datim.hafizlik_durum.includes('Hafız')) {
+                      $('#ekleDers #tarih').val(today);
+
+
+                      for (let index = 0; index < c; index++) {
+
+                          $('#ekleDers #cuzs').append(new Option(index + 1, index + 1));
+                      }
+
+                      if (datim.sonders.includes('-') && !datim.sonders.includes('FN')) {
+
+                          if (datim.sonders.substr(-1) == "4") {
+                              $(`#ekleDers #sayfas`).val(
+                                  '1.Hizb');
+                              $('#ekleDers #cuzs').val(parseInt(
+                                  datim.cuz) + 1).trigger('change');
+                          } else {
+                              console.log((parseInt(datim.sonders.substr(-1)) + 1) +
+                                  '.Hizb')
+                              $(`#ekleDers #sayfas`).val((parseInt(datim.sonders.substr(-1)) + 1) +
+                                  '.Hizb').trigger('change');
+                              $('#ekleDers #cuzs').val(parseInt(
+                                  datim.cuz)).trigger('change');
+                          }
+
+                      } else if (datim.sonders.includes('-') && datim.sonders.includes('FN')) {
+                          if (datim.sonders.substr(-1) == "30") {
+
+                              $('#ekleDers #cuzs').val(['1']).trigger('change');
+                          } else {
+
+                              $('#ekleDers #cuzs').val(['FN', (parseInt(datim.sonders.substr(-1)) + 1)])
+                                  .trigger('change');
+                          }
+                      } else if (datim.cuz == 30 && !datim.durum.includes('Hafız')) {
                           $(`#ekleDers #sayfas`).val(parseInt(datim.sayfa) + 1);
                           $(`#ekleDers #cuzs`).val(1);
 
                       } else {
                           $(`#ekleDers #sayfas`).val(datim.sayfa);
-                          $(`#ekleDers #cuzs`).val(parseInt(
-                              datim.cuz) + 1);
+
+                          $('#ekleDers #cuzs').val(parseInt(
+                              datim.cuz) + 1).trigger('change');
+
+                      }
+
+
+
+
+                  },
+                  error: function(ogrenciedit) {
+                      var dat = JSON.stringify(ogrenciedit);
+                      var datim = JSON.parse(dat);
+
+
+                      console.log('error: ' + dat);
+                  },
+              }).done(function(data) {
+                  document.getElementById("modalDersekle").style.filter = "blur(0px)";
+              });
+          });
+      </script>
+      {{-- ekleders modal bitiş --}}
+      {{-- duzenleders modal baş --}}
+      <script>
+          $(document).on("click", ".duzenleDers", function() {
+              var id = $(this).data('dersid');
+
+              $.ajaxSetup({
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              });
+
+
+              $.ajax({
+                  type: 'post',
+                  beforeSend: function(xhr) {
+                      document.getElementById("modalDersduzenle").style.filter = "blur(10px)";
+                  },
+                  url: "{{ route('hafizlik.ders') }}",
+                  dataType: 'json',
+                  data: {
+                      ders_id: id
+                  },
+                  success: function(ogrenciedit) {
+                      var dat = JSON.stringify(ogrenciedit);
+                      var datim = JSON.parse(dat);
+                      console.log(datim)
+                      $("#duzenleDers #cuzs").empty().trigger('change');
+
+
+
+                      $('#duzenleDers #cuzs').select2({
+                          theme: 'bootstrap4'
+                      });
+
+
+                      if (datim.durum.includes('Hafız')) {
+
+                          $('#duzenleDers #cuzs').append(new Option('Fatiha-Nas', 'FN'));
+
+                          $('#duzenleDers #dersrow').html(
+
+                              `  <label for = 'recipient-name' class = 'col-form-label' > Hizb </label>
+                                <select class="select2" name = 'hafizlik_hizb[]' id = 'hizb' multiple="multiple" data-placeholder="Ders Seçimi" style="width: 100%;">
+                                    <option value="0" selected>Tam cüz</option>
+                                    <option value="1.Hizb">1.Hizb</option>
+                  <option value="2.Hizb">2.Hizb</option>
+                  <option value="3.Hizb">3.Hizb</option>
+                  <option value="4.Hizb">4.Hizb</option>
+
+
+                              </select>
+
+                              `
+                          )
+                          $('#modalDersduzenle .modal-footer').html(`
+                         <ul>
+                          <li>Fatiha-Nas Talebelerinde Fatiha-Nas Seçildikten sonra verdiği ilk ve son cüzü giriniz.</li>
+                          <li>Talebe Eğer Hizb değil de tam cüz verdiyse Tam cüz seçeneğini seçiniz.</li>
+                      </ul>
+
+                            `)
+                          $('#duzenleDers #hizb').select2({
+                              theme: 'bootstrap4'
+                          });
+
+
+                      } else {
+                          $('#duzenleDers #dersrow').html(
+
+                              ` <label for="recipient-name" class="col-form-label">Sayfa</label>
+
+                                  <select class="select2" name="hafizlik_sayfa" id="sayfas" style="width: 100%;">
+                                  </select>
+
+                              `
+                          )
+                          $('#modalDersduzenle .modal-footer').html(`
+                             <ul>
+                          <li>Birden fazla ders verildiği takdirde çoklu cüz seçimi yapılabilir.</li>
+
+                      </ul>
+
+                            `)
+                          $('#duzenleDers #sayfas').select2({
+                              theme: 'bootstrap4'
+                          });
+
+                      }
+                      var s = 20;
+                      var c = 30;
+                      for (let index = 0; index < s; index++) {
+
+                          $('#duzenleDers #sayfas').append(new Option(index + 1, index + 1));
+                      }
+
+
+                      hocagetir('#duzenleDers #hoca', datim.hoca);
+
+                      $('#modalDersduzenle .modal-title').text(datim.adsoyad + ' - ' + datim.sayfa + '/' +
+                          datim.cuz + ' - ' +
+                          'Ders duzenle');
+                      Object.keys(datim).forEach(function(key) {
+                          console.log(datim[key])
+                          if ($('#' + key).length) {
+                              $(`#duzenleDers #${key}`).val(datim[key]);
+                          }
+                      });
+                      var today = moment().format('YYYY-MM-DD');
+                      $('#duzenleDers #tarih').val(datim.tarih);
+
+
+                      for (let index = 0; index < c; index++) {
+
+                          $('#duzenleDers #cuzs').append(new Option(index + 1, index + 1));
+                      }
+                      if (datim.cuz == 30 && !datim.durum.includes('Hafız')) {
+                          $(`#duzenleDers #sayfas`).val(parseInt(datim.sayfa));
+                          $(`#duzenleDers #cuzs`).val(datim.cuz.split(","));
+
+                      } else {
+                          $(`#duzenleDers #sayfas`).val(datim.sayfa);
+
+                          $('#duzenleDers #cuzs').val(
+                              datim.cuz.split(",")).trigger('change');
+
                       }
 
 
@@ -576,9 +960,13 @@
 
                       console.log('error: ' + dat);
                   },
-              });
+              }).done(function(data) {
+                  document.getElementById("modalDersduzenle").style.filter = "blur(0px)";
+              });;
           });
       </script>
+      {{-- duzenleders modal bitiş --}}
+      {{-- datatble config baş --}}
       <script>
           jQuery.extend(jQuery.fn.dataTableExt.oSort, {
               'locale-compare-asc': function(a, b) {
@@ -632,7 +1020,13 @@
                   data
 
           }
-
+          $.fn.dataTable.ext.order['dom-text'] = function(settings, col) {
+              return this.api().column(col, {
+                  order: 'index'
+              }).nodes().map(function(td, i) {
+                  return $('a', td).text();
+              });
+          };
 
           (function($, DataTable) {
 
@@ -680,17 +1074,13 @@
                   console.log('---');
                   e.value = e.value.toLocaleUpperCase();
                   console.log(e.value);
-                  /*
-                                $('#example1')
-                                    .search(
-                                        jQuery.fn.dataTable.ext.type.search.string(NeutralizeAccent(this.value))
-                                    )
-                                    .draw() */
+
               });
           });
-
-
-
+      </script>
+      {{-- datatble config bitiş --}}
+      {{-- hoca ve birim verş baş --}}
+      <script>
           hocagetir('#filter #hoca', {{ $veri['hoca'] }});
           birimgetir('#filter #birim', {{ $veri['birim'] }});
 
@@ -703,6 +1093,7 @@
               });
               $.ajax({
                   type: 'post',
+
                   url: "{{ route('hafizlik.hocagetir') }}",
                   data: {
                       get_option: true
@@ -728,6 +1119,9 @@
               });
               $.ajax({
                   type: 'post',
+                  beforeSend: function(xhr) {
+                      document.getElementById("modalDersekle").style.filter = "blur(10px)";
+                  },
                   url: "{{ route('hafizlik.birimgetir') }}",
                   data: {
                       get_option: true
@@ -741,7 +1135,35 @@
               });
 
           }
+
+          function birimhocagetir(id, veri, birim_id) {
+              $.ajaxSetup({
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              });
+              $.ajax({
+                  type: 'post',
+                  beforeSend: function(xhr) {
+                      document.getElementById("modalDersekle").style.filter = "blur(10px)";
+                  },
+                  url: "{{ route('hafizlik.birimhoca') }}",
+                  data: {
+                      get_option: true,
+                      birim_id: birim_id
+                  },
+                  success: function(response) {
+                      $(id).html(response);
+
+                      $(id).val(veri);
+                  }
+
+              });
+
+          }
       </script>
+      {{-- hoca ve birim verş bitiş --}}
+      {{-- hafizlik durum submit baş --}}
       <script>
           //hafizlik durum güncelleme
           $.ajaxSetup({
@@ -758,7 +1180,8 @@
               $.ajax({
 
                   url: "{{ route('hafizlik.durumguncel') }}",
-                  type: 'POST',
+                  type: 'post',
+
                   contentType: false,
                   cache: false,
                   processData: false,
@@ -809,6 +1232,78 @@
               $("#durum option[value={{ $veri['durum'] }}]").attr("selected", "selected");
           })
       </script>
+      {{-- hafizlik durum submit bitiş --}}
+      {{-- Hoca  submit baş --}}
+      <script>
+          //Hoca  güncelleme
+          $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          });
+          $('#hocaEdit').on("submit", function(e) {
+
+              e.preventDefault();
+              var form = $('#hocaEdit')[0];
+              var data = new FormData(form);
+
+              $.ajax({
+
+                  url: "{{ route('hafizlik.hocaguncel') }}",
+                  type: 'post',
+
+                  contentType: false,
+                  cache: false,
+                  processData: false,
+                  data: data,
+                  dataType: 'text',
+
+
+                  success: (datam) => {
+                      var dat = JSON.parse(datam);
+                      $("#example1").DataTable().ajax.reload();
+
+                      $('#modalHoca').modal('hide');
+                      console.log(datam);
+                      var Toast = Swal.mixin({
+                          toast: true,
+                          position: 'top',
+                          showConfirmButton: false,
+                          timer: 3000
+                      });
+                      Toast.fire({
+                          icon: 'success',
+                          title: dat["ogrenci_adsoyad"] + '<br>  İşlem Başarılı <br>',
+                      })
+
+                      document.getElementById("hocaEdit").reset();
+                  },
+                  error: function(data) {
+                      var dat = JSON.parse(data);
+                      $('#modalHoca').modal('hide');
+
+
+                      var Toast = Swal.mixin({
+                          toast: true,
+                          position: 'top',
+                          showConfirmButton: false,
+                          timer: 3000
+                      });
+                      Toast.fire({
+                          icon: 'error',
+                          title: dat["name"]
+
+                              +
+                              '<br> İşlem başarısız <br>',
+                      })
+                      document.getElementById("hocaEdit").reset();
+                  },
+              });
+              /*  $("#durum option[value={{ $veri['durum'] }}]").attr("selected", "selected"); */
+          })
+      </script>
+      {{-- Hoca submit bitiş --}}
+      {{-- ders ekle submit baş --}}
       <script>
           $('#ekleDers').on("submit", function(e) {
 
@@ -819,7 +1314,8 @@
               $.ajax({
 
                   url: "{{ route('hafizlik.dersekle') }}",
-                  type: 'POST',
+                  type: 'post',
+
                   contentType: false,
                   cache: false,
                   processData: false,
@@ -869,5 +1365,74 @@
               });
               $("#durum option[value={{ $veri['durum'] }}]").attr("selected", "selected");
           })
+          $('.select2').select2({
+              theme: 'bootstrap4',
+
+          });
       </script>
+      {{-- ders ekle submit bitiş --}}
+      {{-- ders ekle submit baş --}}
+      <script>
+          $('#duzenleDers').on("submit", function(e) {
+
+              e.preventDefault();
+              var form = $('#duzenleDers')[0];
+              var data = new FormData(form);
+
+              $.ajax({
+
+                  url: "{{ route('hafizlik.dersguncelle') }}",
+                  type: 'post',
+
+                  contentType: false,
+                  cache: false,
+                  processData: false,
+                  data: data,
+                  dataType: 'text',
+
+
+                  success: (datam) => {
+                      var dat = JSON.parse(datam);
+                      $("#example1").DataTable().ajax.reload();
+
+                      $('#modalDersduzenle').modal('hide');
+                      console.log(datam);
+                      var Toast = Swal.mixin({
+                          toast: true,
+                          position: 'top',
+                          showConfirmButton: false,
+                          timer: 3000
+                      });
+                      Toast.fire({
+                          icon: 'success',
+                          title: dat["ogrenci_adsoyad"] + '<br>  İşlem Başarılı <br>',
+                      })
+
+                      //document.getElementById("durumEdit").reset();
+                  },
+                  error: function(data) {
+                      var dat = JSON.parse(data);
+                      $('#modalDersduzenle').modal('hide');
+
+
+                      var Toast = Swal.mixin({
+                          toast: true,
+                          position: 'top',
+                          showConfirmButton: false,
+                          timer: 3000
+                      });
+                      Toast.fire({
+                          icon: 'error',
+                          title: dat["name"]
+
+                              +
+                              '<br> İşlem başarısız <br>',
+                      })
+                      // document.getElementById("durumEdit").reset();
+                  },
+              });
+              //   $("#durum option[value={{ $veri['durum'] }}]").attr("selected", "selected");
+          })
+      </script>
+      {{-- ders ekle submit bitiş --}}
   @endsection

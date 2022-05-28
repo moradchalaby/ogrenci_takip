@@ -68,7 +68,6 @@ class BekarhocaController extends Controller
             ['data' => 'name', 'name' => 'name', 'title' => 'Name'],
             ['data' => 'email', 'name' => 'email', 'title' => 'Email'],
             ['data' => 'action', 'name' => 'action', 'title' => 'İşlemler'],
-            ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Updated At'],
         ])->lengthMenu([
             [-1, 10, 25, 50],
             ["Tümü", 10, 25, 50]
@@ -79,7 +78,7 @@ class BekarhocaController extends Controller
         $veri['title'] = 'Bekar Hocalar';
         $veri['name'] = 'Bekar Hoca';
 
-        return view('personel.bekar', compact('html', 'veri'));
+        return view('idari.bekar', compact('html', 'veri'));
     }
     public function hocagetir(Request $request)
     {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Egitim;
 
 use App\Http\Controllers\Controller;
 use App\Models\Birim;
+use App\Models\Birimsorumlu;
 use App\Models\Hafizlikhoca;
 use App\Models\Ogrenci;
 use App\Models\User;
@@ -13,11 +14,12 @@ use DatePeriod;
 use DateTime;
 use Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
 
-class HafizlikController extends Controller
+class BirimHafizlikController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +29,7 @@ class HafizlikController extends Controller
     public function index(Request $request, Builder $builder)
     {
 
-        $birim_id = $request->birim_id;
+        $birim_id = Birimsorumlu::where('kullanici_id', Auth::user()->id)->first()->birim_id;
         $hoca_id = $request->hoca_id;
 
         if ($request->tarihar != null) {
@@ -84,11 +86,7 @@ class HafizlikController extends Controller
 
                 ->rightJoin('ogrencibirim', function ($join) use ($birim_id) {
                     $join->on('ogrenci.id', '=', 'ogrencibirim.ogrenci_id')
-                        ->when($birim_id > 0, function ($q) use ($birim_id) {
-                            return $q->where('ogrencibirim.birim_id', $birim_id);
-                        }, function ($q) use ($birim_id) {
-                            return $q;
-                        });
+                        ->where('ogrencibirim.birim_id', '=', $birim_id);
                 })
 
 
@@ -273,6 +271,7 @@ class HafizlikController extends Controller
             ['data' => 'resim', 'name' => 'resim', 'title' => 'Resim'],
             ['data' => 'adsoyad', 'name' => 'adsoyad', 'title' => 'Ad Soyad'],
             ['data' => 'hoca', 'name' => 'hoca', 'title' => 'Hocası'],
+            ['data' => 'birim', 'name' => 'birim', 'title' => 'Birimx'],
             ['data' => 'hfzlkdurum', 'name' => 'hfzlkdurum', 'title' => 'Durum'],
             ['data' => 'sayfa', 'name' => 'sayfa', 'title' => 'Sayfa'],
             ['data' => 'toplam', 'name' => 'toplam', 'title' => 'Toplam'],
@@ -293,7 +292,7 @@ class HafizlikController extends Controller
             'url' => route('hafizlik.indexpost'),
             'type' => 'Post',
             'data' => "function(d) { d.tarihar = '{$bast} - {$sont} ';
-            d.birim_id = '{$request->birim_id}';
+            d.birim_id = '{$birim_id}';
             d.hoca_id = '{$request->hoca_id}';
             d.kota = '{$request->kota}';
             d.sayfa = '{$request->sayfa}';
@@ -333,7 +332,7 @@ class HafizlikController extends Controller
         /* dd($html);
         exit; */
 
-        return view('idari.hafizlik.index', compact('html', 'veri'));
+        return view('birim.hafizlik.index', compact('html', 'veri'));
     }
     public function hocagetir(Request $request)
     {

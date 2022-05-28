@@ -89,7 +89,7 @@ class MuhtelifhocaController extends Controller
 
 
 
-        return view('personel.muhtelif', compact('html', 'veri'));
+        return view('idari.muhtelif', compact('html', 'veri'));
     }
     public function hocagetir(Request $request)
     {

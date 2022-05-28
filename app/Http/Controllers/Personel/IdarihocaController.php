@@ -78,7 +78,7 @@ class IdarihocaController extends Controller
         $veri['name'] = 'İdari Hoca';
 
 
-        return view('personel.idari', compact('html', 'veri'));
+        return view('idari.idari', compact('html', 'veri'));
     }
     public function hocagetir(Request $request)
     {

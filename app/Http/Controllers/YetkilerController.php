@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\RoleUser;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -26,8 +27,9 @@ class YetkilerController extends Controller
 
         $yetki = DB::table('roles')->get();
 
+        $user = User::find($id);
 
-        return view('yapi.yetki', ['yetki' => $yetki], ['id' => $id]);
+        return view('idari.yapi.yetki',  ['yetki' => $yetki, 'user' => $user, 'id' => $id]);
     }
 
     /**
@@ -48,6 +50,7 @@ class YetkilerController extends Controller
                     'user_id' => $request->user_id,
                 ]
             );
+
             return response()->json($data);
         }
     }

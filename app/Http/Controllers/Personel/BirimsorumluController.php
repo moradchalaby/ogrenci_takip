@@ -3,19 +3,22 @@
 namespace App\Http\Controllers\Personel;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Birim;
-
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
-use App\Models\Hafizlikhoca;
+use App\Models\Birimhoca;
+use App\Models\Birimsorumlu;
+use App\Models\RoleUser;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Request as FacadesRequest;
+use Illuminate\Support\Facades\Route;
 use \Yajra\Datatables\Datatables;
 use Yajra\DataTables\Html\Builder;
 
-class HafizlikhocaController extends Controller
+class BirimsorumluController extends Controller
 {
+
     public function __construct()
     {
 
@@ -28,18 +31,23 @@ class HafizlikhocaController extends Controller
      */
     public function index(Request $request, Builder $builder)
     {
+        //
+        $veri['title'] = 'Birim Sorumluları';
+        $veri['name'] = 'Birim Sorumlusu';
+
 
         if (request()->ajax()) {
             $data
-                = User::select('users.*', 'hafizlikhoca.*')
-                ->join('hafizlikhoca', 'hafizlikhoca.kullanici_id', '=', 'users.id')
+                = User::select('users.*', 'birimsorumlu.*')
+                ->join('birimsorumlu', 'birimsorumlu.kullanici_id', '=', 'users.id')
+                ->join('birim', 'birim.birim_id', '=', 'birimsorumlu.birim_id')
 
 
-                ->select('users.*', 'users.id', 'users.email', 'users.kullanici_resim');
+                ->select('users.*', 'users.id', 'users.email', 'users.kullanici_resim', 'birim.birim_ad as birim');
 
 
 
-            return Datatables::of($data)
+            return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('resim', function ($row) {
 
@@ -65,25 +73,20 @@ class HafizlikhocaController extends Controller
             ['data' => 'id', 'name' => 'id', 'title' => 'Id'],
             ['data' => 'resim', 'name' => 'resim', 'title' => 'Resim'],
             ['data' => 'name', 'name' => 'name', 'title' => 'Name'],
-            ['data' => 'email', 'name' => 'email', 'title' => 'Email'],
+            ['data' => 'birim', 'name' => 'birim', 'title' => 'Birim'],
             ['data' => 'action', 'name' => 'action', 'title' => 'İşlemler'],
-            ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Updated At'],
         ])->lengthMenu([
             [-1, 10, 25, 50],
             ["Tümü", 10, 25, 50]
-        ],)->serverSide(false)->search([
-            "caseInsensitive" => true
-        ])
+        ],)
 
             ->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
-        $veri['title'] = 'Hafızlık Hocaları';
-        $veri['name'] = 'Hafızlık Hocası';
-
-
-        return view('idari.hafizlik', compact('html', 'veri'));
+        return view('idari.birimsorumlu', compact('html', 'veri'));
     }
+
     public function hocagetir(Request $request)
     {
+
 
         //
         if ($request->ajax()) {
@@ -114,6 +117,7 @@ class HafizlikhocaController extends Controller
     }
 
 
+
     /**
      * Show the form for creating a new resource.
      *
@@ -125,17 +129,26 @@ class HafizlikhocaController extends Controller
         //
         if ($request->ajax()) {
 
-            $data = Hafizlikhoca::updateOrCreate(
-                ['kullanici_id' => $request->kullanici_id],
+            $data = Birimsorumlu::updateOrCreate(
+                ['birim_id' => $request->birim_id,],
                 [
                     'kullanici_id' => $request->kullanici_id,
                     'birim_id' => $request->birim_id,
                 ]
             );
+
+            $yetki = RoleUser::create(
+
+                [
+                    'role_id' => 3,
+                    'user_id' => $request->kullanici_id,
+                ],
+
+            );
+
             return response()->json($data);
         }
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -144,7 +157,27 @@ class HafizlikhocaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $data =
+                User::select('users.*', 'birimsorumlu.*', 'birim.*')
+                ->join('birimsorumlu', 'birimsorumlu.kullanici_id', '=', 'users.id')
+                ->join('birim', 'birim.birim_id', '=', 'birimsorumlu.birim_id')
+
+
+                ->select('users.*', 'birim.birim_ad', 'birim.birim_id as birimid');
+
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+
+                    $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
+
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
     }
 
     /**

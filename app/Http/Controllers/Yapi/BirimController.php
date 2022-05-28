@@ -29,7 +29,7 @@ class BirimController extends Controller
     public function index()
     {
         //
-        return view('yapi.index');
+        return view('idari.yapi.index');
     }
     public function getBirim(Request $request)
     {

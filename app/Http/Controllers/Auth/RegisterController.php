@@ -10,9 +10,15 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Facades\Image;
 
 class RegisterController extends Controller
 {
+    public function __construct()
+    {
+
+        $this->middleware('can:yetkili');
+    }
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -57,17 +63,47 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    protected function create($data)
+    protected function create(Request $request)
     {
+        if ($request->ajax()) {
 
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-        RoleUser::create([
-            'role_id' => 6,
-            'user_id' => $user->id,
-        ]);
+            $userkay = User::create(['id' => $request['kullanici_id']], [
+                'name' => $request['name'],
+                'email' => $request['email'],
+                'kullanici_dt' => $request['kullanici_dt'],
+                'kullanici_tc' => $request['kullanici_tc'],
+                'kullanici_gsm' => $request['kullanici_gsm'],
+                'kullanici_adres' => $request['kullanici_adres'],
+
+
+                'password' => Hash::make($request['password']),
+            ]);
+            RoleUser::create([
+                'role_id' => 6,
+                'user_id' => $userkay->id,
+            ]);
+
+            $name = $userkay->id . 'resimHoca';
+
+            dd($request['kullanici_id']);
+
+            if ($request->file('file') != null) {
+
+
+
+                $img = Image::make($request->file('file'));
+
+                $img->fit(256, 256);
+                //  $img->path = '/dimg' . $name . '.jpg'; // isterseniz resmi orantılı bir şekilde boyutlandır
+                // isterseniz resmi orantılı bir şekilde boyutlandır
+                $img->save(storage_path('app\public\dimg' . "\\" . $name . '.jpg'), 80);
+                // storage dosyasına resmi %60 kalitede kaydet
+                User::updateOrCreate(
+                    ['id' => $userkay->id],
+                    ['kullanici_resim' => '/storage/dimg' . '/' . $name . '.jpg']
+                );
+            }
+            return response()->json($userkay);
+        }
     }
 }

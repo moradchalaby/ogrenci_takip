@@ -78,7 +78,7 @@ class IhtisashocaController extends Controller
         $veri['name'] = 'İhtisas Hocası';
 
 
-        return view('personel.ihtisas', compact('html', 'veri'));
+        return view('idari.ihtisas', compact('html', 'veri'));
     }
     public function hocagetir(Request $request)
     {

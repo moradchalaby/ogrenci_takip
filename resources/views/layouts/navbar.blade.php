@@ -146,7 +146,7 @@
 
                     <div class="user-panel mt-3 pb-3 mb-3 d-flex ">
                         <div class="image dropdown-item dropdown-header">
-                            <img src="/{{ Auth::user()->kullanici_resim }}" class="img-circle elevation-2"
+                            <img src="{{ Auth::user()->kullanici_resim }}" class="img-circle elevation-2"
                                 alt="User Image">
                             <p>{{ Auth::user()->name }}</p>
                         </div>

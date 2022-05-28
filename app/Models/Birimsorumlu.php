@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Birim extends Model
+class Birimsorumlu extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'birim';
+    protected $table = 'birimsorumlu';
     /**
      * The attributes that are mass assignable.
      *
@@ -20,13 +20,21 @@ class Birim extends Model
      */
     protected $fillable = [
         'birim_id',
-        'birim_ad',
-        'birim_donem',
+        'kullanici_id',
+
 
     ];
 
-    public function birimsorumlu()
+    public function birim()
     {
-        return $this->hasMany(Birimsorumlu::class);
+        return $this->belongsTo(Birim::class);
+    }
+
+
+
+    public function hasBirim($id)
+    {
+
+        return Birimsorumlu::find($id)->birim()->where('birim_id', $id)->first();
     }
 }

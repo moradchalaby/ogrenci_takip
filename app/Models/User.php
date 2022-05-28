@@ -70,4 +70,14 @@ class User extends Authenticatable
 
         return User::find($id)->roles()->where('user_id', $id)->first();
     }
+
+    public function sorumlu()
+    {
+        return $this->belongsTo(Birimsorumlu::class);
+    }
+    public function hasUserBirim($id)
+    {
+
+        return User::find($id)->sorumlu()->where('kullanici_id', $id)->first();
+    }
 }
