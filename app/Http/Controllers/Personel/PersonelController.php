@@ -67,6 +67,7 @@ class PersonelController extends Controller
                     'users.name as name',
                     'users.email as email',
                     'users.kullanici_gsm as gsm',
+                    'users.kullanici_adres as adres',
 
                     'roles.name as roll',
 
@@ -87,6 +88,16 @@ class PersonelController extends Controller
 
                     return $resim;
                 })
+
+                ->addColumn('email', function ($row) {
+                    $gsm = '<a href = "mailto:' . $row['email'] . '?subject = AKMESCİD ÖĞRENCİ BİLGİ SİSTEMİ&body = MESAJINIZI BURAYA YAZINIZ">' . $row['email'] . '</a>';
+                    return $gsm;
+                })
+                ->addColumn('iletisim', function ($row) {
+                    $gsm = '<a href="tel:+90' . $row['gsm'] . '"><i class="fa-solid fa-phone"></i></a>
+                    <a href="https://wa.me/+90' . str_replace([' ', '-', '(', ')'], '', $row['gsm']) . '" class="text-success"><i class="fa-brands fa-whatsapp-square"></i></a>';
+                    return $gsm;
+                })
                 ->addColumn('action', function ($row) {
 
                     $btn = '<a type="button" class="btn btn-success btn-xs editmodal" data-toggle="modal" data-id="' . $row['id'] . '" data-target="#modalEdit">
@@ -100,7 +111,7 @@ class PersonelController extends Controller
 
                     return $btn;
                 })
-                ->rawColumns(['resim', 'action'])
+                ->rawColumns(['resim', 'gsm', 'vazife', 'iletisim', 'email', 'action'])
                 ->make(true);
         }
 
@@ -108,8 +119,11 @@ class PersonelController extends Controller
             ['data' => 'id', 'name' => 'id', 'title' => 'Id'],
             ['data' => 'resim', 'name' => 'resim', 'title' => 'Resim'],
             ['data' => 'name', 'name' => 'name', 'title' => 'Name'],
+            ['data' => 'gsm', 'name' => 'gsm', 'title' => 'Telefon'],
             ['data' => 'email', 'name' => 'email', 'title' => 'Email'],
+            ['data' => 'adres', 'name' => 'adres', 'title' => 'Adres'],
             ['data' => 'vazife', 'name' => 'vazife', 'title' => 'Vazife'],
+            ['data' => 'iletisim', 'name' => 'iletisim', 'title' => 'İletişim'],
             ['data' => 'action', 'name' => 'action', 'title' => 'İşlemler'],
 
         ])->lengthMenu([
@@ -121,11 +135,7 @@ class PersonelController extends Controller
                 ['targets' => [0],  "type" => "numeric"]
 
             ],
-            'createdRow' => 'function(row){
-       $(row).find(".truncate").each(function(){
-          $(this).attr("title", this.innerText);
-       });
-  }'
+
         ])
 
             ->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
