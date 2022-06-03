@@ -15,11 +15,7 @@ class BirimController extends Controller
     public function __construct()
     {
 
-        if (Gate::allows('yetkili', FacadesRequest::route()->getPrefix())) {
-            $this->middleware('auth');
-        } else {
-            $this->middleware('can:root');
-        }
+        $this->middleware('can:yetkili');
     }
     /**
      * Display a listing of the resource.

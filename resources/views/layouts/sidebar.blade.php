@@ -60,9 +60,9 @@
                 @can('idari', 'idari')
                     @include('layouts.sidebar_idare')
                 @endcan
-                @can('birimsorumlu', 'birimsorumlu')
-                    @include('layouts.sidebar_birim')
-                @endcan
+                {{-- @can('birimsorumlu', 'birimsorumlu') --}}
+                @include('layouts.sidebar_birim')
+                {{-- @endcan --}}
                 {{-- @include('layouts.sidebar_muhasebe') --}}
             </ul>
         </nav>

@@ -29,7 +29,7 @@ class BirimHafizlikController extends Controller
     public function index(Request $request, Builder $builder)
     {
 
-        $birim_id = Birimsorumlu::where('kullanici_id', Auth::user()->id)->first()->birim_id;
+        $birim_id = $request->id;
         $hoca_id = $request->hoca_id;
 
         if ($request->tarihar != null) {
@@ -51,32 +51,7 @@ class BirimHafizlikController extends Controller
             $end
         );
 
-        /*  $gunveri = DB::table('hfzlkders')->where('ogrenci_id', 255)
-            ->orderBy('hafizlik_tarih')
-            ->select(
-                '*'
-                /* DB::raw('GROUP_CONCAT(CASE WHEN ogrenci_id = 4 THEN hafizlik_ders ELSE NULL END
-                     ORDER BY id ASC SEPARATOR ",") AS dersler '),
-                DB::raw('GROUP_CONCAT(CASE WHEN ogrenci_id = 4 THEN hafizlik_topl ELSE NULL END
-                     ORDER BY id ASC SEPARATOR ",") AS say'),
-                DB::raw('GROUP_CONCAT(CASE WHEN ogrenci_id = 4 THEN hafizlik_tarih ELSE NULL END
-                     ORDER BY id ASC SEPARATOR ",") AS gunler'),
-                DB::raw('GROUP_CONCAT(CASE WHEN ogrenci_id = 4 THEN id ELSE NULL END
-                     ORDER BY id ASC SEPARATOR ",") AS dersId'), */
 
-        /*
-                DB::raw("GROUP_CONCAT(if(hafizlik_ders is not null, '!!!', NULL)
-                     ORDER BY hfzlkders.id ASC SEPARATOR ',') AS dersler "),
-                DB::raw("GROUP_CONCAT(if(hafizlik_topl is not null, '!!!', NULL)
-                     ORDER BY hfzlkders.id ASC SEPARATOR ',') AS say"),
-                DB::raw("GROUP_CONCAT(if(hafizlik_tarih is not null, '!!!', NULL)
-                     ORDER BY hfzlkders.id ASC SEPARATOR ',') AS gunler"),
-                DB::raw("GROUP_CONCAT(if(id is not null, '!!!', NULL)
-                     ORDER BY hfzlkders.id ASC SEPARATOR ',') AS dersId")
-            ) ->groupBy('ogrenci_id') ->whereBetween('hafizlik_tarih', ['2020.06.15', '2020.06.15'])->orWhere('ogrenci_id', 255)->get();
-
-        dd($request->has('birim_id'));
-        exit;*/
         if ($request->ajax()) {
 
 
@@ -103,13 +78,6 @@ class BirimHafizlikController extends Controller
                     $join->on('hfzlkders.ogrenci_id', '=', 'ogrenci.id')
                         ->WhereBetween('hfzlkders.hafizlik_tarih', [$bast, $sont]);
                 }, null, null, 'FULL')
-                /*   ->crossJoin('hfzlkders') */
-
-
-
-
-
-
 
                 ->orderBy('ogrenci.ogrenci_adsoyad', 'asc')
 
@@ -195,7 +163,7 @@ class BirimHafizlikController extends Controller
                 })
 
                 ->addColumn('sayfa', function ($row) {
-                    //$sayfalar = explode('/', $row['sayfa']);
+
                     $sayfa = $row['sayfa'];
 
 
@@ -203,23 +171,16 @@ class BirimHafizlikController extends Controller
                 })
 
                 ->addColumn('toplam', function ($row) use ($request) {
-                    /* $say = explode(',', ); */
+
 
 
                     $toplam = $row['say'];
-                    /* foreach ($say as  $value) {
-                        $toplam += floatval($value);
-                    } */
 
 
 
                     return $toplam;
                 })
-                /*  ->filterColumn(function ($instance) use ($request) {
-                    if ($request->kota != '0' || $request->kota != null) {
-                        $instance->where('toplam', $request->kota);
-                    }
-                }) */
+
                 ->addColumn('resim', function ($row) {
 
                     $resim = "<img alt=\"Avatar\" class=\"avatar\" src=\"{$row['ogrenci_resim']}\">";
@@ -307,7 +268,7 @@ class BirimHafizlikController extends Controller
         $html->lengthMenu([
             [-1, 10, 25, 50],
             ["Tümü", 10, 25, 50]
-        ],)->serverSide(false)->search([
+        ],)->serverSide(true)->search([
             "caseInsensitive" => true
         ])->parameters([
             'columnDefs' => [
@@ -327,7 +288,7 @@ class BirimHafizlikController extends Controller
         $veri['kota'] = $request->kota;
         $veri['sayfa'] = $request->sayfa;
         $veri['hoca'] = $request->hoca_id;
-        $veri['birim'] = $request->birim_id;
+        $veri['birim'] = $birim_id;
         $veri['durum'] = $request->durum;
         /* dd($html);
         exit; */

@@ -36,7 +36,8 @@ use App\Http\Controllers\RoutesController;
 
 
 
-Auth::routes();
+/* Auth::routes(); */
+
 Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
 
     Route::get('/', [CalenderController::class, 'index']);
@@ -57,6 +58,9 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
 
     Route::prefix('personel')->group(function () {
         Route::get('/', [PersonelController::class, 'index'])->name('personel.index');
+        Route::post('/', [PersonelController::class, 'index'])->name('personel.indexpost');
+        Route::post('/rolegetir', [PersonelController::class, 'rolegetir'])->name('personel.rolegetir');
+        Route::post('/birimgetir', [PersonelController::class, 'birimgetir'])->name('personel.birimgetir');
         Route::post('/edit', [PersonelController::class, 'edit'])->name('personel.edit');
         Route::get('/getEmployees', [PersonelController::class, 'getEmployees'])->name('personel.getEmployees');
         Route::post('/update', [PersonelController::class, 'update'])->name('personel.update');
@@ -165,7 +169,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::post('/edit', [BirimOgrenciController::class, 'edit'])->name('birimogrenci.edit');
         Route::post('/update', [BirimOgrenciController::class, 'update'])->name('birimogrenci.update');
 
-        Route::get('/', [BirimOgrenciController::class, 'index'])->name('birimogrenci.index');
+        Route::get('/{id}', [BirimOgrenciController::class, 'index'])->name('birimogrenci.index');
     });
     Route::prefix('hafizlik')->group(function () {
         //?hafizlik
@@ -183,6 +187,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::post('/birimhocagetir', [HafizlikController::class, 'birimhocagetir'])->name('hafizlik.birimhoca');
         Route::post('/birimgetir', [HafizlikController::class, 'birimgetir'])->name('hafizlik.birimgetir');
     });
+
     Route::prefix('birimhafizlik')->group(function () {
         //?hafizlik
 
@@ -194,7 +199,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::post('/durumguncel', [BirimHafizlikController::class, 'durumguncel'])->name('birimhafizlik.durumguncel');
         Route::post('/hocaguncel', [BirimHafizlikController::class, 'hocaguncel'])->name('birimhafizlik.hocaguncel');
         Route::post('/', [BirimHafizlikController::class, 'index'])->name('birimhafizlik.indexpost');
-        Route::get('/', [BirimHafizlikController::class, 'index'])->name('birimhafizlik.index');
+        Route::get('/' . rand() . '{id}', [BirimHafizlikController::class, 'index'])->name('birimhafizlik.index');
         Route::post('/hocagetir', [BirimHafizlikController::class, 'hocagetir'])->name('birimhafizlik.hocagetir');
         Route::post('/birimhocagetir', [BirimHafizlikController::class, 'birimhocagetir'])->name('birimhafizlik.birimhoca');
         Route::post('/birimgetir', [BirimHafizlikController::class, 'birimgetir'])->name('birimhafizlik.birimgetir');

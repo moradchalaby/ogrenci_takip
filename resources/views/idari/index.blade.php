@@ -34,9 +34,14 @@
                                   <h3 class="card-title">{!! $veri['name'] !!} Tam Liste</h3>
                                   <div class="card-tools">
                                       <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
+                                          data-target="#modalFilter">
+                                          Filtrele
+                                      </button>
+                                      <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
                                           data-target="#modalAdd">
                                           Yeni Ekle
                                       </button>
+
 
                                   </div>
                               </div>
@@ -213,6 +218,48 @@
 
               </div>
               <!-- /.modal-content -->
+          </div>
+      </div>
+      <div class="modal fade" id="modalFilter">
+          <div class="modal-dialog ">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h4 class="modal-title">Filtreler</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      <form method="POST" id="filter" action="{{ route('personel.indexpost') }}">
+                          @csrf
+
+
+
+                          <div class="form-group">
+                              <select id="birim" name="birim_id" class="form-control select2" style="width: 100%;">
+                              </select>
+
+                          </div>
+                          <div class="form-group">
+                              <select id="role" name="role_id" class="form-control select2" style="width: 100%;">
+                              </select>
+
+                          </div>
+
+
+
+                          <button type="submit" class="btn btn-outline-info" onclick="">Filtrele</button>
+
+                      </form>
+                  </div>
+                  <div class="modal-footer justify-content-between">
+                  </div>
+
+
+                  <!-- /.modal-content -->
+
+                  <!-- /.modal-dialog -->
+              </div>
           </div>
       </div>
       <div class="modal fade" id="modalEdit">
@@ -448,10 +495,71 @@
           });
       </script>
       <script>
+          jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+              'locale-compare-asc': function(a, b) {
+                  return a.localeCompare(b, 'cs', {
+                      sensitivity: 'case'
+                  })
+              },
+              'locale-compare-desc': function(a, b) {
+                  return b.localeCompare(a, 'cs', {
+                      sensitivity: 'case'
+                  })
+              }
+          })
+
+          jQuery.fn.dataTable.ext.type.search['locale-compare'] = function(data) {
+
+              return NeutralizeAccent(data);
+          }
+
+          function NeutralizeAccent(data) {
+
+              return !data ?
+                  '' :
+                  typeof data === 'string' ?
+                  data.toLocaleUpperCase()
+                  .replace(/\n/g, ' ')
+                  .replace(/[C]/g, 'C')
+                  .replace(/[Ç]/g, 'Ç')
+                  .replace(/[G]/g, 'G')
+                  .replace(/[Ğ]/g, 'Ğ')
+                  .replace(/[I]/g, 'I')
+                  .replace(/[İ]/g, 'İ')
+                  .replace(/[O]/g, 'O')
+                  .replace(/[Ö]/g, 'Ö')
+                  .replace(/[S]/g, 'S')
+                  .replace(/[Ş]/g, 'Ş')
+                  .replace(/[U]/g, 'U')
+                  .replace(/[Ü]/g, 'Ü')
+                  .replace(/[c]/g, 'c')
+                  .replace(/[ç]/g, 'ç')
+                  .replace(/[g]/g, 'g')
+                  .replace(/[ğ]/g, 'ğ')
+                  .replace(/[ı]/g, 'ı')
+                  .replace(/[i]/g, 'i')
+                  .replace(/[o]/g, 'o')
+                  .replace(/[ö]/g, 'ö')
+                  .replace(/[s]/g, 's')
+                  .replace(/[ş]/g, 'ş')
+                  .replace(/[u]/g, 'u')
+                  .replace(/[ü]/g, 'ü') :
+                  data
+
+          }
+          $.fn.dataTable.ext.order['dom-text'] = function(settings, col) {
+              return this.api().column(col, {
+                  order: 'index'
+              }).nodes().map(function(td, i) {
+                  return $('a', td).text();
+              });
+          };
+
           (function($, DataTable) {
 
-              // Datatable global configuration
+              // Datatable ayarları
               $.extend(true, DataTable.defaults, {
+
                   language: {
                       "url": "/dist/js/tr.json"
                   },
@@ -463,12 +571,17 @@
                           columns: ':visible'
                       }
                   }, "colvis"],
-                  "responsive": true,
+                  scrollY: "900px",
+                  scrollX: true,
+                  scrollCollapse: true,
+
                   "lengthMenu": [
                       [-1, 10, 25, 50],
                       ["Tümü", 10, 25, 50]
                   ],
                   "autoWidth": true,
+
+
 
               });
 
@@ -476,6 +589,21 @@
       </script>
 
       {!! $html->scripts() !!}
+      <script>
+          //veri çekme
+
+          $(function() {
+              $('#example1_filter input').keyup(function(e) {
+                  alert('Handler for .keyup() called.');
+
+                  console.log('---');
+                  e.value = e.value.toLocaleUpperCase();
+                  console.log(e.value);
+
+              });
+          });
+      </script>
+      {{-- datatble config bitiş --}}
       <script>
           $.ajaxSetup({
               headers: {
@@ -656,4 +784,87 @@
               });
           });
       </script>
+      {{-- hoca ve birim verş baş --}}
+      <script>
+          rolegetir('#filter #role', {{ $veri['role'] }});
+          birimgetir('#filter #birim', {{ $veri['birim'] }});
+
+
+          function rolegetir(id, veri) {
+              $.ajaxSetup({
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              });
+              $.ajax({
+                  type: 'post',
+
+                  url: "{{ route('personel.rolegetir') }}",
+                  data: {
+                      get_option: true
+                  },
+                  success: function(response) {
+
+                      $(id).html(response);
+
+                      $(id).val({{ $veri['role'] }});
+                  }
+
+              });
+
+          }
+
+
+
+          function birimgetir(id, veri) {
+              $.ajaxSetup({
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              });
+              $.ajax({
+                  type: 'post',
+
+                  url: "{{ route('personel.birimgetir') }}",
+                  data: {
+                      get_option: true
+                  },
+                  success: function(response) {
+                      $(id).html(response);
+
+                      $(id).val(veri);
+                  }
+
+              });
+              $('.select2').select2({
+                  theme: 'bootstrap4',
+
+              });
+          }
+
+          function birimhocagetir(id, veri, birim_id) {
+              $.ajaxSetup({
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              });
+              $.ajax({
+                  type: 'post',
+
+                  url: "{{ route('hafizlik.birimhoca') }}",
+                  data: {
+                      get_option: true,
+                      birim_id: birim_id
+                  },
+                  success: function(response) {
+                      $(id).html(response);
+
+                      $(id).val(veri);
+                  }
+
+              });
+
+          }
+      </script>
+      {{-- hoca ve birim verş bitiş --}}
   @endsection

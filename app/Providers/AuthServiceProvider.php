@@ -37,7 +37,7 @@ class AuthServiceProvider extends ServiceProvider
             if (empty($rout)) {
                 $rout = '/takvim';
             }
-            if (!str_contains($rout, '/')) {
+            if (!str_contains($rout[0], '/')) {
                 $rout = '/' . $rout;
             }
 
@@ -51,6 +51,9 @@ class AuthServiceProvider extends ServiceProvider
                 $user->hasRole('admin') ? Response::allow() : Response::deny('Bu işlem için admin olmalısınız!'); */
         });
         Gate::define('islem', function ($user, $post) {
+            if (!str_contains($post[0], '/')) {
+                $post = '/' . $post;
+            }
             if ($user->hasRole($post . '/islem') || $user->hasRole('root')) {
                 return   Response::allow();
             } else {

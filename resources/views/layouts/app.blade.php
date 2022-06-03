@@ -33,6 +33,9 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="/dist/css/custom.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 
     @yield('head')
 </head>
@@ -90,8 +93,9 @@
     <!-- AdminLTE for demo purposes -->
     <script src="/dist/js/demo.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src="plugins/moment/moment.js"></script>
-    <script src="plugins/moment/locale/tr.js"></script>
+    <script src="/plugins/moment/moment.js"></script>
+    <script src="/plugins/moment/locale/tr.js"></script>
+    <script src="/plugins/select2/js/select2.full.min.js"></script>
 
     @yield('script')
 

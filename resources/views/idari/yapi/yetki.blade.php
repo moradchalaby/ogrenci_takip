@@ -49,7 +49,7 @@
                                          <div class="custom-control custom-checkbox">
                                              <input
                                                  class="custom-control-input checkbox2 @if ($yet->vazife_id != 1) yetki{{ $yet->parent_id }} @endif"
-                                                 value="{{ $yet->id }}" type="checkbox" name="idari"
+                                                 value="{{ $yet->id }}" type="checkbox" tur="yetki" name="idari"
                                                  id="customCheckbox{{ $yet->id }}"
                                                  @if (App\Models\User::hasRol($yet->roles_slug, $id)) checked @endif>
                                              <label for="customCheckbox{{ $yet->id }}"
@@ -86,7 +86,7 @@
                                          <div class="custom-control custom-checkbox">
                                              <input
                                                  class="custom-control-input @if ($yet->vazife_id != 1) yetki{{ $yet->parent_id }} @endif checkbox3 "
-                                                 value="{{ $yet->id }}" type="checkbox" name="check"
+                                                 value="{{ $yet->id }}" type="checkbox" tur="yetki" name="check"
                                                  id="customCheckbox{{ $yet->id }}"
                                                  @if (App\Models\User::hasRol($yet->roles_slug, $id)) checked @endif>
                                              <label for="customCheckbox{{ $yet->id }}"
@@ -122,7 +122,7 @@
                                          <div class="custom-control custom-checkbox">
                                              <input
                                                  class="custom-control-input @if ($yet->vazife_id != 1) yetki{{ $yet->parent_id }} @endif checkbox4 "
-                                                 value="{{ $yet->id }}" type="checkbox" name="check"
+                                                 value="{{ $yet->id }}" type="checkbox" tur="yetki" name="check"
                                                  id="customCheckbox{{ $yet->id }}"
                                                  @if (App\Models\User::hasRol($yet->roles_slug, $id)) checked @endif>
                                              <label for="customCheckbox{{ $yet->id }}"
@@ -158,7 +158,7 @@
                                          <div class="custom-control custom-checkbox">
                                              <input
                                                  class="custom-control-input @if ($yet->vazife_id != 1) yetki{{ $yet->parent_id }} @endif checkbox5 "
-                                                 value="{{ $yet->id }}" type="checkbox" name="check"
+                                                 value="{{ $yet->id }}" type="checkbox" tur="yetki" name="check"
                                                  id="customCheckbox{{ $yet->id }}"
                                                  @if (App\Models\User::hasRol($yet->roles_slug, $id)) checked @endif>
                                              <label for="customCheckbox{{ $yet->id }}"
@@ -194,7 +194,7 @@
                                          <div class="custom-control custom-checkbox">
                                              <input
                                                  class="custom-control-input @if ($yet->vazife_id != 1) yetki{{ $yet->parent_id }} @endif checkbox6 "
-                                                 value="{{ $yet->id }}" type="checkbox" name="check"
+                                                 value="{{ $yet->id }}" type="checkbox" tur="yetki" name="check"
                                                  id="customCheckbox{{ $yet->id }}"
                                                  @if (App\Models\User::hasRol($yet->roles_slug, $id)) checked @endif>
                                              <label for="customCheckbox{{ $yet->id }}"
@@ -202,6 +202,33 @@
                                          </div>
                                      @else
                                      @endif
+                                 @endforeach
+
+
+                             </div>
+                         </div>
+
+                         <div class="card card-olive card-outline">
+                             <div class="card-header">
+                                 <h5 class="card-title">BİRİMLER</h5>
+                                 <div class="card-tools">
+
+
+                                 </div>
+                             </div>
+                             <div class="card-body">
+                                 @foreach ($birimler as $birim)
+                                     <div class="custom-control custom-checkbox">
+                                         <input class="custom-control-input checkboxb{{ $birim->birim_id }} "
+                                             value="{{ $birim->birim_id }}" tur="birim" type="checkbox" name="check"
+                                             id="customCheckboxb{{ $birim->birim_id }}"
+                                             @foreach ($birimi as $bir) @if ($bir->birim_id == $birim->birim_id)  checked @endif
+                                             @endforeach>
+
+
+                                         <label for="customCheckboxb{{ $birim->birim_id }}"
+                                             class="custom-control-label">{{ $birim->birim_ad }}</label>
+                                     </div>
                                  @endforeach
 
 
@@ -234,7 +261,7 @@
                  data: {
                      user_id: {{ $id }},
                      role_id: params.attr('value'),
-
+                     tur: params.attr('tur')
 
 
                  },
@@ -289,7 +316,7 @@
                  data: {
                      user_id: {{ $id }},
                      role_id: params.attr('value'),
-
+                     tur: params.attr('tur')
 
 
                  },

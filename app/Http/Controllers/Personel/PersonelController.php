@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Personel;
 
 use App\Http\Controllers\Controller;
+use App\Models\Birim;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
@@ -31,55 +32,73 @@ class PersonelController extends Controller
     public function index(Request $request, Builder $builder)
     {
 
-        /*  */
-        /*  ->select(
-
-                'users.id as id',
-                'users.name as name',
-                'users.email as email',
-                'users.kullanici_resim as resim',
-
-                'roles.*'
-            ) */
-        /*
-        foreach ($data->getRelation('name') as $key => $value) {
-            echo $key;
-            echo '<br>';
-            echo $value;
-        } */
+        $role_id = $request->role_id ==  null ? 0 : $request->role_id;
+        $birim_id = $request->birim_id ==  null ? 0 : $request->birim_id;
 
 
         if (request()->ajax()) {
+
             $data = User::leftJoin(
                 'role_user',
-                'role_user.user_id',
-                '=',
-                'users.id'
-            )
-                ->leftJoin(
-                    'roles',
-                    'roles.id',
-                    '=',
-                    'role_user.role_id'
-                )
-                ->select(
-                    'users.id as id',
-                    'users.name as name',
-                    'users.email as email',
-                    'users.kullanici_gsm as gsm',
-                    'users.kullanici_adres as adres',
+                function ($join) {
+                    $join->on('users.id', '=', 'role_user.user_id')
+                        ->where('roles.vazife_id', 1)
+                        ->rightJoin(
+                            'roles',
+                            'roles.id',
+                            '=',
+                            'role_user.role_id'
+                        );
+                },
 
-                    'roles.name as roll',
+            )->leftJoin(
+                'birimhoca',
+                function ($join) {
+                    $join->on('birimhoca.kullanici_id', '=', 'users.id')
+                        ->rightJoin(
+                            'birim',
+                            'birim.birim_id',
+                            '=',
+                            'birimhoca.birim_id'
+                        );
+                },
 
-                    DB::raw('GROUP_CONCAT(CASE WHEN role_user.user_id = users.id AND roles.vazife_id = 1 THEN roles.name ELSE NULL END
-                     ORDER BY users.id ASC SEPARATOR ", ") AS rolum ')
-                )->groupBy('users.id')->get();
+            )->select(
+                'users.id as id',
+                'users.name as name',
+                'users.email as email',
+                'users.kullanici_gsm as gsm',
+                'users.kullanici_adres as adres',
 
+                DB::raw('GROUP_CONCAT(CASE WHEN birimhoca.kullanici_id = users.id AND birim.birim_durum = 1 THEN birim.birim_ad ELSE NULL END
+                     ORDER BY users.id ASC SEPARATOR ", ") AS birim '),
+                DB::raw('GROUP_CONCAT(CASE WHEN birimhoca.kullanici_id = users.id AND birim.birim_durum = 1 THEN birim.birim_id ELSE NULL END
+                     ORDER BY users.id ASC SEPARATOR " ") AS birimid '),
+                DB::raw('GROUP_CONCAT(CASE WHEN role_user.user_id = users.id AND roles.vazife_id = 1 THEN roles.id ELSE NULL END
+                     ORDER BY users.id ASC SEPARATOR " ") AS rolumid '),
+                DB::raw('GROUP_CONCAT(CASE WHEN role_user.user_id = users.id AND roles.vazife_id = 1 THEN roles.name ELSE NULL END
+                     ORDER BY roles.id ASC SEPARATOR ", ") AS rolum '),
 
+            )->groupBy('users.id')->orderBy('name')
+                ->when($role_id != 0, function ($q) use ($role_id) {
+                    return $q->havingRaw("rolumid LIKE '%{$role_id}%'");
+                }, function ($q) {
+                    return $q;
+                })
+                ->when($birim_id != 0, function ($q) use ($birim_id) {
+                    return $q->havingRaw("birimid LIKE '%{$birim_id}%'");
+                }, function ($q) {
+                    return $q;
+                })
+                ->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('vazife', function ($row) {
-                    $vazife = $row['rolum'];
+                    $vazife = implode(', ', array_unique(explode(', ', $row['rolum'])));
+                    return $vazife;
+                })
+                ->addColumn('birim', function ($row) {
+                    $vazife = implode(', ', array_unique(explode(', ', $row['birim'])));
                     return $vazife;
                 })
                 ->addColumn('resim', function ($row) {
@@ -111,17 +130,26 @@ class PersonelController extends Controller
 
                     return $btn;
                 })
-                ->rawColumns(['resim', 'gsm', 'vazife', 'iletisim', 'email', 'action'])
+                ->rawColumns(['resim', 'gsm', 'vazife', 'iletisim', 'email', 'action', 'birim'])
                 ->make(true);
         }
+        $html = $builder->ajax([
 
-        $html = $builder->columns([
-            ['data' => 'id', 'name' => 'id', 'title' => 'Id'],
+            'url' => route('personel.indexpost'),
+            'type' => 'Post',
+            'data' => "function(d) {
+            d.birim_id = '{$request->birim_id}';
+            d.role_id = '{$request->role_id}';
+
+        }",
+        ])->columns([
+            ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'Id'],
             ['data' => 'resim', 'name' => 'resim', 'title' => 'Resim'],
             ['data' => 'name', 'name' => 'name', 'title' => 'Name'],
             ['data' => 'gsm', 'name' => 'gsm', 'title' => 'Telefon'],
             ['data' => 'email', 'name' => 'email', 'title' => 'Email'],
             ['data' => 'adres', 'name' => 'adres', 'title' => 'Adres'],
+            ['data' => 'birim', 'name' => 'birim', 'title' => 'Birim'],
             ['data' => 'vazife', 'name' => 'vazife', 'title' => 'Vazife'],
             ['data' => 'iletisim', 'name' => 'iletisim', 'title' => 'İletişim'],
             ['data' => 'action', 'name' => 'action', 'title' => 'İşlemler'],
@@ -129,21 +157,21 @@ class PersonelController extends Controller
         ])->lengthMenu([
             [-1, 10, 25, 50],
             ["Tümü", 10, 25, 50]
-        ],)->parameters([
+        ],)->serverSide(true)->search([
+            "caseInsensitive" => true
+        ])->parameters([
             'columnDefs' => [
-                ["targets" => [4], "className" => "truncate"],
+                ['targets' => [2, 3], "orderDataType" => "dom-text", "type" => "locale-compare"],
                 ['targets' => [0],  "type" => "numeric"]
 
-            ],
+            ]
+        ])->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
 
-        ])
 
-            ->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
         $veri['title'] = 'Personeller';
         $veri['name'] = 'Personel';
-
-
-
+        $veri['role'] =  $role_id;
+        $veri['birim'] = $birim_id;
         return view('idari.index', compact('html', 'veri'));
     }
 
@@ -165,7 +193,38 @@ class PersonelController extends Controller
         }
         return view('idari.birim');
     }
+    public function rolegetir(Request $request)
+    {
 
+
+        //
+        if ($request->ajax()) {
+
+            $data = Role::where('vazife_id', 1)->get();
+            $gonder[] =
+                "<option selected value='0'> Tüm Personel</option>";
+            foreach ($data as $veri) {
+                $gonder[] = "<option value='" . $veri['id'] . "'>" . $veri['name'] . "</option>";
+            }
+
+            return response()->json($gonder);
+        }
+    }
+
+    public function birimgetir(Request $request)
+    {
+
+        //
+        if ($request->ajax()) {
+            $gonder[] = "<option selected value='0'> Tüm Birimler</option>";
+            $data = Birim::get(['birim_id', 'birim_ad']);
+            foreach ($data as $veri) {
+                $gonder[] = "<option value=\"" . $veri['birim_id'] . "\">" . $veri['birim_ad'] . "</option>";
+            }
+
+            return response()->json($gonder);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *

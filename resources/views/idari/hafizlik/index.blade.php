@@ -6,9 +6,6 @@
       <link rel="stylesheet" href="/plugins/bs-stepper/css/bs-stepper.min.css">
       <!-- daterange picker -->
       <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
-      <!-- Select2 -->
-      <link rel="stylesheet" href="/plugins/select2/css/select2.min.css">
-      <link rel="stylesheet" href="/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
   @endsection
   @section('content')
       <!-- Content Wrapper. Contains page content -->
@@ -430,7 +427,6 @@
   @section('js')
   @endsection
   @section('script')
-      <script src="/plugins/select2/js/select2.full.min.js"></script>
       <!-- DataTables  & Plugins -->
       <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
 

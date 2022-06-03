@@ -13,6 +13,7 @@
                   <div class="row mb-2">
                       <div class="col-sm-6">
                           <h1>{!! $veri['title'] !!}</h1>
+
                       </div>
                       <div class="col-sm-6">
                           <ol class="breadcrumb float-sm-right">
@@ -540,7 +541,7 @@
 
               $.ajax({
                   type: 'post',
-                  url: "{{ route('ogrenci.edit') }}",
+                  url: "{{ route('birimogrenci.edit') }}",
                   dataType: 'json',
                   data: {
                       id: id
@@ -721,7 +722,7 @@
               // file_button.after('<br><br><hr><br><img src="' + file_data + '" width="350px">');
               $.ajax({
 
-                  url: "{{ route('ogrenci.store') }}",
+                  url: "{{ route('birimogrenci.store') }}",
                   type: 'POST',
                   contentType: false,
                   cache: false,
@@ -794,7 +795,7 @@
               // file_button.after('<br><br><hr><br><img src="' + file_data + '" width="350px">');
               $.ajax({
 
-                  url: "{{ route('ogrenci.update') }}",
+                  url: "{{ route('birimogrenci.update') }}",
                   type: 'POST',
                   contentType: false,
                   cache: false,

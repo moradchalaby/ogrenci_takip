@@ -71,6 +71,7 @@
                   <div class="modal-body">
                       <form method="POST" id="filter" action="{{ route('birimhafizlik.indexpost') }}">
                           @csrf
+                          <input type="hidden" name="id" value={{ $veri['birim'] }}>
                           <div class="form-group">
                               <label>Tarih Aralığı:</label>
                               <div class="input-group col-12">
@@ -113,11 +114,11 @@
                               </select>
 
                           </div>
-                          <div class="form-group">
+                          {{-- <div class="form-group">
                               <select id="birim" name="birim_id" class="form-control select2" style="width: 100%;">
                               </select>
 
-                          </div>
+                          </div> --}}
                           <div class="form-group">
                               <select id="hoca" name="hoca_id" class="form-control select2" style="width: 100%;">
                               </select>
@@ -666,7 +667,7 @@
               $.ajax({
                   type: 'post',
                   beforeSend: function(xhr) {
-                      document.getElementById("modalDersekle").style.filter = "blur(10px)";
+                      document.getElementById("modalDersekle").style.filter = "blur(0px)";
                   },
 
                   url: "{{ route('birimhafizlik.ders') }}",
@@ -747,7 +748,10 @@
 
                           $('#ekleDers #sayfas').append(new Option(index + 1, index + 1));
                       }
+                      for (let index = 0; index < c; index++) {
 
+                          $('#ekleDers #cuzs').append(new Option(index + 1, index + 1));
+                      }
 
                       hocagetir('#ekleDers #hoca', datim.hoca);
 
@@ -764,10 +768,7 @@
                       $('#ekleDers #tarih').val(today);
 
 
-                      for (let index = 0; index < c; index++) {
 
-                          $('#ekleDers #cuzs').append(new Option(index + 1, index + 1));
-                      }
 
                       if (datim.sonders.includes('-') && !datim.sonders.includes('FN')) {
 
@@ -1233,6 +1234,7 @@
           })
       </script>
       {{-- hafizlik durum submit bitiş --}}
+
       {{-- Hoca  submit baş --}}
       <script>
           //Hoca  güncelleme

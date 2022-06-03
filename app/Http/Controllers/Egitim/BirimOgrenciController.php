@@ -30,9 +30,9 @@ class BirimOgrenciController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, Builder $builder)
+    public function index(Request $request, Builder $builder, $id)
     {
-        $birim_id = Birimsorumlu::where('kullanici_id', Auth::user()->id)->first()->birim_id;
+        $birim_id = $id;
 
         if (request()->ajax()) {
             $data = Ogrenci::select('*')
@@ -54,7 +54,7 @@ class BirimOgrenciController extends Controller
                     return $resim;
                 })
                 ->addColumn('action', function ($row) {
-                    if (Gate::denies('islem', 'ogrenci')) {
+                    if (Gate::denies('islem', 'birimogrenci')) {
                         $btn = '
 
 
@@ -109,8 +109,8 @@ class BirimOgrenciController extends Controller
         ],)
 
             ->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
-        $veri['title'] = 'Öğrenciler';
-        $veri['name'] = 'Ogrenci';
+        $veri['title'] = 'BİRİM Öğrenciler';
+        $veri['name'] = 'Birim Ogrenci';
 
 
 

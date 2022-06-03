@@ -49,32 +49,6 @@ class HafizlikController extends Controller
             $end
         );
 
-        /*  $gunveri = DB::table('hfzlkders')->where('ogrenci_id', 255)
-            ->orderBy('hafizlik_tarih')
-            ->select(
-                '*'
-                /* DB::raw('GROUP_CONCAT(CASE WHEN ogrenci_id = 4 THEN hafizlik_ders ELSE NULL END
-                     ORDER BY id ASC SEPARATOR ",") AS dersler '),
-                DB::raw('GROUP_CONCAT(CASE WHEN ogrenci_id = 4 THEN hafizlik_topl ELSE NULL END
-                     ORDER BY id ASC SEPARATOR ",") AS say'),
-                DB::raw('GROUP_CONCAT(CASE WHEN ogrenci_id = 4 THEN hafizlik_tarih ELSE NULL END
-                     ORDER BY id ASC SEPARATOR ",") AS gunler'),
-                DB::raw('GROUP_CONCAT(CASE WHEN ogrenci_id = 4 THEN id ELSE NULL END
-                     ORDER BY id ASC SEPARATOR ",") AS dersId'), */
-
-        /*
-                DB::raw("GROUP_CONCAT(if(hafizlik_ders is not null, '!!!', NULL)
-                     ORDER BY hfzlkders.id ASC SEPARATOR ',') AS dersler "),
-                DB::raw("GROUP_CONCAT(if(hafizlik_topl is not null, '!!!', NULL)
-                     ORDER BY hfzlkders.id ASC SEPARATOR ',') AS say"),
-                DB::raw("GROUP_CONCAT(if(hafizlik_tarih is not null, '!!!', NULL)
-                     ORDER BY hfzlkders.id ASC SEPARATOR ',') AS gunler"),
-                DB::raw("GROUP_CONCAT(if(id is not null, '!!!', NULL)
-                     ORDER BY hfzlkders.id ASC SEPARATOR ',') AS dersId")
-            ) ->groupBy('ogrenci_id') ->whereBetween('hafizlik_tarih', ['2020.06.15', '2020.06.15'])->orWhere('ogrenci_id', 255)->get();
-
-        dd($request->has('birim_id'));
-        exit;*/
         if ($request->ajax()) {
 
 
@@ -106,12 +80,6 @@ class HafizlikController extends Controller
                         ->WhereBetween('hfzlkders.hafizlik_tarih', [$bast, $sont]);
                 }, null, null, 'FULL')
                 /*   ->crossJoin('hfzlkders') */
-
-
-
-
-
-
 
                 ->orderBy('ogrenci.ogrenci_adsoyad', 'asc')
 

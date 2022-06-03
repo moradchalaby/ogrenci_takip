@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Birimhoca;
 use App\Models\RoleUser;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,8 +29,18 @@ class YetkilerController extends Controller
         $yetki = DB::table('roles')->get();
 
         $user = User::find($id);
+        $birimler = DB::table('birim')->where('birim_durum', 1)->get();
+        $user_birim = DB::table('birimhoca')
+            ->rightJoin('birim', 'birim.birim_id', '=', 'birimhoca.birim_id')->select()
+            ->where('birimhoca.kullanici_id', $id)->get();
 
-        return view('idari.yapi.yetki',  ['yetki' => $yetki, 'user' => $user, 'id' => $id]);
+        return view('idari.yapi.yetki',  [
+            'yetki' => $yetki,
+            'user' => $user,
+            'id' => $id,
+            'birimler' => $birimler,
+            'birimi' => $user_birim
+        ]);
     }
 
     /**
@@ -42,14 +53,24 @@ class YetkilerController extends Controller
     {
         //
         if ($request->ajax()) {
+            if ($request->tur == 'birim') {
+                $data = Birimhoca::create(
 
-            $data = RoleUser::create(
+                    [
+                        'birim_id' => $request->role_id,
+                        'kullanici_id' => $request->user_id,
+                    ]
+                );
+            } else {
+                $data = RoleUser::create(
 
-                [
-                    'role_id' => $request->role_id,
-                    'user_id' => $request->user_id,
-                ]
-            );
+                    [
+                        'role_id' => $request->role_id,
+                        'user_id' => $request->user_id,
+                    ]
+                );
+            }
+
 
             return response()->json($data);
         }
@@ -109,10 +130,12 @@ class YetkilerController extends Controller
     {
         //
         if ($request->ajax()) {
-
-            $data
-                = RoleUser::where('role_id', '=', $request->role_id)->where('user_id', '=', $request->user_id)->delete();
-
+            if ($request->tur == 'birim') {
+                $data = Birimhoca::where('birim_id', '=', $request->role_id)->where('kullanici_id', '=', $request->user_id)->delete();
+            } else {
+                $data
+                    = RoleUser::where('role_id', '=', $request->role_id)->where('user_id', '=', $request->user_id)->delete();
+            }
             return response()->json($data);
         }
     }
