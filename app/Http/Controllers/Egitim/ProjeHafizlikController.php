@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Egitim;
 
 use App\Http\Controllers\Controller;
 use App\Models\Birim;
+use App\Models\Birimsorumlu;
 use App\Models\Hafizlikhoca;
 use App\Models\Ogrenci;
 use App\Models\User;
@@ -13,11 +14,12 @@ use DatePeriod;
 use DateTime;
 use Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
 
-class HafizlikController extends Controller
+class ProjeHafizlikController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +29,7 @@ class HafizlikController extends Controller
     public function index(Request $request, Builder $builder)
     {
 
-        $birim_id = $request->birim_id;
+        $birim_id = $request->id;
         $hoca_id = $request->hoca_id;
 
         if ($request->tarihar != null) {
@@ -49,20 +51,17 @@ class HafizlikController extends Controller
             $end
         );
 
+
         if ($request->ajax()) {
 
 
 
             $data =
-                Ogrenci::where(['ogrenci.ogrenci_kytdurum' => '1'])
+                Ogrenci::where(['ogrenci.ogrenci_kytdurum' => '1'])->rightJoin('ogrenciproje', 'ogrenciproje.ogrenci_id', '=', 'ogrenci.id')
 
                 ->rightJoin('ogrencibirim', function ($join) use ($birim_id) {
                     $join->on('ogrenci.id', '=', 'ogrencibirim.ogrenci_id')
-                        ->when($birim_id > 0, function ($q) use ($birim_id) {
-                            return $q->where('ogrencibirim.birim_id', $birim_id);
-                        }, function ($q) use ($birim_id) {
-                            return $q;
-                        });
+                        ->where('ogrencibirim.birim_id', '=', $birim_id);
                 })
 
 
@@ -79,7 +78,6 @@ class HafizlikController extends Controller
                     $join->on('hfzlkders.ogrenci_id', '=', 'ogrenci.id')
                         ->WhereBetween('hfzlkders.hafizlik_tarih', [$bast, $sont]);
                 }, null, null, 'FULL')
-                /*   ->crossJoin('hfzlkders') */
 
                 ->orderBy('ogrenci.ogrenci_adsoyad', 'asc')
 
@@ -165,7 +163,7 @@ class HafizlikController extends Controller
                 })
 
                 ->addColumn('sayfa', function ($row) {
-                    //$sayfalar = explode('/', $row['sayfa']);
+
                     $sayfa = $row['sayfa'];
 
 
@@ -173,23 +171,16 @@ class HafizlikController extends Controller
                 })
 
                 ->addColumn('toplam', function ($row) use ($request) {
-                    /* $say = explode(',', ); */
+
 
 
                     $toplam = $row['say'];
-                    /* foreach ($say as  $value) {
-                        $toplam += floatval($value);
-                    } */
 
 
 
                     return $toplam;
                 })
-                /*  ->filterColumn(function ($instance) use ($request) {
-                    if ($request->kota != '0' || $request->kota != null) {
-                        $instance->where('toplam', $request->kota);
-                    }
-                }) */
+
                 ->addColumn('resim', function ($row) {
 
                     $resim = "<img alt=\"Avatar\" class=\"avatar\" src=\"{$row['ogrenci_resim']}\">";
@@ -241,6 +232,7 @@ class HafizlikController extends Controller
             ['data' => 'resim', 'name' => 'resim', 'title' => 'Resim'],
             ['data' => 'adsoyad', 'name' => 'adsoyad', 'title' => 'Ad Soyad'],
             ['data' => 'hoca', 'name' => 'hoca', 'title' => 'Hocası'],
+            ['data' => 'birim', 'name' => 'birim', 'title' => 'Birimx'],
             ['data' => 'hfzlkdurum', 'name' => 'hfzlkdurum', 'title' => 'Durum'],
             ['data' => 'sayfa', 'name' => 'sayfa', 'title' => 'Sayfa'],
             ['data' => 'toplam', 'name' => 'toplam', 'title' => 'Toplam'],
@@ -258,10 +250,10 @@ class HafizlikController extends Controller
         }
         $html = $builder->ajax([
 
-            'url' => route('hafizlik.indexpost'),
-            'type' => 'Post',
+            'url' => route('projehafizlik.index'),
+            'type' => 'Get',
             'data' => "function(d) { d.tarihar = '{$bast} - {$sont} ';
-            d.birim_id = '{$request->birim_id}';
+            d.birim_id = '{$birim_id}';
             d.hoca_id = '{$request->hoca_id}';
             d.kota = '{$request->kota}';
             d.sayfa = '{$request->sayfa}';
@@ -276,7 +268,7 @@ class HafizlikController extends Controller
         $html->lengthMenu([
             [-1, 10, 25, 50],
             ["Tümü", 10, 25, 50]
-        ],)->serverSide(false)->search([
+        ],)->serverSide(true)->search([
             "caseInsensitive" => true
         ])->parameters([
             'columnDefs' => [
@@ -296,12 +288,12 @@ class HafizlikController extends Controller
         $veri['kota'] = $request->kota;
         $veri['sayfa'] = $request->sayfa;
         $veri['hoca'] = $request->hoca_id;
-        $veri['birim'] = $request->birim_id;
+        $veri['birim'] = $birim_id;
         $veri['durum'] = $request->durum;
         /* dd($html);
         exit; */
 
-        return view('idari.hafizlik.index', compact('html', 'veri'));
+        return view('proje.hafizlik.index', compact('html', 'veri'));
     }
     public function hocagetir(Request $request)
     {
@@ -310,11 +302,14 @@ class HafizlikController extends Controller
         //
         if ($request->ajax()) {
 
-            $data = User::rightJoin('hafizlikhoca', 'hafizlikhoca.kullanici_id', '=', 'users.id')->get();
+            $data = User::join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->join('roles', 'role_user.role_id', '=', 'roles.id')
+                ->where('roles.id', '37')->select('users.*')
+                ->get();
             $gonder[] =
                 "<option selected value='0'> Tüm Hocalar</option>";
             foreach ($data as $veri) {
-                $gonder[] = "<option value=\"" . $veri['kullanici_id'] . "\">" . $veri['name'] . "</option>";
+                $gonder[] = "<option value=\"" . $veri['id'] . "\">" . $veri['name'] . "</option>";
             }
 
             return response()->json($gonder);
@@ -326,9 +321,15 @@ class HafizlikController extends Controller
 
         //
         if ($request->ajax()) {
-
+            User::join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->join('roles', 'role_user.role_id', '=', 'roles.id')
+                ->where('roles.id', '37')->select('users.*')
+                ->get();
             $data = User::leftJoin('birimhoca', 'birimhoca.kullanici_id', '=', 'users.id')
                 ->leftJoin('hafizlikhoca', 'hafizlikhoca.kullanici_id', '=', 'birimhoca.kullanici_id')
+                ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->join('roles', 'role_user.role_id', '=', 'roles.id')
+                ->where('roles.id', '37')
                 ->where('birimhoca.birim_id', '=', $request->birim_id)
                 ->select(
                     'users.id as id',

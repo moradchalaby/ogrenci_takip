@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Yapi;
 use App\Http\Controllers\Controller;
 use App\Models\Birim;
 use App\Models\Birimhoca;
+use Yajra\DataTables\Html\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Request as FacadesRequest;
+use Yajra\DataTables\Facades\DataTables;
 
 class BirimController extends Controller
 {
@@ -22,112 +24,69 @@ class BirimController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, Builder $builder)
     {
         //
-        return view('idari.yapi.index');
-    }
-    public function getBirim(Request $request)
-    {
-
-        ## Read value
-        $draw = $request->get('draw');
-        $start = $request->get("start");
-        $rowperpage = $request->get("length"); // Rows display per page
-
-        $columnIndex_arr = $request->get('order');
-        $columnName_arr = $request->get('columns');
-        $order_arr = $request->get('order');
-        $search_arr = $request->get('search');
-
-        $columnIndex = $columnIndex_arr[0]['column']; // Column index
-        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
-        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
-        $searchValue = $search_arr['value']; // Search value
-
-        // Total records
-        $totalRecords = Birim::select('count(*) as allcount')->count();
-        $totalRecordswithFilter =
-            Birim::select('birim.*', 'birimhoca.*', 'users.*')
-            ->leftJoin(
-                'birimhoca',
-                'birimhoca.birim_id',
-                '=',
-                'birim.birim_id'
-            )
-            ->join('users', 'users.id', '=', 'birimhoca.kullanici_id')
-
-            ->groupBy('birim.birim_id')->where('birim_ad', 'like', '%' . $searchValue . '%')->count();
-
-        // Fetch records
-        $records =
-            Birim::select('birim.*', 'birimhoca.*', 'users.*')
-            ->leftJoin(
-                'birimhoca',
-                'birimhoca.birim_id',
-                '=',
-                'birim.birim_id'
-            )
-            ->leftJoin(
-                'users',
-                'users.id',
-                '=',
-                'birimhoca.kullanici_id'
-            )
-
-
-            ->orderBy($columnName, $columnSortOrder)
-            ->where('birim.birim_ad', 'like', '%' . $searchValue . '%')
-            ->select(
-
-                'birim.*',
-                'users.name',
-                'users.id'
+        if (request()->ajax()) {
+            $data = Birim::where('birim_durum', '1')->get();
 
 
 
-            )
-            ->skip($start)
-            ->take($totalRecords)
-            ->get();
-
-        $data_arr = array();
-
-        foreach ($records as $record) {
-            $birim_id = $record->birim_id;
-            $birim_donem = $record->birim_donem;
-            $birim_ad = $record->birim_ad;
-            $birim_sorumlu = $record->name;
+            return DataTables::of($data)
+                ->addIndexColumn()
 
 
-            $data_arr[] = array(
+                ->addColumn('action', function ($row) {
+                    if (Gate::denies('islem', 'birimogrenci')) {
+                        $btn = '
 
-                "birim_ad" =>  $birim_ad,
-                "birim_donem" => $birim_donem,
-                "birim_id" => '<a href="#" onclick="alert(\'Hello world!\')">' . $birim_id . '</a>',
-                "birim_sorumlu" => $birim_sorumlu,
-                "islemler" => '<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-id="' . $birim_id . '" data-ad="' . $birim_ad . '"
+
+                                      <a href="/ogrenci/detay/' . $row['id'] . '" type="button" class="btn btn-outline-primary btn-xs">
+
+                                        <i class="fa-solid fa-angles-right"></i>
+                                      </a>';
+                    } else {
+                        $btn = '
+
+
+                                      <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-id="' . $row['birim_id'] . '" data-ad="' . $row['birim_ad'] . '"
                                           data-target="#modalEdit">
 
                                          <i class="fa-solid fa-pen-to-square"></i>
-                                      </button>'/*  <input type="hidden" id="veri' . $birim_id . '" value="' . strval($record) . '">
-                                          <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
-                                          data-target="#modalAdd">
-                                          Sil
-                                      </button>*/
-            );
+                                      </button>
+                                      <button type="button" class="btn btn-danger btn-xs deletebirim" data-id="' . $row['birim_id'] . '">
+
+                                       <i class="fa-solid fa-trash-can"></i>
+                                      </button>';
+                    }
+
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
         }
 
-        $response = array(
-            "draw" => intval($draw),
-            "iTotalRecords" => $totalRecords,
-            "iTotalDisplayRecords" => $totalRecordswithFilter,
-            "aaData" => $data_arr
-        );
+        $html = $builder->columns([
+            ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'Id'],
 
-        echo json_encode($response);
-        exit;
+            ['data' => 'birim_ad', 'name' => 'birim_ad', 'title' => 'BİRİM'],
+            ['data' => 'birim_donem', 'name' => 'birim_donem', 'title' => 'Birim Dönem'],
+
+            ['data' => 'action', 'name' => 'action', 'title' => 'İşlemler'],
+
+        ])->lengthMenu([
+            [-1, 10, 25, 50],
+            ["Tümü", 10, 25, 50]
+        ],)
+
+            ->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
+        $veri['title'] = 'BİRİMLER';
+        $veri['name'] = 'Birimler';
+
+
+        return view('idari.yapi.index', compact('html', 'veri'));
     }
+
 
     /**
      *  Store a newly created resource in storage.
@@ -178,9 +137,10 @@ class BirimController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
         //
+
     }
 
     /**
@@ -190,9 +150,18 @@ class BirimController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
+        if ($request->ajax()) {
+
+            $data = Birim::updateOrCreate(['birim_id' => $request->birim_id], [
+                'birim_ad' => $request->birim_ad,
+
+            ]);
+
+            return response()->json($data);
+        }
     }
 
     /**
@@ -201,8 +170,17 @@ class BirimController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         //
+        if ($request->ajax()) {
+
+            $data = Birim::updateOrCreate(['birim_id' => $request->birim_id], [
+                'birim_durum' => '0',
+
+            ]);
+
+            return response()->json($data);
+        }
     }
 }

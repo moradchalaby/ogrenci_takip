@@ -62,6 +62,7 @@
                 @endcan
                 {{-- @can('birimsorumlu', 'birimsorumlu') --}}
                 @include('layouts.sidebar_birim')
+                @include('layouts.sidebar_proje')
                 {{-- @endcan --}}
                 {{-- @include('layouts.sidebar_muhasebe') --}}
             </ul>

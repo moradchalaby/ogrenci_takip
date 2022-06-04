@@ -9,17 +9,18 @@
               <div class="container-fluid">
                   <div class="row mb-2">
                       <div class="col-sm-6">
-                          <h1>BİRİMLER</h1>
+                          <h1>{!! $veri['title'] !!}</h1>
                       </div>
                       <div class="col-sm-6">
                           <ol class="breadcrumb float-sm-right">
                               <li class="breadcrumb-item"><a href="#">Home</a></li>
-                              <li class="breadcrumb-item active">Birimler</li>
+                              <li class="breadcrumb-item active">{!! $veri['name'] !!}</li>
                           </ol>
                       </div>
                   </div>
               </div><!-- /.container-fluid -->
           </section>
+
 
           <!-- Main content -->
           <section class="content">
@@ -30,32 +31,24 @@
 
                           <div class="card">
                               <div class="card-header">
-                                  <h3 class="card-title">Birim Listesi</h3>
+                                  <h3 class="card-title">{!! $veri['name'] !!} Tam Liste</h3>
                                   <div class="card-tools">
-                                      <button type="button" class="btn btn-success btn-xs" id="yeni" data-toggle="modal"
+                                      <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
+                                          data-target="#modalFilter">
+                                          Filtrele
+                                      </button>
+                                      <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
                                           data-target="#modalAdd">
                                           Yeni Ekle
                                       </button>
+
 
                                   </div>
                               </div>
                               <!-- /.card-header -->
                               <div class="card-body">
-                                  <table id="example1" class="table table-bordered table-striped">
-                                      <thead>
-                                          <tr>
-                                              <td>Sıra</td>
-                                              <td>Dönem</td>
-                                              <td>Birim Adı</td>
-                                              <td>Birim Sorumlusu</td>
-                                              <td>İşlem</td>
 
-
-                                          </tr>
-                                      </thead>
-                                      <tbody></tbody>
-
-                                  </table>
+                                  {!! $html->table() !!}
                               </div>
                               <!-- /.card-body -->
                           </div>
@@ -69,8 +62,6 @@
           </section>
           <!-- /.content -->
       </div>
-
-
 
 
       <div class="modal fade" id="modalAdd">
@@ -95,7 +86,7 @@
                               </div>
                           </div>
                           <div class="input-group mb-3">
-                              <select name="yearpicker" id="yearpicker" class="form-control">
+                              <select name="yearpicker" id="yearpicker" class="form-control select2">
                                   <option value="">SEÇİNİZ</option>p
                               </select>
                               <div class="input-group-append">
@@ -142,7 +133,7 @@
                       </button>
                   </div>
                   <div class="modal-body">
-                      <form method="POST" id="birimadd" action="#">
+                      <form method="POST" id="birimedit" action="#">
                           @csrf
                           <div class="input-group mb-3">
                               <input id="birim_adi" name="birim_ad" class="form-control">
@@ -213,16 +204,143 @@
           });
       </script>
       <script>
-          $(function() {
-              var table = $("#example1").DataTable({
-                  ajax: "{{ route('birim.getBirim') }}",
+          $('#birimedit').on("submit", function(e) {
 
-                  processing: true,
-                  serverSide: true,
-                  "deferRender": true,
-                  "order": [
-                      [0, "desc"]
-                  ],
+              e.preventDefault();
+              var form = $('#birimedit')[0];
+              var data = new FormData(form);
+
+              $.ajax({
+
+                  url: "{{ route('birim.update') }}",
+                  type: 'post',
+
+                  contentType: false,
+                  cache: false,
+                  processData: false,
+                  data: data,
+                  dataType: 'text',
+
+
+                  success: (d) => {
+                      var dat = JSON.stringify(d);
+                      var datim = JSON.parse(dat);
+                      $("#example1").DataTable().ajax.reload();
+
+                      $('#modalEdit').modal('hide');
+                      console.log(datam);
+                      var Toast = Swal.mixin({
+                          toast: true,
+                          position: 'top',
+                          showConfirmButton: false,
+                          timer: 3000
+                      });
+                      Toast.fire({
+                          icon: 'success',
+                          title: dat["birim_ad"] + '<br>  Olarak Değişti <br>',
+                      })
+
+                      document.getElementById("birimedit").reset();
+                  },
+                  error: function(d) {
+                      var dat = JSON.stringify(d);
+                      var datim = JSON.parse(dat);
+                      $('#modalEdit').modal('hide');
+
+
+                      var Toast = Swal.mixin({
+                          toast: true,
+                          position: 'top',
+                          showConfirmButton: false,
+                          timer: 3000
+                      });
+                      Toast.fire({
+                          icon: 'error',
+                          title: dat["birim_ad"]
+
+                              +
+                              '<br>Düzenleme İşlemi başarısız <br>',
+                      })
+                      document.getElementById("birimedit").reset();
+                  },
+              });
+
+          })
+          $('.select2').select2({
+              theme: 'bootstrap4',
+
+          });
+      </script>
+      <script>
+          jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+              'locale-compare-asc': function(a, b) {
+                  return a.localeCompare(b, 'cs', {
+                      sensitivity: 'case'
+                  })
+              },
+              'locale-compare-desc': function(a, b) {
+                  return b.localeCompare(a, 'cs', {
+                      sensitivity: 'case'
+                  })
+              }
+          })
+
+          jQuery.fn.dataTable.ext.type.search['locale-compare'] = function(data) {
+
+              return NeutralizeAccent(data);
+          }
+
+          function NeutralizeAccent(data) {
+
+              return !data ?
+                  '' :
+                  typeof data === 'string' ?
+                  data.toLocaleUpperCase()
+                  .replace(/\n/g, ' ')
+                  .replace(/[C]/g, 'C')
+                  .replace(/[Ç]/g, 'Ç')
+                  .replace(/[G]/g, 'G')
+                  .replace(/[Ğ]/g, 'Ğ')
+                  .replace(/[I]/g, 'I')
+                  .replace(/[İ]/g, 'İ')
+                  .replace(/[O]/g, 'O')
+                  .replace(/[Ö]/g, 'Ö')
+                  .replace(/[S]/g, 'S')
+                  .replace(/[Ş]/g, 'Ş')
+                  .replace(/[U]/g, 'U')
+                  .replace(/[Ü]/g, 'Ü')
+                  .replace(/[c]/g, 'c')
+                  .replace(/[ç]/g, 'ç')
+                  .replace(/[g]/g, 'g')
+                  .replace(/[ğ]/g, 'ğ')
+                  .replace(/[ı]/g, 'ı')
+                  .replace(/[i]/g, 'i')
+                  .replace(/[o]/g, 'o')
+                  .replace(/[ö]/g, 'ö')
+                  .replace(/[s]/g, 's')
+                  .replace(/[ş]/g, 'ş')
+                  .replace(/[u]/g, 'u')
+                  .replace(/[ü]/g, 'ü') :
+                  data
+
+          }
+          $.fn.dataTable.ext.order['dom-text'] = function(settings, col) {
+              return this.api().column(col, {
+                  order: 'index'
+              }).nodes().map(function(td, i) {
+                  return $('a', td).text();
+              });
+          };
+
+          (function($, DataTable) {
+
+              // Datatable ayarları
+              $.extend(true, DataTable.defaults, {
+
+                  language: {
+                      "url": "/dist/js/tr.json"
+                  },
+
                   "buttons": ["copy", "csv", "excel", "pdf", {
                       extend: 'print',
 
@@ -230,75 +348,109 @@
                           columns: ':visible'
                       }
                   }, "colvis"],
-                  columns: [{
-                          data: 'birim_id'
-                      },
-                      {
-                          data: 'birim_donem'
-                      },
-                      {
-                          data: 'birim_ad'
-                      },
-                      {
-                          data: 'birim_sorumlu'
-                      },
-                      {
-                          data: 'islemler'
-                      },
-                  ],
-                  "language": {
-                      buttons: {
-                          colvis: 'Sütun Seç',
-                          copy: "Kopyala",
-                          print: "Yazdır"
-                      },
-                      "decimal": "",
+                  scrollY: "900px",
+                  scrollX: true,
+                  scrollCollapse: true,
 
-                      "emptyTable": "Tabloda veri yok",
-                      "info": "",
-                      "infoEmpty": "",
-                      "infoFiltered": "(Toplam _MAX_ kayıt.)",
-                      "infoPostFix": "",
-                      "thousands": ",",
-                      "lengthMenu": "Gösterilen _MENU_",
-                      "loadingRecords": "Yükleniyor...",
-                      "processing": "İşleniyor...",
-                      "search": "Arama:",
-                      "zeroRecords": "Eşleşen kayıt bulunamadı",
-                      "paginate": {
-                          "first": "İlk",
-                          "last": "Son",
-                          "next": "İleri",
-                          "previous": "Geri"
-                      },
-                      "aria": {
-                          "sortAscending": ": sütunu artan şekilde sıralamak için etkinleştirin",
-                          "sortDescending": ": sütunu azalan sıralamak için etkinleştir"
-                      }
-                  },
-                  "responsive": true,
                   "lengthMenu": [
                       [-1, 10, 25, 50],
                       ["Tümü", 10, 25, 50]
                   ],
                   "autoWidth": true,
-                  initComplete: function() {
-                      table.buttons().container()
-                          .appendTo($('.col-md-6:eq(0)', table.table().container()));
-                  }
+
+
 
               });
 
+          })(jQuery, jQuery.fn.dataTable);
+      </script>
+
+      {!! $html->scripts() !!}
+      <script>
+          //veri çekme
+
+          $(function() {
+              $('#example1_filter input').keyup(function(e) {
+                  alert('Handler for .keyup() called.');
+
+                  console.log('---');
+                  e.value = e.value.toLocaleUpperCase();
+                  console.log(e.value);
+
+              });
           });
       </script>
+      {{-- datatble config bitiş --}}
+      {{-- Delete Birim baş --}}
+      <script>
+          $(document).on("click", ".deletebirim", function() {
+              var id = $(this).data('id');
+              console.log(id)
+              $.ajaxSetup({
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              });
+
+
+              $.ajax({
+                  type: 'post',
+
+                  url: "{{ route('birim.destroy') }}",
+                  dataType: 'json',
+                  data: {
+                      birim_id: id
+                  },
+                  success: function(d) {
+                      var dat = JSON.stringify(d);
+
+                      $("#example1").DataTable().ajax.reload();
+                      var Toast = Swal.mixin({
+                          toast: true,
+                          position: 'top',
+                          showConfirmButton: false,
+                          timer: 3000
+                      });
+                      Toast.fire({
+                          icon: 'success',
+                          title: dat["birim_ad"] + '<br>Silme İşlemi Başarılı <br>',
+                      })
+                  },
+
+                  error: function(d) {
+                      var dat = JSON.stringify(d);
+                      $("#example1").DataTable().ajax.reload();
+                      var Toast = Swal.mixin({
+                          toast: true,
+                          position: 'top',
+                          showConfirmButton: false,
+                          timer: 3000
+                      });
+                      Toast.fire({
+                          title: dat["birim_ad"]
+
+                              +
+                              '<br>Silme İşlemi başarısız <br>',
+                      })
+
+                  },
+              });
+          });
+      </script>
+      {{-- Delete Birim bitiş --}}
       <script>
           let startYear = 2008;
-          let endYear = new Date().getFullYear();
+          let endYear = new Date().getFullYear() + 1;
           var a;
           for (i = endYear; i > startYear; i--) {
               a = i + ' - ' + (i + 1);
               $('#yearpicker').append($('<option />').val(a).html(a));
           }
+
+          $('.select2').select2({
+              theme: 'bootstrap4',
+
+          });
       </script>
       <script>
           $.ajaxSetup({

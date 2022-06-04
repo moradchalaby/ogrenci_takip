@@ -18,10 +18,12 @@ class Birim extends Model
      *
      * @var array<int, string>
      */
+    protected $primaryKey = 'birim_id';
     protected $fillable = [
         'birim_id',
         'birim_ad',
         'birim_donem',
+        'birim_durum',
 
     ];
 

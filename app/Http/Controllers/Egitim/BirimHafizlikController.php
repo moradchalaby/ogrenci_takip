@@ -135,7 +135,7 @@ class BirimHafizlikController extends Controller
                     $hoca = ' <a  class="editHoca" data-toggle="modal" data-ogrenci="' . $row['id'] . '" data-birim="' . $row['birim_id'] . '" data-id="0" data-target="#modalHoca">-</a> ';
                     if ($row['hoca'] != null) {
                         $hocam = User::find($row['hoca']);
-                        $hoca = ' <a  class="editHoca" data-toggle="modal" data-birim="' . $row['birim_id'] . '" data-id="' . $hocam->id . '"data-target="#modalHoca">' . $hocam->name . '</a> ';
+                        $hoca = ' <a  class="editHoca" data-toggle="modal" data-ogrenci="' . $row['id'] . '" data-birim="' . $row['birim_id'] . '" data-id="' . $hocam->id . '"data-target="#modalHoca">' . $hocam->name . '</a> ';
                     }
 
                     return $hoca;
@@ -250,8 +250,8 @@ class BirimHafizlikController extends Controller
         }
         $html = $builder->ajax([
 
-            'url' => route('hafizlik.indexpost'),
-            'type' => 'Post',
+            'url' => route('birimhafizlik.index', $birim_id),
+            'type' => 'Get',
             'data' => "function(d) { d.tarihar = '{$bast} - {$sont} ';
             d.birim_id = '{$birim_id}';
             d.hoca_id = '{$request->hoca_id}';
@@ -302,11 +302,14 @@ class BirimHafizlikController extends Controller
         //
         if ($request->ajax()) {
 
-            $data = User::rightJoin('hafizlikhoca', 'hafizlikhoca.kullanici_id', '=', 'users.id')->get();
+            $data = User::join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->join('roles', 'role_user.role_id', '=', 'roles.id')
+                ->where('roles.id', '37')->select('users.*')
+                ->get();
             $gonder[] =
                 "<option selected value='0'> Tüm Hocalar</option>";
             foreach ($data as $veri) {
-                $gonder[] = "<option value=\"" . $veri['kullanici_id'] . "\">" . $veri['name'] . "</option>";
+                $gonder[] = "<option value=\"" . $veri['id'] . "\">" . $veri['name'] . "</option>";
             }
 
             return response()->json($gonder);
@@ -318,9 +321,15 @@ class BirimHafizlikController extends Controller
 
         //
         if ($request->ajax()) {
-
+            User::join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->join('roles', 'role_user.role_id', '=', 'roles.id')
+                ->where('roles.id', '37')->select('users.*')
+                ->get();
             $data = User::leftJoin('birimhoca', 'birimhoca.kullanici_id', '=', 'users.id')
                 ->leftJoin('hafizlikhoca', 'hafizlikhoca.kullanici_id', '=', 'birimhoca.kullanici_id')
+                ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->join('roles', 'role_user.role_id', '=', 'roles.id')
+                ->where('roles.id', '37')
                 ->where('birimhoca.birim_id', '=', $request->birim_id)
                 ->select(
                     'users.id as id',
