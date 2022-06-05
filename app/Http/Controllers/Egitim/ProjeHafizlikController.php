@@ -61,7 +61,11 @@ class ProjeHafizlikController extends Controller
 
                 ->rightJoin('ogrencibirim', function ($join) use ($birim_id) {
                     $join->on('ogrenci.id', '=', 'ogrencibirim.ogrenci_id')
-                        ->where('ogrencibirim.birim_id', '=', $birim_id);
+                        ->when($birim_id > 0, function ($q) use ($birim_id) {
+                            return $q->where('ogrencibirim.birim_id', '=', $birim_id);
+                        }, function ($q) use ($birim_id) {
+                            return $q;
+                        });
                 })
 
 

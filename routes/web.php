@@ -212,6 +212,8 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::post('/store', [ProjeOgrenciController::class, 'store'])->name('projeogrenci.store');
         Route::post('/edit', [ProjeOgrenciController::class, 'edit'])->name('projeogrenci.edit');
         Route::post('/update', [ProjeOgrenciController::class, 'update'])->name('projeogrenci.update');
+        Route::post('/hocagetir', [ProjeOgrenciController::class, 'hocagetir'])->name('projeogrenci.hocagetir');
+        Route::post('/ogrencicek', [ProjeOgrenciController::class, 'ogrencicek'])->name('projeogrenci.ogrencicek');
 
         Route::get('/', [ProjeOgrenciController::class, 'index'])->name('projeogrenci.index');
     });

@@ -8,6 +8,7 @@ use App\Models\Ogrenci;
 use App\Models\Ogrencibirim;
 use App\Models\Ogrenciokul;
 use App\Models\Okul;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -38,8 +39,7 @@ class ProjeOgrenciController extends Controller
         if (request()->ajax()) {
             $data = Ogrenci::select('*')->rightJoin('ogrenciproje', 'ogrenciproje.ogrenci_id', '=', 'ogrenci.id')
                 ->rightJoin('ogrencibirim', function ($join) use ($birim_id) {
-                    $join->on('ogrenci.id', '=', 'ogrencibirim.ogrenci_id')
-                        ->where('ogrencibirim.birim_id', '=', $birim_id);
+                    $join->on('ogrenci.id', '=', 'ogrencibirim.ogrenci_id');
                 })
                 ->where(['ogrenci.ogrenci_kytdurum' => '1']);
 
@@ -115,7 +115,47 @@ class ProjeOgrenciController extends Controller
 
 
 
-        return view('birim.egitim.index', compact('html', 'veri'));
+        return view('proje.egitim.index', compact('html', 'veri'));
+    }
+    public function hocagetir(Request $request)
+    {
+
+
+        //
+        if ($request->ajax()) {
+
+            $data = User::join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->join('roles', 'role_user.role_id', '=', 'roles.id')
+                ->where('roles.id', '37')->select('users.*')
+                ->get();
+            $gonder[] =
+                "<option selected value='0'> Tüm Hocalar</option>";
+            foreach ($data as $veri) {
+                $gonder[] = "<option value=\"" . $veri['id'] . "\">" . $veri['name'] . "</option>";
+            }
+
+            return response()->json($gonder);
+        }
+    }
+    public function ogrencicek(Request $request)
+    {
+
+
+        //
+        if ($request->ajax()) {
+
+            $data = Ogrenci::join('hafizlikdurum', 'ogrenci.id', '=', 'hafizlikdurum.ogrenci_id')
+
+                ->where('hafizlikdurum.hoca', $request->hoca_id)->select('ogrenci.*')
+                ->get();
+            $gonder[] =
+                "<option selected value='0'> Talebeler</option>";
+            foreach ($data as $veri) {
+                $gonder[] = "<option value=\"" . $veri['id'] . "\">" . $veri['ogrenci_adsoyad'] . "</option>";
+            }
+
+            return response()->json($gonder);
+        }
     }
 
 
@@ -141,11 +181,11 @@ class ProjeOgrenciController extends Controller
         if ($request->ajax()) {
 
 
-            $dataf = DB::table('ogrenciproje')->updateOrInsert()
-            }
+            $dataf = DB::table('ogrenciproje')->insert(['ogrenci_id' => $request->ogrenci_id]);
+
             return response()->json($dataf);
         }
-
+    }
 
     /**
      * Display the specified resource.
