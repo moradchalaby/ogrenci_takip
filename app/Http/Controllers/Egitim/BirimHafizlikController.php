@@ -26,10 +26,22 @@ class BirimHafizlikController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, Builder $builder)
+    public function index(Request $request, Builder $builder, $id = 1)
     {
 
-        $birim_id = $request->id;
+        $user_birim = Birim::leftJoin('birimhoca', 'birim.birim_id', '=', 'birimhoca.birim_id')
+            ->select()
+            ->where('birimhoca.kullanici_id', Auth::user()->id)
+            ->get();
+        $birim_id = $user_birim[0]->birim_id;
+        for ($i = 0; $i < count($user_birim); $i++) {
+            if ($user_birim[$i]->birim_id == $id) {
+                $birim_id = $user_birim[$i]->birim_id;
+                break;
+            }
+        }
+
+
         $hoca_id = $request->hoca_id;
 
         if ($request->tarihar != null) {

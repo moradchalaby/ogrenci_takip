@@ -12,41 +12,20 @@
 
 namespace App\Models{
 /**
- * App\Models\Bekarhoca
- *
- * @property int $id
- * @property int $kullanici_id
- * @property string|null $vazife
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|Bekarhoca newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Bekarhoca newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Bekarhoca query()
- * @method static \Illuminate\Database\Eloquent\Builder|Bekarhoca whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Bekarhoca whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Bekarhoca whereKullaniciId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Bekarhoca whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Bekarhoca whereVazife($value)
- */
-	class Bekarhoca extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
  * App\Models\Birim
  *
  * @property int $birim_id
  * @property string $birim_ad
  * @property string|null $birim_donem
+ * @property string $birim_durum
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Birimsorumlu[] $birimsorumlu
- * @property-read int|null $birimsorumlu_count
  * @method static \Illuminate\Database\Eloquent\Builder|Birim newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Birim newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Birim query()
  * @method static \Illuminate\Database\Eloquent\Builder|Birim whereBirimAd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Birim whereBirimDonem($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Birim whereBirimDurum($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Birim whereBirimId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Birim whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Birim whereUpdatedAt($value)
@@ -79,30 +58,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Birimsorumlu
- *
- * @property int $id
- * @property int $kullanici_id
- * @property int $birim_id
- * @property string|null $vazife
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Birim|null $birim
- * @method static \Illuminate\Database\Eloquent\Builder|Birimsorumlu newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Birimsorumlu newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Birimsorumlu query()
- * @method static \Illuminate\Database\Eloquent\Builder|Birimsorumlu whereBirimId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Birimsorumlu whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Birimsorumlu whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Birimsorumlu whereKullaniciId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Birimsorumlu whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Birimsorumlu whereVazife($value)
- */
-	class Birimsorumlu extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
  * App\Models\Event
  *
  * @property int $id
@@ -128,71 +83,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereUpdatedAt($value)
  */
 	class Event extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
- * App\Models\Hafizlikhoca
- *
- * @property int $id
- * @property int $kullanici_id
- * @property string|null $vazife
- * @property int $birim_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikhoca newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikhoca newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikhoca query()
- * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikhoca whereBirimId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikhoca whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikhoca whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikhoca whereKullaniciId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikhoca whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikhoca whereVazife($value)
- */
-	class Hafizlikhoca extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
- * App\Models\Idarihoca
- *
- * @property int $id
- * @property int $kullanici_id
- * @property string|null $vazife
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|Idarihoca newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Idarihoca newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Idarihoca query()
- * @method static \Illuminate\Database\Eloquent\Builder|Idarihoca whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Idarihoca whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Idarihoca whereKullaniciId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Idarihoca whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Idarihoca whereVazife($value)
- */
-	class Idarihoca extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
- * App\Models\Ihtisashoca
- *
- * @property int $id
- * @property int $kullanici_id
- * @property string|null $vazife
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|Ihtisashoca newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Ihtisashoca newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Ihtisashoca query()
- * @method static \Illuminate\Database\Eloquent\Builder|Ihtisashoca whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Ihtisashoca whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Ihtisashoca whereKullaniciId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Ihtisashoca whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Ihtisashoca whereVazife($value)
- */
-	class Ihtisashoca extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -238,27 +128,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Kullanici whereUpdatedAt($value)
  */
 	class Kullanici extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
- * App\Models\Muhtelifhoca
- *
- * @property int $id
- * @property int $kullanici_id
- * @property string|null $vazife
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|Muhtelifhoca newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Muhtelifhoca newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Muhtelifhoca query()
- * @method static \Illuminate\Database\Eloquent\Builder|Muhtelifhoca whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Muhtelifhoca whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Muhtelifhoca whereKullaniciId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Muhtelifhoca whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Muhtelifhoca whereVazife($value)
- */
-	class Muhtelifhoca extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -405,6 +274,7 @@ namespace App\Models{
  * @property string $name
  * @property string $roles_slug
  * @property int|null $parent_id
+ * @property int|null $vazife_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Database\Factories\RoleFactory factory(...$parameters)
@@ -417,6 +287,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereParentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereRolesSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereVazifeId($value)
  */
 	class Role extends \Eloquent {}
 }
@@ -444,27 +315,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Teknikhoca
- *
- * @property int $id
- * @property int $kullanici_id
- * @property string|null $vazife
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|Teknikhoca newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Teknikhoca newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Teknikhoca query()
- * @method static \Illuminate\Database\Eloquent\Builder|Teknikhoca whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Teknikhoca whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Teknikhoca whereKullaniciId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Teknikhoca whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Teknikhoca whereVazife($value)
- */
-	class Teknikhoca extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
  * App\Models\User
  *
  * @property int $id
@@ -473,6 +323,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $kullanici_resim
  * @property string $password
+ * @property string|null $telegramId
  * @property string $kullanici_dt
  * @property string|null $kullanici_tc
  * @property string|null $kullanici_gsm
@@ -485,7 +336,6 @@ namespace App\Models{
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $roles
  * @property-read int|null $roles_count
- * @property-read \App\Models\Birimsorumlu|null $sorumlu
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
  * @property-read int|null $tokens_count
  * @method static \Database\Factories\UserFactory factory(...$parameters)
@@ -505,6 +355,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereTelegramId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  */
 	class User extends \Eloquent {}

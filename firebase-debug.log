@@ -1,0 +1,39 @@
+[debug] [2022-10-09T16:55:30.768Z] ----------------------------------------------------------------------
+[debug] [2022-10-09T16:55:30.770Z] Command:       C:\laragon\bin\nodejs\node-v18.7.0\node.exe C:\laragon\bin\nodejs\node-v18.7.0\node_modules\firebase-tools\lib\bin\firebase.js emulators:start
+[debug] [2022-10-09T16:55:30.771Z] CLI Version:   11.14.1
+[debug] [2022-10-09T16:55:30.771Z] Platform:      win32
+[debug] [2022-10-09T16:55:30.771Z] Node Version:  v18.7.0
+[debug] [2022-10-09T16:55:30.772Z] Time:          Sun Oct 09 2022 19:55:30 GMT+0300 (GMT+03:00)
+[debug] [2022-10-09T16:55:30.772Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-10-09T16:55:30.898Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-10-09T16:55:30.898Z] > authorizing via signed-in user (yaziliminyuzaki@gmail.com)
+[info] i  emulators: Starting emulators: hosting {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: hosting"}}
+[debug] [2022-10-09T16:55:30.918Z] [hub] writing locator at C:\Users\Seyr\AppData\Local\Temp\hub-webapp-c187f.json
+[debug] [2022-10-09T16:55:30.939Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/webapp-c187f/sites 
+[debug] [2022-10-09T16:55:32.035Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/webapp-c187f/sites 200
+[debug] [2022-10-09T16:55:32.036Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/webapp-c187f/sites {"sites":[{"name":"projects/webapp-c187f/sites/webapp-c187f","defaultUrl":"https://webapp-c187f.web.app","appId":"1:884095726890:web:04a11c10deb995a5215a53","type":"DEFAULT_SITE"}]}
+[debug] [2022-10-09T16:55:32.036Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/webapp-c187f/webApps/1:884095726890:web:04a11c10deb995a5215a53/config [none]
+[debug] [2022-10-09T16:55:32.904Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/webapp-c187f/webApps/1:884095726890:web:04a11c10deb995a5215a53/config 200
+[debug] [2022-10-09T16:55:32.904Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/webapp-c187f/webApps/1:884095726890:web:04a11c10deb995a5215a53/config {"projectId":"webapp-c187f","appId":"1:884095726890:web:04a11c10deb995a5215a53","storageBucket":"webapp-c187f.appspot.com","apiKey":"AIzaSyAER8D7oOI4J--S0aS2bw6mev8eWG04xKY","authDomain":"webapp-c187f.firebaseapp.com","messagingSenderId":"884095726890","measurementId":"G-8T07J9QCCF"}
+[info] i  hosting: Serving hosting files from: public {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mpublic\u001b[22m"}}
+[info] +  hosting: Local server: http://localhost:5000 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://localhost:5000\u001b[22m\u001b[24m"}}
+[warn] !  emulators: The Emulator UI is not starting, either because none of the emulated products have an interaction layer in Emulator UI or it cannot determine the Project ID. Pass the --project flag to specify a project. {"metadata":{"emulator":{"name":"hub"},"message":"The Emulator UI is not starting, either because none of the emulated products have an interaction layer in Emulator UI or it cannot determine the Project ID. Pass the --project flag to specify a project."}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+└─────────────────────────────────────────────────────────────┘
+
+┌──────────┬────────────────┐
+│ Emulator │ Host:Port      │
+├──────────┼────────────────┤
+│ Hosting  │ localhost:5000 │
+└──────────┴────────────────┘
+  Emulator Hub running at localhost:4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[info] i  hosting: 127.0.0.1 - - [09/Oct/2022:16:55:40 +0000] "GET / HTTP/1.1" 304 - "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [09/Oct/2022:16:55:40 +0000] \"GET / HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [09/Oct/2022:16:55:40 +0000] "GET /__/firebase/init.js?useEmulator=true HTTP/1.1" 200 - "http://localhost:5000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [09/Oct/2022:16:55:40 +0000] \"GET /__/firebase/init.js?useEmulator=true HTTP/1.1\" 200 - \"http://localhost:5000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36\""}}
+[debug] [2022-10-09T17:20:26.044Z] Received signal SIGHUP 1

@@ -3,6 +3,7 @@
 
  @section('content')
      <!-- Content Wrapper. Contains page content -->
+
      <div class="content-wrapper kanban">
          <section class="content-header">
              <div class="container-fluid">
@@ -221,8 +222,8 @@
                                          <div class="custom-control custom-checkbox">
                                              <input
                                                  class="custom-control-input @if ($yet->vazife_id != 1) yetki{{ $yet->parent_id }} @endif checkbox6 "
-                                                 value="{{ $yet->id }}" type="checkbox" tur="yetki" name="check"
-                                                 id="customCheckbox{{ $yet->id }}"
+                                                 value="{{ $yet->id }}" type="checkbox" tur="yetki"
+                                                 name="check" id="customCheckbox{{ $yet->id }}"
                                                  @if (App\Models\User::hasRol($yet->roles_slug, $id)) checked @endif>
                                              <label for="customCheckbox{{ $yet->id }}"
                                                  class="custom-control-label">{{ $yet->name }}</label>
@@ -247,10 +248,9 @@
                                  @foreach ($birimler as $birim)
                                      <div class="custom-control custom-checkbox">
                                          <input class="custom-control-input checkboxb{{ $birim->birim_id }} "
-                                             value="{{ $birim->birim_id }}" tur="birim" type="checkbox" name="check"
-                                             id="customCheckboxb{{ $birim->birim_id }}"
-                                             @foreach ($birimi as $bir) @if ($bir->birim_id == $birim->birim_id)  checked @endif
-                                             @endforeach>
+                                             value="{{ $birim->birim_id }}" tur="birim" type="checkbox"
+                                             name="check" id="customCheckboxb{{ $birim->birim_id }}"
+                                             @foreach ($birimi as $bir) @if ($bir->birim_id == $birim->birim_id)  checked @endif @endforeach>
 
 
                                          <label for="customCheckboxb{{ $birim->birim_id }}"
