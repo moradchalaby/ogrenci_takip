@@ -1398,3 +1398,4 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `kullanici_resim`, `password`, `telegramId`, `kullanici_dt`, `kullanici_tc`, `kullanici_gsm`, `kullanici_adres`, `kullanici_durum`, `remember_token`, `created_at`, `updated_at`) VALUES (NULL, 'Murat Çelebi', 'root@root', NULL, '/storage/dimg/1resimHoca.jpg', '$2y$10$wh/nz0lVGh.hr3xMy2dTNuTHd2ZGW6kb4klEAz7r8/mIcH/wOfvza', '131850638', '2020-01-01', '60622310864', '5462057927', NULL, '1', 'y4mkbpWWTuoDOzvsi9eh70ZllFOFzuc29i6jEMz2d2FLIIdqnmXhigVxP2bQ', '2022-04-17 21:05:31', '2022-04-17 21:05:31');
