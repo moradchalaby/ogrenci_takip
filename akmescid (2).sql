@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Anamakine: localhost:3306
--- Üretim Zamanı: 08 Mar 2023, 14:44:20
+-- Üretim Zamanı: 08 Mar 2023, 15:20:29
 -- Sunucu sürümü: 10.11.2-MariaDB-log
 -- PHP Sürümü: 8.1.10
 
@@ -329,6 +329,60 @@ CREATE TABLE `migrations` (
   `batch` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Tablo döküm verisi `migrations`
+--
+
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
+(5, '2022_04_12_123536_create_kullanici_table', 1),
+(75, '2022_04_12_135823_create_kullanim_table', 2),
+(76, '2022_04_12_135913_create_alanlar_table', 2),
+(88, '2022_04_23_164528_create_ogrenciuni_table', 6),
+(89, '2022_04_23_164604_create_ogrenciacikl_table', 6),
+(90, '2022_04_23_164627_create_ogrenciorgunl_table', 6),
+(91, '2022_04_23_164640_create_ogrenciorta_table', 6),
+(92, '2022_04_23_164650_create_ogrenciproje_table', 6),
+(99, '2014_10_12_000000_create_users_table', 7),
+(100, '2014_10_12_100000_create_password_resets_table', 7),
+(101, '2019_08_19_000000_create_failed_jobs_table', 7),
+(102, '2019_12_14_000001_create_personal_access_tokens_table', 7),
+(103, '2022_04_12_124455_create_odeme_table', 7),
+(104, '2022_04_12_124510_create_birim_table', 7),
+(105, '2022_04_12_124521_create_ders_table', 7),
+(106, '2022_04_12_124531_create_events_table', 7),
+(107, '2022_04_12_124545_create_hafizlikdurum_table', 7),
+(108, '2022_04_12_124639_create_hfzlkders_table', 7),
+(109, '2022_04_12_124719_create_hrapor_table', 7),
+(110, '2022_04_12_124831_create_yoklama_table', 7),
+(111, '2022_04_12_124846_create_yoklamaogrenci_table', 7),
+(112, '2022_04_12_124857_create_makbuz_table', 7),
+(113, '2022_04_12_124921_create_odevler_table', 7),
+(114, '2022_04_12_124935_create_odevogrenci_table', 7),
+(115, '2022_04_12_124946_create_sinavlar_table', 7),
+(116, '2022_04_12_125008_create_sinavogrenci_table', 7),
+(117, '2022_04_12_125111_create_sinif_table', 7),
+(118, '2022_04_12_125118_create_sinifders_table', 7),
+(119, '2022_04_12_125130_create_yuzune_table', 7),
+(120, '2022_04_12_125139_create_yuzuneders_table', 7),
+(121, '2022_04_12_133301_create_ogrenci_table', 7),
+(122, '2022_04_12_135823_create_role_user_table', 7),
+(123, '2022_04_12_135913_create_roles_table', 7),
+(124, '2022_04_17_205501_create_birimhoca_table', 7),
+(125, '2022_04_17_205512_create_hafizlikhoca_table', 7),
+(126, '2022_04_17_205525_create_ihtisashoca_table', 7),
+(127, '2022_04_17_205538_create_muhtelifhoca_table', 7),
+(128, '2022_04_17_205548_create_idarihoca_table', 7),
+(129, '2022_04_17_205616_create_bekarhoca_table', 7),
+(130, '2022_04_17_210034_create_teknikpersonel_table', 7),
+(131, '2022_04_23_164703_create_hafizbelgesiz_table', 7),
+(132, '2022_04_24_223956_create_okul_table', 7),
+(133, '2022_04_24_224008_create_ogrenciokul_table', 7),
+(134, '2022_04_24_224023_create_ogrencibirim_table', 7),
+(135, '2022_05_21_091218_create_birimsorumlu_table', 8),
+(136, '2022_09_05_082752_create_telegraph_bots_table', 9),
+(137, '2022_09_05_082753_create_telegraph_chats_table', 9),
+(138, 'telegram_log', 10);
+
 -- --------------------------------------------------------
 
 --
@@ -551,6 +605,13 @@ CREATE TABLE `password_resets` (
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Tablo döküm verisi `password_resets`
+--
+
+INSERT INTO `password_resets` (`email`, `token`, `created_at`) VALUES
+('evladuiyal@gmail.com', '$2y$10$6QlwLTGJLHobezApMMpTLOz1Na5cq6iFjFX0TlHxNxQ4lLm5EqxOC', '2022-05-24 11:12:00');
+
 -- --------------------------------------------------------
 
 --
@@ -584,6 +645,53 @@ CREATE TABLE `roles` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Tablo döküm verisi `roles`
+--
+
+INSERT INTO `roles` (`id`, `name`, `roles_slug`, `parent_id`, `vazife_id`, `created_at`, `updated_at`) VALUES
+(1, 'Geliştirici', 'root', 1, 1, NULL, NULL),
+(2, 'İDARİ', 'idari', 2, 1, NULL, NULL),
+(3, 'BİRİM SORUMLUSU', 'birimsorumlu', 3, 1, NULL, NULL),
+(4, 'MUHASEBE', 'muhasebe', 4, 1, NULL, NULL),
+(5, 'TEKNİK - İDARİ', 'teknikidari', 5, 1, NULL, NULL),
+(6, 'Takvim', '/takvim', 2, NULL, NULL, NULL),
+(7, 'Takvim - İşlem', '/takvim/islem', 2, NULL, NULL, NULL),
+(8, 'Yetkilendirme', '/yetki', 2, NULL, NULL, NULL),
+(9, 'Personel', '/personel', 2, NULL, NULL, NULL),
+(10, 'Personel - İşlem', '/personel/islem', 2, NULL, NULL, NULL),
+(11, 'Birim Hocaları', '/birimhoca', 2, NULL, NULL, NULL),
+(12, 'Birimhoca - İşlem', '/birimhoca/islem', 2, NULL, NULL, NULL),
+(13, 'Bekar Hocalar', '/bekarhoca', 2, NULL, NULL, NULL),
+(14, 'Bekarhoca - İşlem', '/bekarhoca/islem', 2, NULL, NULL, NULL),
+(15, 'Muhtelif Hocalar', '/muhtelifhoca', 2, NULL, NULL, NULL),
+(16, 'Muhtelifhoca - İşlem', '/muhtelifhoca/islem', 2, NULL, NULL, NULL),
+(17, 'Hafizlik Hocaları', '/hafizlikhoca', 2, NULL, NULL, NULL),
+(18, 'Hafizlikhoca - İşlem', '/hafizlikhoca/islem', 2, NULL, NULL, NULL),
+(19, 'İhtisas Hocaları', '/ihtisashoca', 2, NULL, NULL, NULL),
+(20, 'İhtisashoca - İşlem', '/ihtisashoca/islem', 2, NULL, NULL, NULL),
+(21, 'Teknik Personel', '/teknikhoca', 2, NULL, NULL, NULL),
+(22, 'Teknikpersonel - İşlem', '/teknikhoca/islem', 2, NULL, NULL, NULL),
+(23, 'İdari Hocalar', '/idarihoca', 2, NULL, NULL, NULL),
+(24, 'İdarihoca - İşlem', '/idarihoca/islem', 2, NULL, NULL, NULL),
+(25, 'Birimler', '/birim', 2, NULL, NULL, NULL),
+(26, 'Birim - İşlem', '/birim/islem', 2, NULL, NULL, NULL),
+(27, 'Tüm Öğrenciler', '/ogrenci', 2, NULL, NULL, NULL),
+(28, 'Tüm Öğrenciler - İşlem', '/ogrenci/islem', 2, NULL, NULL, NULL),
+(29, 'Tüm Öğrenci Hafızlık', '/hafizlik', 2, NULL, NULL, NULL),
+(30, 'Tüm Öğrenci Hafızlık - İşlem', '/hafizlik/islem', 2, NULL, NULL, NULL),
+(31, 'Birim Öğrenciler', '/birimogrenci', 3, NULL, NULL, NULL),
+(32, 'Birim Öğrenciler - İşlem', '/birimogrenci/islem', 3, NULL, NULL, NULL),
+(33, 'Birim Hafızlık', '/birimhafizlik', 3, NULL, NULL, NULL),
+(34, 'Birim Hafızlık - İşlem', '/birimhafizlik/islem', 3, NULL, NULL, NULL),
+(35, 'Birim Personel', '/birimpersonel', 3, NULL, NULL, NULL),
+(36, 'Birim Personel - İşlem', '/birimpersonel/islem', 3, NULL, NULL, NULL),
+(37, 'HAFIZLIK HOCASI', 'hafizlikhoca', 6, 1, NULL, NULL),
+(38, 'İHTİSAS HOCASI', 'ihtisashoca', 6, 1, NULL, NULL),
+(39, 'BEKAR HOCA', 'bekarhoca', 6, 1, NULL, NULL),
+(40, 'MUHTELİF HOCA', 'muhtelifhoca', 6, 1, NULL, NULL),
+(41, 'TEKNİK PERSONEL', 'teknikpersonel', 6, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1214,7 +1322,7 @@ ALTER TABLE `makbuz`
 -- Tablo için AUTO_INCREMENT değeri `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=139;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `muhtelifhoca`
@@ -1304,7 +1412,7 @@ ALTER TABLE `personal_access_tokens`
 -- Tablo için AUTO_INCREMENT değeri `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `role_user`
@@ -1398,4 +1506,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `kullanici_resim`, `password`, `telegramId`, `kullanici_dt`, `kullanici_tc`, `kullanici_gsm`, `kullanici_adres`, `kullanici_durum`, `remember_token`, `created_at`, `updated_at`) VALUES (NULL, 'Murat Çelebi', 'root@root', NULL, '/storage/dimg/1resimHoca.jpg', '$2y$10$wh/nz0lVGh.hr3xMy2dTNuTHd2ZGW6kb4klEAz7r8/mIcH/wOfvza', '131850638', '2020-01-01', '60622310864', '5462057927', NULL, '1', 'y4mkbpWWTuoDOzvsi9eh70ZllFOFzuc29i6jEMz2d2FLIIdqnmXhigVxP2bQ', '2022-04-17 21:05:31', '2022-04-17 21:05:31');
