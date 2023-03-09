@@ -93,21 +93,7 @@ class BirimController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function birimadd(Request $request)
-    {
 
-        //
-        /*  echo 'geldik'; */
-        if ($request->ajax()) {
-
-            $data = Birim::create([
-                'birim_ad' => $request->birim_ad,
-                'birim_donem' => $request->birim_donem,
-            ]);
-            print_r($request);
-            return response()->json($data);
-        }
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -118,6 +104,15 @@ class BirimController extends Controller
     public function store(Request $request)
     {
         //
+        if ($request->ajax()) {
+
+            $data = Birim::create([
+                'birim_ad' => $request->birim_ad,
+                'birim_donem' => $request->birim_donem,
+            ]);
+
+            return response()->json($data);
+        }
     }
 
     /**

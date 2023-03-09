@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Birim extends Model
 {
+    protected $fillable = [
+        'birim_id',
+        'birim_ad',
+        'birim_donem',
+        'birim_durum',
+
+    ];
     /**
      * The table associated with the model.
      *
@@ -19,13 +26,7 @@ class Birim extends Model
      * @var array<int, string>
      */
     protected $primaryKey = 'birim_id';
-    protected $fillable = [
-        'birim_id',
-        'birim_ad',
-        'birim_donem',
-        'birim_durum',
 
-    ];
 
     public function birimsorumlu()
     {

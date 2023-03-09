@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Egitim;
 
 use App\Http\Controllers\Controller;
+use App\Models\Birim;
 use App\Models\Ogrenci;
 use App\Models\Ogrencibirim;
 use App\Models\Ogrenciokul;
@@ -106,6 +107,9 @@ class OgrenciController extends Controller
             ->initComplete('function() { window.LaravelDataTables["example1"].buttons().container().appendTo($(".col-md-6:eq(0)", window.LaravelDataTables["example1"].table().container()));}');
         $veri['title'] = 'Öğrenciler';
         $veri['name'] = 'Ogrenci';
+        $veri['birimler'] = Birim::select('*')
+
+            ->where(['birim.birim_durum' => '1'])->get();
 
 
 
@@ -232,22 +236,20 @@ class OgrenciController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $requeste)
+    public function edit(Request $request)
     {
         //
 
 
-        if ($requeste->ajax()) {
-
+        if ($request->ajax()) {
+            //dd($request);
             $ogrenciedit
-                = DB::table('ogrenci')->select('*')->where('ogrenci.id', $requeste->id)
-                ->rightJoin('ogrenciokul',  'ogrenci.id', '=', 'ogrenciokul.ogrenci_id')
-                ->rightJoin('okul', 'okul.id', '=', 'ogrenciokul.okul_id')
-                ->rightJoin('ogrencibirim',  'ogrenci.id', '=', 'ogrencibirim.ogrenci_id')
-                ->rightJoin('birim', 'birim.birim_id', '=', 'ogrencibirim.birim_id')
+                = DB::table('ogrenci')->select('*')->where('ogrenci.id', $request->ogrenci_id)
+                ->leftJoin('ogrenciokul',  'ogrenci.id', '=', 'ogrenciokul.ogrenci_id')
+                ->leftJoin('okul', 'okul.id', '=', 'ogrenciokul.okul_id')
+                ->leftJoin('ogrencibirim',  'ogrenci.id', '=', 'ogrencibirim.ogrenci_id')
+                ->leftJoin('birim', 'birim.birim_id', '=', 'ogrencibirim.birim_id')
 
-
-                ->select('*')
 
                 ->first();
 
@@ -255,6 +257,20 @@ class OgrenciController extends Controller
         }
     }
 
+    public function birimgetir(Request $request)
+    {
+
+        //
+        if ($request->ajax()) {
+            $gonder[] = "<option selected value=''> Birim Seçiniz</option>";
+            $data = Birim::get(['birim_id', 'birim_ad']);
+            foreach ($data as $veri) {
+                $gonder[] = "<option value=\"" . $veri['birim_id'] . "\">" . $veri['birim_ad'] . "</option>";
+            }
+
+            return response()->json($gonder);
+        }
+    }
     /**
      * Update the specified resource in storage.
      *

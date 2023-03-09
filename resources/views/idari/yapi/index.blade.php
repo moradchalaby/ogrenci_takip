@@ -461,7 +461,7 @@
           $('#birimadd').on("submit", function(e) {
               e.preventDefault();
               var formdata = $('#birimadd').serializeArray();
-              //console.log(formdata);
+              console.log(formdata);
               $.ajax({
 
                   url: '/birim/birimadd',
@@ -473,6 +473,8 @@
                   },
                   dataType: 'text',
                   success: (data) => {
+                      console.log('success');
+                      console.log(data);
                       var dat = JSON.parse(data);
                       $("#example1").DataTable().ajax.reload();
                       $('#modalAdd').modal('hide');
@@ -493,6 +495,7 @@
                   error: function(data) {
                       // var dat = JSON.parse(data);
                       $('#modalAdd').modal('hide');
+                      console.log('error');
                       console.log(data);
 
                       var Toast = Swal.mixin({
