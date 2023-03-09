@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Birimhoca;
+use App\Models\HafizlikHoca;
 use App\Models\RoleUser;
 use App\Models\User;
 use Illuminate\Http\Request;

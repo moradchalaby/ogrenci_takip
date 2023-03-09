@@ -223,7 +223,8 @@
                                              <input
                                                  class="custom-control-input @if ($yet->vazife_id != 1) yetki{{ $yet->parent_id }} @endif checkbox6 "
                                                  value="{{ $yet->id }}" type="checkbox" tur="yetki"
-                                                 name="check" id="customCheckbox{{ $yet->id }}"
+                                                 slug="{{ $yet->roles_slug }}" name="check"
+                                                 id="customCheckbox{{ $yet->id }}"
                                                  @if (App\Models\User::hasRol($yet->roles_slug, $id)) checked @endif>
                                              <label for="customCheckbox{{ $yet->id }}"
                                                  class="custom-control-label">{{ $yet->name }}</label>
@@ -288,7 +289,8 @@
                  data: {
                      user_id: {{ $id }},
                      role_id: params.attr('value'),
-                     tur: params.attr('tur')
+                     tur: params.attr('tur'),
+                     slug: params.attr('slug')
 
 
                  },
@@ -343,7 +345,8 @@
                  data: {
                      user_id: {{ $id }},
                      role_id: params.attr('value'),
-                     tur: params.attr('tur')
+                     tur: params.attr('tur'),
+                     slug: params.attr('slug')
 
 
                  },

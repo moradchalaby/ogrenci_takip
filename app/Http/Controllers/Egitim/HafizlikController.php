@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Egitim;
 
 use App\Http\Controllers\Controller;
 use App\Models\Birim;
+use App\Models\Hafizlikders;
+use App\Models\Hafizlikdurum;
 use App\Models\Hafizlikhoca;
+use App\Models\Hocarapor;
 use App\Models\Ogrenci;
 use App\Models\User;
 use Carbon\Carbon;
@@ -310,7 +313,7 @@ class HafizlikController extends Controller
         //
         if ($request->ajax()) {
 
-            $data = User::rightJoin('hafizlikhoca', 'hafizlikhoca.kullanici_id', '=', 'users.id')->get();
+            $data = User::rightJoin('role_user', 'role_user.user_id', '=', 'users.id')->where(['role_user.role_id' => '17', 'users.kullanici_durum' => 1])->get();
             $gonder[] =
                 "<option selected value='0'> Tüm Hocalar</option>";
             foreach ($data as $veri) {
@@ -444,22 +447,19 @@ class HafizlikController extends Controller
                 $hocaders = sizeof($request->hafizlik_cuz);
             }
 
-
-            $dersekle
-                = DB::table('hfzlkders')->insertGetId([
-                    "ogrenci_id" => $request->ogrenci_id,
-                    "kullanici_id" => $request->hoca_id,
-                    "hafizlik_sayfa" => $sayfaders,
-                    "hafizlik_cuz" => implode(",", $request->hafizlik_cuz),
-                    "hafizlik_ders" => $ders,
-                    "hafizlik_topl" => $topl,
-                    "hafizlik_tarih" => $request->hafizlik_tarih,
-                    "hafizlik_hata" => $request->hafizlik_hata,
-                    "hafizlik_usul" => $request->hafizlik_usul,
-                    "hafizlik_durum" => $request->hafizlik_durum,
-
-                ]);
-            $sonders = DB::table('hafizlikdurum')->where('ogrenci_id', $request->ogrenci_id)->update(
+            $dersekle = Hafizlikders::create([
+                "ogrenci_id" => $request->ogrenci_id,
+                "kullanici_id" => $request->hoca_id,
+                "hafizlik_sayfa" => $sayfaders,
+                "hafizlik_cuz" => implode(",", $request->hafizlik_cuz),
+                "hafizlik_ders" => $ders,
+                "hafizlik_topl" => $topl,
+                "hafizlik_tarih" => $request->hafizlik_tarih,
+                "hafizlik_hata" => $request->hafizlik_hata,
+                "hafizlik_usul" => $request->hafizlik_usul,
+                "hafizlik_durum" => $request->hafizlik_durum,
+            ]);
+            $sonders = Hafizlikdurum::where('ogrenci_id', $request->ogrenci_id)->update(
 
                 [
                     "hafizlik_son" => $sond,
@@ -467,17 +467,18 @@ class HafizlikController extends Controller
                 ]
 
             );
-            $hrapor = DB::table('hrapor')->insert([
+
+            $hrapor = Hocarapor::create([
                 "ogrenci_id" => $request->ogrenci_id,
                 "kullanici_id" => $request->hoca_id,
                 "hrapor_sayfa" => $hocasayfa,
-                "ders_id" => $dersekle,
+                "ders_id" => $dersekle->id,
                 "hrapor_ders" => $hocaders,
 
                 "hrapor_tarih" => $request->hafizlik_tarih,
 
             ]);
-            return response()->json($hrapor);
+            return response()->json($dersekle);
         }
     }
     public function dersguncelle(Request $request)

@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Egitim;
 
 use App\Http\Controllers\Controller;
 use App\Models\Birim;
+use App\Models\Hafizlikdurum;
+use App\Models\Hafizlikders;
+
 use App\Models\Ogrenci;
 use App\Models\Ogrencibirim;
 use App\Models\Ogrenciokul;
@@ -176,6 +179,18 @@ class OgrenciController extends Controller
                     'ogrenci_id' => $son->id,
                 ]
             );
+            Hafizlikders::create(
+                [
+                    'ogrenci_id' => $son->id,
+                    'kullanici_id' => Auth::id()
+                ]
+            );
+            Hafizlikdurum::create(
+                [
+                    'ogrenci_id' => $son->id,
+                    'hafizlik_durum' => 'Yeni Kayıt'
+                ]
+            );
             $name = $son->id . 'resim';
 
             /*  $request->validate([
@@ -215,6 +230,8 @@ class OgrenciController extends Controller
                     ['ogrenci_resim' => '/storage/dimg' . '/' . $name . '.jpg']
                 );
             }
+
+
             return response()->json($dataf);
         }
     }

@@ -92,8 +92,8 @@
                               <!-- /.input group -->
                           </div>
                           <div class="form-group">
-                              <input type="text" class="form-control" name="kota" id="kota" value="{{ $veri['kota'] }}"
-                                  placeholder="Kota">
+                              <input type="text" class="form-control" name="kota" id="kota"
+                                  value="{{ $veri['kota'] }}" placeholder="Kota">
                           </div>
                           <div class="form-group">
                               <input type="text" class="form-control" name="sayfa" id="sayfa"
@@ -159,20 +159,22 @@
                           <div class="form-group">
                               <label for="recipient-name" class="col-form-label">Dönüş Başlama Tarihi</label>
 
-                              <input type="date" class="form-control" name="bast" id="bast" value="" required="">
+                              <input type="date" class="form-control" name="bast" id="bast" value=""
+                                  required="">
 
                           </div>
                           <div class="form-group">
                               <label for="recipient-name" class="col-form-label">Dönüş Süresi</label>
 
-                              <input type="text" class="form-control" name="donus_suresi" id="donus_suresi" value=""
-                                  required="">
+                              <input type="text" class="form-control" name="donus_suresi" id="donus_suresi"
+                                  value="" required="">
 
                           </div>
                           <div class="form-group">
                               <label for="recipient-name" class="col-form-label">Sayfa</label>
 
-                              <input type="text" class="form-control" name="sayfa" id="sayfa" value="" required="">
+                              <input type="text" class="form-control" name="sayfa" id="sayfa" value=""
+                                  required="">
 
                           </div>
 
@@ -213,7 +215,8 @@
                           <div class="form-group">
                               <input type="hidden" id="ogrenci_id" name="ogrenci_id">
                               <label for="recipient-name" class="col-form-label">Hoca</label>
-                              <select name="birimHoca_id" id="birimHoca" class="form-control select2" style="width: 100%;">
+                              <select name="birimHoca_id" id="birimHoca" class="form-control select2"
+                                  style="width: 100%;">
 
                               </select>
 
@@ -263,13 +266,14 @@
                               <div class="form-group col-6">
                                   <label for="recipient-name" class="col-form-label">Tarih</label>
 
-                                  <input type="date" class="form-control" name="hafizlik_tarih" id="tarih" value=""
-                                      required="">
+                                  <input type="date" class="form-control" name="hafizlik_tarih" id="tarih"
+                                      value="" required="">
 
                               </div>
                               <div class="form-group col-6">
                                   <label for="recipient-name" class="col-form-label">Hoca</label>
-                                  <select name="hoca_id" id="hoca" class="form-control select2" style="width: 100%;">
+                                  <select name="hoca_id" id="hoca" class="form-control select2"
+                                      style="width: 100%;">
 
                                   </select>
                               </div>
@@ -281,8 +285,8 @@
                               <div class="form-group col-6">
                                   <label for="recipient-name" class="col-form-label">Cüz</label>
 
-                                  <select class="form-control select2" name="hafizlik_cuz[]" id="cuzs" multiple="multiple"
-                                      style="width: 100%;">
+                                  <select class="form-control select2" name="hafizlik_cuz[]" id="cuzs"
+                                      multiple="multiple" style="width: 100%;">
                                   </select>
                               </div>
                               <div class="form-group col-4">
@@ -303,7 +307,8 @@
                               </div>
                               <div class="form-group col-6">
                                   <label for="recipient-name" class="col-form-label">Okuma Usulü</label>
-                                  <select name="hafizlik_usul" class="form-control select2" id="usul" style="width: 100%;">
+                                  <select name="hafizlik_usul" class="form-control select2" id="usul"
+                                      style="width: 100%;">
                                       <option selected>Hadr</option>
                                       <option>Tedvir</option>
                                       <option>Tahkik</option>
@@ -357,13 +362,14 @@
                               <div class="form-group col-6">
                                   <label for="recipient-name" class="col-form-label">Tarih</label>
 
-                                  <input type="date" class="form-control" name="hafizlik_tarih" id="tarih" value=""
-                                      required="">
+                                  <input type="date" class="form-control" name="hafizlik_tarih" id="tarih"
+                                      value="" required="">
 
                               </div>
                               <div class="form-group col-6">
                                   <label for="recipient-name" class="col-form-label">Hoca</label>
-                                  <select name="hoca_id" id="hoca" class="form-control select2" style="width: 100%;">
+                                  <select name="hoca_id" id="hoca" class="form-control select2"
+                                      style="width: 100%;">
 
                                   </select>
                               </div>
@@ -375,8 +381,8 @@
                               <div class="form-group col-6">
                                   <label for="recipient-name" class="col-form-label">Cüz</label>
 
-                                  <select class="form-control select2" name="hafizlik_cuz[]" id="cuzs" multiple="multiple"
-                                      style="width: 100%;">
+                                  <select class="form-control select2" name="hafizlik_cuz[]" id="cuzs"
+                                      multiple="multiple" style="width: 100%;">
                                   </select>
                               </div>
                               <div class="form-group col-4">
@@ -472,7 +478,7 @@
                       success: function(ogrenciedit) {
                           var dat = JSON.stringify(ogrenciedit);
                           var datim = JSON.parse(dat);
-
+                          console.log(dat);
                           $('#hafizlik_durum')
                               .find('option')
                               .remove()
@@ -531,6 +537,23 @@
                               $('#hafizlik_durum').append(
                                   `<option value="Yüzüne" >Yüzüne</option>`
                               );
+                          } else {
+                              $('#hafizlik_durum').append(
+                                  `<option value="Ham" >Ham</option>`
+                              );
+                              $('#hafizlik_durum').append(
+                                  `<option value="Komisyon" >Komisyon</option>`
+                              );
+                              $('#hafizlik_durum').append(
+                                  `<option value="Yüzüne" >Yüzüne</option>`
+                              );
+                              $('#hafizlik_durum').append(
+                                  '<option value="1.Has" >1.Has</option>'
+                              );
+                              $('#hafizlik_durum').append(
+                                  '<option value="Hafız(1)" >Hafız(1)</option>'
+                              );
+
                           }
                           $('#modalDurum .modal-title').text(datim.ogrenci_adsoyad + ' ' +
                               datim.ogrenci_id);
@@ -541,7 +564,7 @@
                               }
                           });
 
-                          $('#durumEdit #sayfa').val(`${datim.hafizlik_son.split('/')[0]}`);
+                          $('#durumEdit #sayfa').val(`${datim?.hafizlik_son?.split('/')[0]}`);
 
                           $("#hafizlik_durum").val(datim.hafizlik_durum);
                       },
@@ -684,7 +707,7 @@
                       });
 
 
-                      if (datim.durum.includes('Hafız')) {
+                      if (datim?.durum?.includes('Hafız')) {
 
                           $('#ekleDers #cuzs').append(new Option('Fatiha-Nas', 'FN'));
 
@@ -765,7 +788,7 @@
                           $('#ekleDers #cuzs').append(new Option(index + 1, index + 1));
                       }
 
-                      if (datim.sonders.includes('-') && !datim.sonders.includes('FN')) {
+                      if (datim?.sonders?.includes('-') && !datim?.sonders?.includes('FN')) {
 
                           if (datim.sonders.substr(-1) == "4") {
                               $(`#ekleDers #sayfas`).val(
@@ -781,7 +804,7 @@
                                   datim.cuz)).trigger('change');
                           }
 
-                      } else if (datim.sonders.includes('-') && datim.sonders.includes('FN')) {
+                      } else if (datim?.sonders?.includes('-') && datim?.sonders?.includes('FN')) {
                           if (datim.sonders.substr(-1) == "30") {
 
                               $('#ekleDers #cuzs').val(['1']).trigger('change');
@@ -1095,7 +1118,7 @@
                       get_option: true
                   },
                   success: function(response) {
-
+                      console.log(response);
                       $(id).html(response);
 
                       $(id).val(veri);
@@ -1306,7 +1329,7 @@
               e.preventDefault();
               var form = $('#ekleDers')[0];
               var data = new FormData(form);
-
+              console.log(form);
               $.ajax({
 
                   url: "{{ route('hafizlik.dersekle') }}",
