@@ -104,7 +104,7 @@ class BirimController extends Controller
                 'birim_ad' => $request->birim_ad,
                 'birim_donem' => $request->birim_donem,
             ]);
-
+            print_r($request);
             return response()->json($data);
         }
     }
