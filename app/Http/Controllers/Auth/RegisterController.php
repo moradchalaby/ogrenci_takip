@@ -65,6 +65,11 @@ class RegisterController extends Controller
      */
     protected function create(Request $request)
     {
+        if ($errors->any()) {
+            foreach ($errors->all() as $error) {
+                echo $error;
+            }
+        }
         if ($request->ajax()) {
 
             $userkay = User::create(['id' => $request['kullanici_id']], [
