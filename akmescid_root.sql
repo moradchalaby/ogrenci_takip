@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Anamakine: localhost:3306
--- Üretim Zamanı: 08 Mar 2023, 15:20:29
+-- Üretim Zamanı: 09 Mar 2023, 12:08:46
 -- Sunucu sürümü: 10.11.2-MariaDB-log
 -- PHP Sürümü: 8.1.10
 
@@ -593,6 +593,16 @@ CREATE TABLE `okul` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Tablo döküm verisi `okul`
+--
+
+INSERT INTO `okul` (`id`, `okul`, `okul_ad`, `created_at`, `updated_at`) VALUES
+(1, 'ORTA OKUL', 'MUSA EFENDİ İMAM HATİP ORTA OKULU', NULL, NULL),
+(2, 'ÖRGÜN LİSE', 'MUSA EFENDİ ANADOLU İMAM HATİP LİSESİ', NULL, NULL),
+(3, 'AÇIK LİSE', 'MUSA EFENDİ AÇIK İHL', NULL, NULL),
+(4, 'ÜNİVERSİTE', 'ANADOLU AÖF', NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -604,13 +614,6 @@ CREATE TABLE `password_resets` (
   `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Tablo döküm verisi `password_resets`
---
-
-INSERT INTO `password_resets` (`email`, `token`, `created_at`) VALUES
-('evladuiyal@gmail.com', '$2y$10$6QlwLTGJLHobezApMMpTLOz1Na5cq6iFjFX0TlHxNxQ4lLm5EqxOC', '2022-05-24 11:12:00');
 
 -- --------------------------------------------------------
 
@@ -800,6 +803,13 @@ CREATE TABLE `telegramlog` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Tablo döküm verisi `telegramlog`
+--
+
+INSERT INTO `telegramlog` (`id`, `telegramId`, `starterror`, `emailerror`, `passerror`, `ban`, `created_at`, `updated_at`) VALUES
+(16, '131850638', '3', '3', '3', '0', '2022-10-05 07:45:50', '2022-10-05 07:45:50');
+
 -- --------------------------------------------------------
 
 --
@@ -813,6 +823,13 @@ CREATE TABLE `telegraph_bots` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Tablo döküm verisi `telegraph_bots`
+--
+
+INSERT INTO `telegraph_bots` (`id`, `token`, `name`, `created_at`, `updated_at`) VALUES
+(3, '5672235289:AAGJUQnLHrb32Lu0aZPnRDpGLzA4RYQ3ZVA', 'hafizlikBot', '2022-09-05 05:35:26', '2022-09-05 05:35:26');
 
 -- --------------------------------------------------------
 
@@ -828,6 +845,13 @@ CREATE TABLE `telegraph_chats` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Tablo döküm verisi `telegraph_chats`
+--
+
+INSERT INTO `telegraph_chats` (`id`, `chat_id`, `name`, `telegraph_bot_id`, `created_at`, `updated_at`) VALUES
+(1, '131850638', 'hafizlik', 3, '2022-09-05 05:58:35', '2022-09-05 05:58:35');
 
 -- --------------------------------------------------------
 
@@ -1400,7 +1424,7 @@ ALTER TABLE `ogrenciuni`
 -- Tablo için AUTO_INCREMENT değeri `okul`
 --
 ALTER TABLE `okul`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `personal_access_tokens`
@@ -1448,19 +1472,19 @@ ALTER TABLE `teknikpersonel`
 -- Tablo için AUTO_INCREMENT değeri `telegramlog`
 --
 ALTER TABLE `telegramlog`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `telegraph_bots`
 --
 ALTER TABLE `telegraph_bots`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `telegraph_chats`
 --
 ALTER TABLE `telegraph_chats`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `users`
@@ -1506,3 +1530,6 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `kullanici_resim`, `password`, `telegramId`, `kullanici_dt`, `kullanici_tc`, `kullanici_gsm`, `kullanici_adres`, `kullanici_durum`, `remember_token`, `created_at`, `updated_at`) VALUES (NULL, 'Root ROOT', 'root@root', NULL, '/storage/dimg/1resimHoca.jpg', '$2y$10$wh/nz0lVGh.hr3xMy2dTNuTHd2ZGW6kb4klEAz7r8/mIcH/wOfvza', '131850638', '2020-01-01', '60622310864', '5462057927', NULL, '1', 'y4mkbpWWTuoDOzvsi9eh70ZllFOFzuc29i6jEMz2d2FLIIdqnmXhigVxP2bQ', '2022-04-17 21:05:31', '2022-04-17 21:05:31');
+
+INSERT INTO `role_user` (`id`, `role_id`, `user_id`, `created_at`, `updated_at`) VALUES (NULL, '1', '1', NULL, NULL), (NULL, '37', '1', '2022-06-03 13:10:53', '2022-06-03 13:10:53'), (NULL, '36', '1', '2022-06-02 14:06:01', '2022-06-02 14:06:01'), (NULL, '32', '1', '2022-06-02 14:06:01', '2022-06-02 14:06:01'), (NULL, '33', '1', '2022-06-02 14:06:01', '2022-06-02 14:06:01'), (NULL, '35', '1', '2022-06-02 14:06:01', '2022-06-02 14:06:01'), (NULL, '34', '1', '2022-06-02 14:06:01', '2022-06-02 14:06:01'), (NULL, '31', '1', '2022-06-02 14:06:01', '2022-06-02 14:06:01'), (NULL, '3', '1', '2022-06-02 14:06:01', '2022-06-02 14:06:01');
