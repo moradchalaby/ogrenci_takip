@@ -8,6 +8,7 @@ use App\Models\Ogrenci;
 use App\Models\Ogrencibirim;
 use App\Models\Ogrenciokul;
 use App\Models\Okul;
+use App\Models\Birim;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -127,6 +128,20 @@ class BirimOgrenciController extends Controller
     {
         //
         return view('egitim.create');
+    }
+    public function birimgetir(Request $request)
+    {
+
+        //
+        if ($request->ajax()) {
+            $gonder[] = "<option selected value='0'> Tüm Birimler</option>";
+            $data = Birim::get(['birim_id', 'birim_ad']);
+            foreach ($data as $veri) {
+                $gonder[] = "<option value=\"" . $veri['birim_id'] . "\">" . $veri['birim_ad'] . "</option>";
+            }
+
+            return response()->json($gonder);
+        }
     }
 
     /**

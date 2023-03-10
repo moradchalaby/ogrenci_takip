@@ -857,7 +857,7 @@
           function birimgetir(id) {
               $.ajax({
                   type: 'post',
-                  url: "{{ route('birimhoca.birimgetir') }}",
+                  url: "{{ route('birimogrenci.birimgetir') }}",
                   data: {
                       get_option: true
                   },
