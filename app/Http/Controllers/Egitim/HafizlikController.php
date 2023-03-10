@@ -313,7 +313,7 @@ class HafizlikController extends Controller
         //
         if ($request->ajax()) {
 
-            $data = User::rightJoin('role_user', 'role_user.user_id', '=', 'users.id')->where(['role_user.role_id' => '37', 'users.kullanici_durum' => 1])->whereNot('user.id', 1)->get();
+            $data = User::rightJoin('role_user', 'role_user.user_id', '=', 'users.id')->where(['role_user.role_id' => '37', 'users.kullanici_durum' => 1])->whereNotIn('user.id', [1])->get();
             $gonder[] =
                 "<option selected value='0'> Tüm Hocalar</option>";
             foreach ($data as $veri) {
@@ -332,7 +332,7 @@ class HafizlikController extends Controller
 
             $data = User::leftJoin('birimhoca', 'birimhoca.kullanici_id', '=', 'users.id')
                 ->leftJoin('hafizlikhoca', 'hafizlikhoca.kullanici_id', '=', 'birimhoca.kullanici_id')
-                ->where('birimhoca.birim_id', '=', $request->birim_id)->whereNot('user.id', 1)
+                ->where('birimhoca.birim_id', '=', $request->birim_id)->whereNotIn('user.id', [1])
                 ->select(
                     'users.id as id',
                     'users.name as name',

@@ -38,7 +38,7 @@ class PersonelController extends Controller
 
         if (request()->ajax()) {
 
-            $data = User::whereNot('user.id', 1)->leftJoin(
+            $data = User::whereNotIn('user.id', [1])->leftJoin(
                 'role_user',
                 function ($join) {
                     $join->on('users.id', '=', 'role_user.user_id')

@@ -308,7 +308,7 @@ class ProjeHafizlikController extends Controller
 
             $data = User::join('role_user', 'users.id', '=', 'role_user.user_id')
                 ->join('roles', 'role_user.role_id', '=', 'roles.id')
-                ->where('roles.id', '37')->whereNot('user.id', 1)->select('users.*')
+                ->where('roles.id', '37')->whereNotIn('user.id', [1])->select('users.*')
                 ->get();
             $gonder[] =
                 "<option selected value='0'> Tüm Hocalar</option>";
@@ -327,13 +327,13 @@ class ProjeHafizlikController extends Controller
         if ($request->ajax()) {
             User::join('role_user', 'users.id', '=', 'role_user.user_id')
                 ->join('roles', 'role_user.role_id', '=', 'roles.id')
-                ->where('roles.id', '37')->whereNot('user.id', 1)->select('users.*')
+                ->where('roles.id', '37')->whereNotIn('user.id', [1])->select('users.*')
                 ->get();
             $data = User::leftJoin('birimhoca', 'birimhoca.kullanici_id', '=', 'users.id')
                 ->leftJoin('hafizlikhoca', 'hafizlikhoca.kullanici_id', '=', 'birimhoca.kullanici_id')
                 ->join('role_user', 'users.id', '=', 'role_user.user_id')
                 ->join('roles', 'role_user.role_id', '=', 'roles.id')
-                ->where('roles.id', '37')->whereNot('user.id', 1)
+                ->where('roles.id', '37')->whereNotIn('user.id', [1])
                 ->where('birimhoca.birim_id', '=', $request->birim_id)
                 ->select(
                     'users.id as id',
