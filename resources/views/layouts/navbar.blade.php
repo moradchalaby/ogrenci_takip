@@ -146,8 +146,14 @@
 
                     <div class="user-panel mt-3 pb-3 mb-3 d-flex ">
                         <div class="image dropdown-item dropdown-header">
-                            <img src="{{ Auth::user()->kullanici_resim }}" class="img-circle elevation-2"
-                                alt="User Image">
+                            @if (Auth::user()->kullanici_resim == '')
+                                <img src="/storage/dimg/logo-yok.png" class="img-circle elevation-2"
+                                    alt="User Image">
+                            @else
+                                <img src="{{ Auth::user()->kullanici_resim }}" class="img-circle elevation-2"
+                                    alt="User Image">
+                            @endif
+
                             <p>{{ Auth::user()->name }}</p>
                         </div>
 
@@ -167,7 +173,8 @@
 
 
 
-                    <a class="dropdown-item dropdown-header" href="{{ route('logout') }}" onclick="event.preventDefault();
+                    <a class="dropdown-item dropdown-header" href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
                                                                  document.getElementById('logout-form').submit();">
                         <i class="fas fa-power-off mr-2"></i> Çıkış
 
