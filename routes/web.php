@@ -187,7 +187,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::post('/store', [BirimOgrenciController::class, 'store'])->name('birimogrenci.store');
         Route::post('/edit', [BirimOgrenciController::class, 'edit'])->name('birimogrenci.edit');
         Route::post('/update', [BirimOgrenciController::class, 'update'])->name('birimogrenci.update');
-
+        Route::post('/birimgetir', [BirimOgrenciController::class, 'birimgetir'])->name('birimogrenci.birimgetir');
         Route::get('/{id}', [BirimOgrenciController::class, 'index'])->name('birimogrenci.index');
     });
     Route::prefix('birimhafizlik')->group(function () {
