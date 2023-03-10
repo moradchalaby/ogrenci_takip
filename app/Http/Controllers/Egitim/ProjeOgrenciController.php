@@ -126,7 +126,7 @@ class ProjeOgrenciController extends Controller
 
             $data = User::join('role_user', 'users.id', '=', 'role_user.user_id')
                 ->join('roles', 'role_user.role_id', '=', 'roles.id')
-                ->where('roles.id', '37')->whereNotIn('user.id', [1])->select('users.*')
+                ->where('roles.id', '37')->whereNotIn('users.id', [1])->select('users.*')
                 ->get();
             $gonder[] =
                 "<option selected value='0'> Tüm Hocalar</option>";
