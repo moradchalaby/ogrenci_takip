@@ -6,3 +6,14 @@
 ogrenciorta
 ogrenciproje
 ogrencibelgesiz
+
+//key generate
+php artisan key:generate
+
+
+//resim dosya vs için storage yi gösterme
+php artisan storage:link
+
+
+//chache temisleme
+php artisan optimize:clear

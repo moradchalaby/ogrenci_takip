@@ -68,7 +68,7 @@
                 @can('birimsorumlu', 'birimsorumlu')
                     @include('layouts.sidebar_birim')
                 @endcan
-                @can('idari', 'idari')
+                @can('projesorumlu', 'projesorumlu')
                     @include('layouts.sidebar_proje')
                 @endcan
                 {{-- @endcan --}}

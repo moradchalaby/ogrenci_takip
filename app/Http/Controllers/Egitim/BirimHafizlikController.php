@@ -200,8 +200,12 @@ class BirimHafizlikController extends Controller
                 })
 
                 ->addColumn('resim', function ($row) {
+                    if ($row['ogrenci_resim'] == '') {
+                        $resim = "<img alt=\"Avatar\" class=\"avatar\" src=\"/storage/dimg/logo-yok.png\">";
+                    } else {
+                        $resim = "<img alt=\"Avatar\" class=\"avatar\" src=\"{$row['ogrenci_resim']}\">";
+                    }
 
-                    $resim = "<img alt=\"Avatar\" class=\"avatar\" src=\"{$row['ogrenci_resim']}\">";
 
                     return $resim;
                 });

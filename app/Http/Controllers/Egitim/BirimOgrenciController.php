@@ -7,7 +7,8 @@ use App\Models\Birimsorumlu;
 use App\Models\Ogrenci;
 use App\Models\Ogrencibirim;
 use App\Models\Ogrenciokul;
-use App\Models\Okul;
+use App\Models\Hafizlikders;
+use App\Models\Hafizlikdurum;
 use App\Models\Birim;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -50,7 +51,11 @@ class BirimOgrenciController extends Controller
 
                 ->addColumn('resim', function ($row) {
 
-                    $resim = '<img alt="Avatar" class="avatar" src="' . $row['ogrenci_resim'] . '">';
+                    if ($row['ogrenci_resim'] == '') {
+                        $resim = "<img alt=\"Avatar\" class=\"avatar\" src=\"/storage/dimg/logo-yok.png\">";
+                    } else {
+                        $resim = "<img alt=\"Avatar\" class=\"avatar\" src=\"{$row['ogrenci_resim']}\">";
+                    }
 
                     return $resim;
                 })
@@ -190,6 +195,18 @@ class BirimOgrenciController extends Controller
                 [
                     "birim_id" => $request->birim_id,
                     'ogrenci_id' => $son->id,
+                ]
+            );
+            Hafizlikders::create(
+                [
+                    'ogrenci_id' => $son->id,
+                    'kullanici_id' => Auth::id()
+                ]
+            );
+            Hafizlikdurum::create(
+                [
+                    'ogrenci_id' => $son->id,
+                    'hafizlik_durum' => 'Yeni Kayıt'
                 ]
             );
             $name = $son->id . 'resim';
