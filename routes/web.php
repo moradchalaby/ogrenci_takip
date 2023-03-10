@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 */
 use App\Http\Controllers\CalenderController;
 use App\Http\Controllers\Personel\PersonelController;
-use App\Http\Controllers\Personel\BirimhocaController;
+//use App\Http\Controllers\Personel\BirimhocaController;
 use App\Http\Controllers\Personel\BirimsorumluController;
 use App\Http\Controllers\Personel\BekarhocaController;
 use App\Http\Controllers\Personel\MuhtelifhocaController;
@@ -65,7 +65,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::get('/getEmployees', [PersonelController::class, 'getEmployees'])->name('personel.getEmployees');
         Route::post('/update', [PersonelController::class, 'update'])->name('personel.update');
     });
-
+    /* 
     Route::prefix('birimhoca')->group(function () {
         //?BirimHoca
         Route::get('/getBirim', [BirimhocaController::class, 'getBirim'])->name('birimhoca.getBirim');
@@ -74,7 +74,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::get('/', [BirimhocaController::class, 'index'])->name('birimhoca.index');
         Route::post('/hocagetir', [BirimhocaController::class, 'hocagetir'])->name('birimhoca.hocagetir');
         Route::post('/birimgetir', [BirimhocaController::class, 'birimgetir'])->name('birimhoca.birimgetir');
-    });
+    }); */
     Route::prefix('birimsorumlu')->group(function () {
         //?IhtisasHoca
         Route::get('/getBirim', [BirimsorumluController::class, 'getBirim'])->name('birimsorumlu.getBirim');
