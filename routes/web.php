@@ -15,13 +15,13 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CalenderController;
 use App\Http\Controllers\Personel\PersonelController;
 //use App\Http\Controllers\Personel\BirimhocaController;
-use App\Http\Controllers\Personel\BirimsorumluController;
-use App\Http\Controllers\Personel\BekarhocaController;
-use App\Http\Controllers\Personel\MuhtelifhocaController;
-use App\Http\Controllers\Personel\IhtisashocaController;
-use App\Http\Controllers\Personel\HafizlikhocaController;
-use App\Http\Controllers\Personel\TeknikhocaController;
-use App\Http\Controllers\Personel\IdarihocaController;
+//use App\Http\Controllers\Personel\BirimsorumluController;
+//use App\Http\Controllers\Personel\BekarhocaController;
+//use App\Http\Controllers\Personel\MuhtelifhocaController;
+//use App\Http\Controllers\Personel\IhtisashocaController;
+//use App\Http\Controllers\Personel\HafizlikhocaController;
+//use App\Http\Controllers\Personel\TeknikhocaController;
+//use App\Http\Controllers\Personel\IdarihocaController;
 use App\Http\Controllers\Egitim\OgrenciController;
 use App\Http\Controllers\Egitim\BirimOgrenciController;
 use App\Http\Controllers\Egitim\ProjeOgrenciController;
@@ -74,7 +74,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::get('/', [BirimhocaController::class, 'index'])->name('birimhoca.index');
         Route::post('/hocagetir', [BirimhocaController::class, 'hocagetir'])->name('birimhoca.hocagetir');
         Route::post('/birimgetir', [BirimhocaController::class, 'birimgetir'])->name('birimhoca.birimgetir');
-    }); */
+    }); 
     Route::prefix('birimsorumlu')->group(function () {
         //?IhtisasHoca
         Route::get('/getBirim', [BirimsorumluController::class, 'getBirim'])->name('birimsorumlu.getBirim');
@@ -143,7 +143,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::post('/hocagetir', [IdarihocaController::class, 'hocagetir'])->name('idarihoca.hocagetir');
         Route::post('/birimgetir', [IdarihocaController::class, 'birimgetir'])->name('idarihoca.birimgetir');
     });
-
+*/
     Route::prefix('birim')->group(function () {
 
         Route::get('/', [BirimController::class, 'index'])->name('birim.index');
