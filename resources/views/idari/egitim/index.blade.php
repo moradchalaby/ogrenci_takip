@@ -884,20 +884,7 @@
           })
 
 
-          /* hocagetir();
-                            function hocagetir() {
-                                $.ajax({
-                                    type: 'post',
-                                    url: "{{ route('birimhoca.hocagetir') }}",
-                                    data: {
-                                        get_option: true
-                                    },
-                                    success: function(response) {
-                                        document.getElementById("hoca").innerHTML = response;
-                                    }
-                                });
-                            }
-           */
+
           birimgetir('#useredit #birime');
           birimgetir('#useradd #birim');
 
