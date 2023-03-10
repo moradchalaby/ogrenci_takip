@@ -85,8 +85,8 @@
                                   </div>
                                   <div class="line"></div>
                                   <div class="step" data-target="#iletisim-part">
-                                      <button type="button" class="step-trigger" role="tab" aria-controls="iletisim-part"
-                                          id="iletisim-part-trigger">
+                                      <button type="button" class="step-trigger" role="tab"
+                                          aria-controls="iletisim-part" id="iletisim-part-trigger">
                                           <span class="bs-stepper-circle bg-info">2</span>
                                           <span class="bs-stepper-label">Veli</span>
                                       </button>
@@ -126,14 +126,16 @@
                                                   placeholder="Doğum Tarihi">
                                           </div>
                                           <div class="form-group">
-                                              <input type="text" class="form-control" name="ogrenci_tc" id="ogrenci_tc"
-                                                  placeholder="TC No" onblur="tckimlikkontorolu(this);" maxlength="11">
+                                              <input type="text" class="form-control" name="ogrenci_tc"
+                                                  id="ogrenci_tc" placeholder="TC No" onblur="tckimlikkontorolu(this);"
+                                                  maxlength="11">
 
                                           </div>
 
                                           <div class="form-group">
-                                              <input type="text" class="form-control" name="ogrenci_tel" id="ogrenci_tel"
-                                                  placeholder="Tel No" data-inputmask='"mask": "(999) 999-9999"' data-mask>
+                                              <input type="text" class="form-control" name="ogrenci_tel"
+                                                  id="ogrenci_tel" placeholder="Tel No"
+                                                  data-inputmask='"mask": "(999) 999-9999"' data-mask>
                                           </div>
                                           <div class="form-group">
                                               <input type="text" class="form-control" name="ogrenci_sehir"
@@ -151,22 +153,22 @@
                                       <div id="iletisim-part" class="content" role="tabpanel"
                                           aria-labelledby="iletisim-part-trigger">
                                           <div class="form-group row">
-                                              <input type="text" class="form-control col" name="babaad" id="babaad"
-                                                  placeholder="Baba Adı">
+                                              <input type="text" class="form-control col" name="babaad"
+                                                  id="babaad" placeholder="Baba Adı">
 
-                                              <input type="text" class="form-control col" name="babatel" id="babatel"
-                                                  placeholder="Baba Tel No" data-inputmask='"mask": "(999) 999-9999"'
-                                                  data-mask>
+                                              <input type="text" class="form-control col" name="babatel"
+                                                  id="babatel" placeholder="Baba Tel No"
+                                                  data-inputmask='"mask": "(999) 999-9999"' data-mask>
                                           </div>
                                           <div class="form-group">
                                               <input type="text" class="form-control" name="babames" id="babames"
                                                   placeholder="Baba Meslek">
                                           </div>
                                           <div class="form-group row">
-                                              <input type="text" class="form-control col" name="annead" id="annead"
-                                                  placeholder="Anne Adı">
-                                              <input type="text" class="form-control col" name="annetel" id="annetel"
-                                                  placeholder="Anne Tel No">
+                                              <input type="text" class="form-control col" name="annead"
+                                                  id="annead" placeholder="Anne Adı">
+                                              <input type="text" class="form-control col" name="annetel"
+                                                  id="annetel" placeholder="Anne Tel No">
                                           </div>
                                           <div class="form-group">
                                               <input type="text" class="form-control" name="annemes" id="annemes"
@@ -211,12 +213,12 @@
 
                                           </div>
                                           <div class="form-group">
-                                              <input type="text" class="form-control" name="basaripuan" id="basaripuan"
-                                                  placeholder="Başarı Puanı">
+                                              <input type="text" class="form-control" name="basaripuan"
+                                                  id="basaripuan" placeholder="Başarı Puanı">
                                           </div>
                                           <div class="form-group">
-                                              <textarea class="form-control" name="ogrenci_aciklama" id="ogrenci_aciklama" placeholder="Özel Durum" cols="10"
-                                                  rows="2"></textarea>
+                                              <textarea class="form-control" name="ogrenci_aciklama" id="ogrenci_aciklama" placeholder="Özel Durum"
+                                                  cols="10" rows="2"></textarea>
 
                                           </div>
                                           <button type="button" class="btn btn-outline-info"
@@ -230,7 +232,8 @@
                                           aria-labelledby="egitim-part-trigger">
                                           <div class="form-group">
 
-                                              <div class="input-group  input-file " id="ogrenci_resim" name="ogrenci_resim">
+                                              <div class="input-group  input-file " id="ogrenci_resim"
+                                                  name="ogrenci_resim">
                                                   <span class="input-group-btn">
                                                       <button class="btn btn-default btn-choose" id="file_button"
                                                           type="button">Resim
@@ -300,24 +303,24 @@
                               <div class="bs-stepper-header inline-block" role="tablist">
                                   <!-- your steps here -->
                                   <div class="step" data-target="#genel-part">
-                                      <button type="button" class="step-trigger" role="tab" aria-controls="genel-part"
-                                          id="genel-part-trigger">
+                                      <button type="button" class="step-trigger" role="tab"
+                                          aria-controls="genel-part" id="genel-part-trigger">
                                           <span class="bs-stepper-circle bg-info">1</span>
                                           <span class="bs-stepper-label">Öğrenci</span>
                                       </button>
                                   </div>
                                   <div class="line"></div>
                                   <div class="step" data-target="#iletisim-part">
-                                      <button type="button" class="step-trigger" role="tab" aria-controls="iletisim-part"
-                                          id="iletisim-part-trigger">
+                                      <button type="button" class="step-trigger" role="tab"
+                                          aria-controls="iletisim-part" id="iletisim-part-trigger">
                                           <span class="bs-stepper-circle bg-info">2</span>
                                           <span class="bs-stepper-label">Veli</span>
                                       </button>
                                   </div>
                                   <div class="line"></div>
                                   <div class="step" data-target="#veli-part">
-                                      <button type="button" class="step-trigger" role="tab" aria-controls="veli-part"
-                                          id="veli-part-trigger">
+                                      <button type="button" class="step-trigger" role="tab"
+                                          aria-controls="veli-part" id="veli-part-trigger">
                                           <span class="bs-stepper-circle bg-info">3</span>
                                           <span class="bs-stepper-label">Eğitim</span>
                                       </button>
@@ -325,8 +328,8 @@
                                   <br>
                                   <div class="line"></div>
                                   <div class="step" data-target="#egitim-part">
-                                      <button type="button" class="step-trigger" role="tab" aria-controls="egitim-part"
-                                          id="egitim-part-trigger">
+                                      <button type="button" class="step-trigger" role="tab"
+                                          aria-controls="egitim-part" id="egitim-part-trigger">
                                           <span class="bs-stepper-circle bg-info">4</span>
                                           <span class="bs-stepper-label">Belgeler</span>
                                       </button>
@@ -346,18 +349,20 @@
                                               <input type="hidden" name="id" id="ogrenci_id">
                                           </div>
                                           <div class="form-group">
-                                              <input type="date" class="form-control" name="ogrenci_dt" id="ogrenci_dt"
-                                                  placeholder="Doğum Tarihi">
+                                              <input type="date" class="form-control" name="ogrenci_dt"
+                                                  id="ogrenci_dt" placeholder="Doğum Tarihi">
                                           </div>
                                           <div class="form-group">
-                                              <input type="text" class="form-control" name="ogrenci_tc" id="ogrenci_tc"
-                                                  placeholder="TC No" onblur="tckimlikkontorolu(this);" maxlength="11">
+                                              <input type="text" class="form-control" name="ogrenci_tc"
+                                                  id="ogrenci_tc" placeholder="TC No" onblur="tckimlikkontorolu(this);"
+                                                  maxlength="11">
 
                                           </div>
 
                                           <div class="form-group">
-                                              <input type="text" class="form-control" name="ogrenci_tel" id="ogrenci_tel"
-                                                  placeholder="Tel No" data-inputmask='"mask": "(999) 999-9999"' data-mask>
+                                              <input type="text" class="form-control" name="ogrenci_tel"
+                                                  id="ogrenci_tel" placeholder="Tel No"
+                                                  data-inputmask='"mask": "(999) 999-9999"' data-mask>
                                           </div>
                                           <div class="form-group">
                                               <input type="text" class="form-control" name="ogrenci_sehir"
@@ -375,22 +380,22 @@
                                       <div id="iletisim-part" class="content" role="tabpanel"
                                           aria-labelledby="iletisim-part-trigger">
                                           <div class="form-group row">
-                                              <input type="text" class="form-control col" name="babaad" id="babaad"
-                                                  placeholder="Baba Adı">
+                                              <input type="text" class="form-control col" name="babaad"
+                                                  id="babaad" placeholder="Baba Adı">
 
-                                              <input type="text" class="form-control col" name="babatel" id="babatel"
-                                                  placeholder="Baba Tel No" data-inputmask='"mask": "(999) 999-9999"'
-                                                  data-mask>
+                                              <input type="text" class="form-control col" name="babatel"
+                                                  id="babatel" placeholder="Baba Tel No"
+                                                  data-inputmask='"mask": "(999) 999-9999"' data-mask>
                                           </div>
                                           <div class="form-group">
                                               <input type="text" class="form-control" name="babames" id="babames"
                                                   placeholder="Baba Meslek">
                                           </div>
                                           <div class="form-group row">
-                                              <input type="text" class="form-control col" name="annead" id="annead"
-                                                  placeholder="Anne Adı">
-                                              <input type="text" class="form-control col" name="annetel" id="annetel"
-                                                  placeholder="Anne Tel No">
+                                              <input type="text" class="form-control col" name="annead"
+                                                  id="annead" placeholder="Anne Adı">
+                                              <input type="text" class="form-control col" name="annetel"
+                                                  id="annetel" placeholder="Anne Tel No">
                                           </div>
                                           <div class="form-group">
                                               <input type="text" class="form-control" name="annemes" id="annemes"
@@ -435,12 +440,12 @@
 
                                           </div>
                                           <div class="form-group">
-                                              <input type="text" class="form-control" name="basaripuan" id="basaripuan"
-                                                  placeholder="Başarı Puanı">
+                                              <input type="text" class="form-control" name="basaripuan"
+                                                  id="basaripuan" placeholder="Başarı Puanı">
                                           </div>
                                           <div class="form-group">
-                                              <textarea class="form-control" name="ogrenci_aciklama" id="ogrenci_aciklama" placeholder="Özel Durum" cols="10"
-                                                  rows="2"></textarea>
+                                              <textarea class="form-control" name="ogrenci_aciklama" id="ogrenci_aciklama" placeholder="Özel Durum"
+                                                  cols="10" rows="2"></textarea>
 
                                           </div>
                                           <button type="button" class="btn btn-outline-info"
@@ -846,20 +851,6 @@
           })
 
 
-          /* hocagetir();
-                            function hocagetir() {
-                                $.ajax({
-                                    type: 'post',
-                                    url: "{{ route('birimhoca.hocagetir') }}",
-                                    data: {
-                                        get_option: true
-                                    },
-                                    success: function(response) {
-                                        document.getElementById("hoca").innerHTML = response;
-                                    }
-                                });
-                            }
-           */
           birimgetir('#useredit #birime');
           birimgetir('#useradd #birim');
 
