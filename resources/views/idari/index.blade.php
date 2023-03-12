@@ -167,8 +167,8 @@
 
                           <div class="input-group mb-3">
                               <input id="apassword" type="password"
-                                  class="form-control @error('password') is-invalid @enderror" name="password" required
-                                  autocomplete="new-password">
+                                  class="form-control @error('password') is-invalid @enderror" name="password"
+                                  value="akmescid1453" autocomplete="new-password">
 
                               @error('password')
                                   <span class="invalid-feedback" role="alert">
@@ -183,15 +183,15 @@
                           </div>
                           <div class="input-group mb-3">
                               <input id="apassword-confirm" type="password" class="form-control"
-                                  name="password_confirmation" required autocomplete="new-password">
+                                  name="password_confirmation" autocomplete="new-password" value="akmescid1453">
                               <div class="input-group-append">
                                   <div class="input-group-text">
                                       <span class="fas fa-lock"></span>
                                   </div>
                               </div>
                           </div>
-                          <div class="icheck-primary">
-                              <input type="checkbox" id="aagreeTerms" name="terms" value="agree">
+                          <div class="icheck-primary hidden">
+                              <input type="checkbox" id="aagreeTerms" name="terms" checked>
                               <label for="agreeTerms">
                                   I agree to the <a href="#">terms</a>
                               </label>
@@ -203,7 +203,8 @@
 
                               <!-- /.col -->
 
-                              <button type="button" class="btn btn-default bg-danger" data-dismiss="modal">İptal</button>
+                              <button type="button" class="btn btn-default bg-danger"
+                                  data-dismiss="modal">İptal</button>
                               <button type="submit" class="btn btn-primary">
                                   {{ __('Kaydet') }}</button>
 
@@ -275,10 +276,12 @@
                       <form method="POST" id="useredit" action="#">
                           @csrf
                           <div class="input-group mb-3">
-                              <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
-                                  name="name" placeholder="AD SOYAD" value="{{ old('name') }}" required
-                                  autocomplete="name" autofocus>
-                              <input id="kullanici_id" type="text" class="form-control" name="kullanici_id" value="">
+                              <input id="name" type="text"
+                                  class="form-control @error('name') is-invalid @enderror" name="name"
+                                  placeholder="AD SOYAD" value="{{ old('name') }}" required autocomplete="name"
+                                  autofocus>
+                              <input id="kullanici_id" type="text" class="form-control" name="kullanici_id"
+                                  value="">
                               @error('name')
                                   <span class="invalid-feedback" role="alert">
                                       <strong>{{ $message }}</strong>
@@ -291,9 +294,9 @@
                               </div>
                           </div>
                           <div class="input-group mb-3">
-                              <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                                  name="email" placeholder="E-MAİL" value="{{ old('email') }}" required
-                                  autocomplete="email">
+                              <input id="email" type="email"
+                                  class="form-control @error('email') is-invalid @enderror" name="email"
+                                  placeholder="E-MAİL" value="{{ old('email') }}" required autocomplete="email">
 
                               @error('email')
                                   <span class="invalid-feedback" role="alert">
@@ -372,7 +375,8 @@
                           </div>
                           <div class="modal-footer justify-content-between">
 
-                              <button type="button" class="btn btn-default bg-danger" data-dismiss="modal">İptal</button>
+                              <button type="button" class="btn btn-default bg-danger"
+                                  data-dismiss="modal">İptal</button>
                               <button type="submit" class="btn btn-primary">
                                   {{ __('Kaydet') }}</button>
 
@@ -649,6 +653,7 @@
                       document.getElementById("useradd").reset();
                   },
                   error: function(data) {
+
                       var dat = JSON.parse(data);
                       $('#modalAdd').modal('hide');
 

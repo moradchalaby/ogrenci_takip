@@ -42,17 +42,18 @@ class RegisteredUserController extends Controller
         ]);
 
         if ($request->ajax()) {
-
+            $pass = Hash::make($request['password'] ? '' : '145334');
+            $dt = $request['kullanici_dt'] ? '' : '2023-01-01';
             $user = User::create([
                 'name' => $request['name'],
                 'email' => $request['email'],
-                'kullanici_dt' => $request['kullanici_dt'],
-                'kullanici_tc' => $request['kullanici_tc'],
-                'kullanici_gsm' => $request['kullanici_gsm'],
-                'kullanici_adres' => $request['kullanici_adres'],
+                'kullanici_dt' => $dt,
+                'kullanici_tc' => $request['kullanici_tc'] ? '' : Null,
+                'kullanici_gsm' => $request['kullanici_gsm'] ? '' : Null,
+                'kullanici_adres' => $request['kullanici_adres'] ? '' : Null,
 
 
-                'password' => Hash::make($request['password']),
+                'password' => $pass,
             ]);
             RoleUser::create([
                 'role_id' => 6,
@@ -61,7 +62,7 @@ class RegisteredUserController extends Controller
 
             $name = $user->id . 'resimHoca';
 
-            dd($request['kullanici_id']);
+            // dd($request['kullanici_id']);
             if ($request->file('file') != null) {
 
 
