@@ -38,19 +38,19 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            //'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         if ($request->ajax()) {
-            $pass = Hash::make($request['password'] ? '' : '145334');
+            $pass = Hash::make($request['password'] ? '' : 'akmescid1453');
             $dt = $request['kullanici_dt'] ? '' : '2023-01-01';
             $user = User::create([
                 'name' => $request['name'],
                 'email' => $request['email'],
                 'kullanici_dt' => $dt,
-                'kullanici_tc' => $request['kullanici_tc'] ? '' : Null,
-                'kullanici_gsm' => $request['kullanici_gsm'] ? '' : Null,
-                'kullanici_adres' => $request['kullanici_adres'] ? '' : Null,
+                'kullanici_tc' => $request['kullanici_tc'],
+                'kullanici_gsm' => $request['kullanici_gsm'],
+                'kullanici_adres' => $request['kullanici_adres'],
 
 
                 'password' => $pass,

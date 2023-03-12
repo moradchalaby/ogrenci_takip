@@ -168,7 +168,7 @@
                           <div class="input-group mb-3">
                               <input id="apassword" type="password"
                                   class="form-control @error('password') is-invalid @enderror" name="password"
-                                  value="akmescid1453" autocomplete="new-password">
+                                  autocomplete="new-password">
 
                               @error('password')
                                   <span class="invalid-feedback" role="alert">
@@ -183,7 +183,7 @@
                           </div>
                           <div class="input-group mb-3">
                               <input id="apassword-confirm" type="password" class="form-control"
-                                  name="password_confirmation" autocomplete="new-password" value="akmescid1453">
+                                  name="password_confirmation" autocomplete="new-password">
                               <div class="input-group-append">
                                   <div class="input-group-text">
                                       <span class="fas fa-lock"></span>
@@ -643,11 +643,12 @@
                           toast: true,
                           position: 'top',
                           showConfirmButton: false,
-                          timer: 3000
+                          timer: 4000
                       });
                       Toast.fire({
                           icon: 'success',
-                          title: dat["name"] + '<br>  İşlem Başarılı <br>',
+                          title: dat["name"] +
+                              '<br>  İşlem Başarılı <br> <br> Varsayılan Şifre  <br> akmescid1453',
                       })
 
                       document.getElementById("useradd").reset();
