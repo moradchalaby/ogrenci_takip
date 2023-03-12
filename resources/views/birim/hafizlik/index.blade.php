@@ -101,7 +101,7 @@
                           </div>
                           <div class="form-group">
                               <input type="text" class="form-control" name="sayfa" id="sayfa"
-                                  value="{{ $veri['sayfa'] }}" placeholder="Sayfa">
+                                  value="{{ $veri['sayfa'] }}" placeholder="Tur">
                           </div>
                           <div class="form-group">
                               <select id="durum" name="durum" class="form-control select2" style="width: 100%;">
@@ -175,7 +175,7 @@
 
                           </div>
                           <div class="form-group">
-                              <label for="recipient-name" class="col-form-label">Sayfa</label>
+                              <label for="recipient-name" class="col-form-label">Tur</label>
 
                               <input type="text" class="form-control" name="sayfa" id="sayfa" value=""
                                   required="">
@@ -745,7 +745,7 @@
                       } else {
                           $('#ekleDers #dersrow').html(
 
-                              ` <label for="recipient-name" class="col-form-label">Sayfa</label>
+                              ` <label for="recipient-name" class="col-form-label">Tur</label>
 
                                   <select class="select2" name="hafizlik_sayfa" id="sayfas" style="width: 100%;">
                                   </select>
@@ -915,7 +915,7 @@
                       } else {
                           $('#duzenleDers #dersrow').html(
 
-                              ` <label for="recipient-name" class="col-form-label">Sayfa</label>
+                              ` <label for="recipient-name" class="col-form-label">Tur</label>
 
                                   <select class="select2" name="hafizlik_sayfa" id="sayfas" style="width: 100%;">
                                   </select>

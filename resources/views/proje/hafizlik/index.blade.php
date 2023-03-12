@@ -96,12 +96,12 @@
                               <!-- /.input group -->
                           </div>
                           <div class="form-group">
-                              <input type="text" class="form-control" name="kota" id="kota" value="{{ $veri['kota'] }}"
-                                  placeholder="Kota">
+                              <input type="text" class="form-control" name="kota" id="kota"
+                                  value="{{ $veri['kota'] }}" placeholder="Kota">
                           </div>
                           <div class="form-group">
                               <input type="text" class="form-control" name="sayfa" id="sayfa"
-                                  value="{{ $veri['sayfa'] }}" placeholder="Sayfa">
+                                  value="{{ $veri['sayfa'] }}" placeholder="Tur">
                           </div>
                           <div class="form-group">
                               <select id="durum" name="durum" class="form-control select2" style="width: 100%;">
@@ -163,20 +163,22 @@
                           <div class="form-group">
                               <label for="recipient-name" class="col-form-label">Dönüş Başlama Tarihi</label>
 
-                              <input type="date" class="form-control" name="bast" id="bast" value="" required="">
+                              <input type="date" class="form-control" name="bast" id="bast" value=""
+                                  required="">
 
                           </div>
                           <div class="form-group">
                               <label for="recipient-name" class="col-form-label">Dönüş Süresi</label>
 
-                              <input type="text" class="form-control" name="donus_suresi" id="donus_suresi" value=""
-                                  required="">
+                              <input type="text" class="form-control" name="donus_suresi" id="donus_suresi"
+                                  value="" required="">
 
                           </div>
                           <div class="form-group">
-                              <label for="recipient-name" class="col-form-label">Sayfa</label>
+                              <label for="recipient-name" class="col-form-label">Tur</label>
 
-                              <input type="text" class="form-control" name="sayfa" id="sayfa" value="" required="">
+                              <input type="text" class="form-control" name="sayfa" id="sayfa" value=""
+                                  required="">
 
                           </div>
 
@@ -217,7 +219,8 @@
                           <div class="form-group">
                               <input type="hidden" id="ogrenci_id" name="ogrenci_id">
                               <label for="recipient-name" class="col-form-label">Hoca</label>
-                              <select name="birimHoca_id" id="birimHoca" class="form-control select2" style="width: 100%;">
+                              <select name="birimHoca_id" id="birimHoca" class="form-control select2"
+                                  style="width: 100%;">
 
                               </select>
 
@@ -267,13 +270,14 @@
                               <div class="form-group col-6">
                                   <label for="recipient-name" class="col-form-label">Tarih</label>
 
-                                  <input type="date" class="form-control" name="hafizlik_tarih" id="tarih" value=""
-                                      required="">
+                                  <input type="date" class="form-control" name="hafizlik_tarih" id="tarih"
+                                      value="" required="">
 
                               </div>
                               <div class="form-group col-6">
                                   <label for="recipient-name" class="col-form-label">Hoca</label>
-                                  <select name="hoca_id" id="hoca" class="form-control select2" style="width: 100%;">
+                                  <select name="hoca_id" id="hoca" class="form-control select2"
+                                      style="width: 100%;">
 
                                   </select>
                               </div>
@@ -285,8 +289,8 @@
                               <div class="form-group col-6">
                                   <label for="recipient-name" class="col-form-label">Cüz</label>
 
-                                  <select class="form-control select2" name="hafizlik_cuz[]" id="cuzs" multiple="multiple"
-                                      style="width: 100%;">
+                                  <select class="form-control select2" name="hafizlik_cuz[]" id="cuzs"
+                                      multiple="multiple" style="width: 100%;">
                                   </select>
                               </div>
                               <div class="form-group col-4">
@@ -307,7 +311,8 @@
                               </div>
                               <div class="form-group col-6">
                                   <label for="recipient-name" class="col-form-label">Okuma Usulü</label>
-                                  <select name="hafizlik_usul" class="form-control select2" id="usul" style="width: 100%;">
+                                  <select name="hafizlik_usul" class="form-control select2" id="usul"
+                                      style="width: 100%;">
                                       <option selected>Hadr</option>
                                       <option>Tedvir</option>
                                       <option>Tahkik</option>
@@ -361,13 +366,14 @@
                               <div class="form-group col-6">
                                   <label for="recipient-name" class="col-form-label">Tarih</label>
 
-                                  <input type="date" class="form-control" name="hafizlik_tarih" id="tarih" value=""
-                                      required="">
+                                  <input type="date" class="form-control" name="hafizlik_tarih" id="tarih"
+                                      value="" required="">
 
                               </div>
                               <div class="form-group col-6">
                                   <label for="recipient-name" class="col-form-label">Hoca</label>
-                                  <select name="hoca_id" id="hoca" class="form-control select2" style="width: 100%;">
+                                  <select name="hoca_id" id="hoca" class="form-control select2"
+                                      style="width: 100%;">
 
                                   </select>
                               </div>
@@ -379,8 +385,8 @@
                               <div class="form-group col-6">
                                   <label for="recipient-name" class="col-form-label">Cüz</label>
 
-                                  <select class="form-control select2" name="hafizlik_cuz[]" id="cuzs" multiple="multiple"
-                                      style="width: 100%;">
+                                  <select class="form-control select2" name="hafizlik_cuz[]" id="cuzs"
+                                      multiple="multiple" style="width: 100%;">
                                   </select>
                               </div>
                               <div class="form-group col-4">
@@ -723,7 +729,7 @@
                       } else {
                           $('#ekleDers #dersrow').html(
 
-                              ` <label for="recipient-name" class="col-form-label">Sayfa</label>
+                              ` <label for="recipient-name" class="col-form-label">Tur</label>
 
                                   <select class="select2" name="hafizlik_sayfa" id="sayfas" style="width: 100%;">
                                   </select>
@@ -893,7 +899,7 @@
                       } else {
                           $('#duzenleDers #dersrow').html(
 
-                              ` <label for="recipient-name" class="col-form-label">Sayfa</label>
+                              ` <label for="recipient-name" class="col-form-label">Tur</label>
 
                                   <select class="select2" name="hafizlik_sayfa" id="sayfas" style="width: 100%;">
                                   </select>

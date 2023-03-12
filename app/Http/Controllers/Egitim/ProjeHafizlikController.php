@@ -242,7 +242,7 @@ class ProjeHafizlikController extends Controller
             ['data' => 'hoca', 'name' => 'hoca', 'title' => 'Hocası'],
             ['data' => 'birim', 'name' => 'birim', 'title' => 'Birimx'],
             ['data' => 'hfzlkdurum', 'name' => 'hfzlkdurum', 'title' => 'Durum'],
-            ['data' => 'sayfa', 'name' => 'sayfa', 'title' => 'Sayfa'],
+            ['data' => 'sayfa', 'name' => 'sayfa', 'title' => 'Tur'],
             ['data' => 'toplam', 'name' => 'toplam', 'title' => 'Toplam'],
 
         ];
