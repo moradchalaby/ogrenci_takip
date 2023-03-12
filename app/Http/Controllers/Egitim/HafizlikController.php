@@ -321,7 +321,7 @@ class HafizlikController extends Controller
             $gonder[] =
                 "<option selected value='0'> Tüm Hocalar</option>";
             foreach ($data as $veri) {
-                $gonder[] = "<option value=\"" . $veri['kullanici_id'] . "\">" . $veri['name'] . "</option>";
+                $gonder[] = "<option value=\"" . $veri['id'] . "\">" . $veri['name'] . "</option>";
             }
 
             return response()->json($gonder);
