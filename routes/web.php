@@ -201,7 +201,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
 
         Route::post('/durumguncel', [BirimHafizlikController::class, 'durumguncel'])->name('birimhafizlik.durumguncel');
         Route::post('/hocaguncel', [BirimHafizlikController::class, 'hocaguncel'])->name('birimhafizlik.hocaguncel');
-        Route::post('/', [BirimHafizlikController::class, 'index'])->name('birimhafizlik.indexpost');
+        Route::post('/{id}', [BirimHafizlikController::class, 'index'])->name('birimhafizlik.indexpost');
         Route::get('/{id}', [BirimHafizlikController::class, 'index'])->name('birimhafizlik.index');
         Route::post('/hocagetir', [BirimHafizlikController::class, 'hocagetir'])->name('birimhafizlik.hocagetir');
         Route::post('/birimhocagetir', [BirimHafizlikController::class, 'birimhocagetir'])->name('birimhafizlik.birimhoca');

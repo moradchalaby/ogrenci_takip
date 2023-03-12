@@ -69,9 +69,9 @@
                       </button>
                   </div>
                   <div class="modal-body">
-                      <form method="POST" id="filter" action="{{ route('birimhafizlik.indexpost') }}">
+                      <form method="POST" id="filter" action="{{ route('birimhafizlik.indexpost', $veri['birim']) }}">
                           @csrf
-                          <input type="hidden" name="id" value={{ $veri['birim'] }}>
+                          <input type="text" name="id" value={{ $veri['birim'] }}>
                           <div class="form-group">
                               <label>Tarih Aralığı:</label>
                               <div class="input-group col-12">
