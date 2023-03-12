@@ -406,7 +406,8 @@
                               </div>
                               <div class="form-group col-6">
                                   <label for="recipient-name" class="col-form-label">Okuma Usulü</label>
-                                  <select name="hafizlik_usul" class="select2" id="usul" style="width: 100%;">
+                                  <select name="hafizlik_usul" class="form-control select2" id="usul"
+                                      style="width: 100%;">
                                       <option selected>Hadr</option>
                                       <option>Tedvir</option>
                                       <option>Tahkik</option>
@@ -1334,10 +1335,10 @@
               e.preventDefault();
               var form = $('#ekleDers')[0];
               var data = new FormData(form);
-
+              console.log(new FormData(form));
               $.ajax({
 
-                  url: "{{ route('birimhafizlik.dersekle') }}",
+                  url: "{{ route('hafizlik.dersekle') }}",
                   type: 'post',
 
                   contentType: false,
@@ -1402,7 +1403,7 @@
               e.preventDefault();
               var form = $('#duzenleDers')[0];
               var data = new FormData(form);
-
+              console.log(data);
               $.ajax({
 
                   url: "{{ route('birimhafizlik.dersguncelle') }}",
