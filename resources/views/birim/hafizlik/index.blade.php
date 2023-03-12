@@ -1170,7 +1170,7 @@
                   beforeSend: function(xhr) {
                       document.getElementById("modalDersekle").style.filter = "blur(10px)";
                   },
-                  url: "{{ route('birimhafizlik.birimhoca') }}",
+                  url: "{{ route('hafizlik.birimhoca') }}",
                   data: {
                       get_option: true,
                       birim_id: birim_id
