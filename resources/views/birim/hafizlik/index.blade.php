@@ -1117,12 +1117,12 @@
               $.ajax({
                   type: 'post',
 
-                  url: "{{ route('birimhafizlik.hocagetir') }}",
+                  url: "{{ route('hafizlik.hocagetir') }}",
                   data: {
                       get_option: true
                   },
                   success: function(response) {
-
+                      console.log(response);
                       $(id).html(response);
 
                       $(id).val(veri);
