@@ -61,6 +61,9 @@ class HocaHafizlikController extends Controller
 
             $data =
                 User::whereNotIn('users.id', [1])->where(['users.kullanici_durum' => '1'])
+                ->when($hoca_id > 0, function ($q) use ($hoca_id) {
+                    return $q->where('users.id', $hoca_id);
+                })
                 ->rightJoin('role_user', function ($join) {
                     $join->on('role_user.user_id', '=', 'users.id')
                         ->Where('role_user.role_id', '=', 37);
@@ -76,6 +79,9 @@ class HocaHafizlikController extends Controller
 
 
                 ->leftJoin('birim', 'birim.birim_id', '=', 'birimhoca.birim_id')
+                ->when($birim_id > 0, function ($q) use ($birim_id) {
+                    return $q->where('birimhoca.birim_id', $birim_id);
+                })
 
                 ->leftJoin('hrapor', function ($join) use ($bast, $sont) {
                     $join->on('hrapor.kullanici_id', '=', 'users.id')
