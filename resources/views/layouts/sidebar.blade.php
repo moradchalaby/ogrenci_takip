@@ -51,7 +51,7 @@
                 @can('root', 'root')
                     <li class="nav-item">
                         <a href="{{ route('routes.index') }}" class="nav-link {{ active('routes.index') }}">
-                            <i class="nav-icon fas fa-home"></i>
+                            <i class="nav-icon fas fa-way"></i>
                             <p>
                                 ROUTES
 
@@ -61,6 +61,15 @@
                         </a>
                     </li>
                 @endcan
+                @can('root', 'root')
+                    <li class="nav-item">
+                        <a href="{{ route('root.index') }}" class="nav-link {{ active('root.index') }}">
+                            <i class="nav-icon fas fa-person"></i>
+                            <p>ROLLER</p>
+                        </a>
+                    </li>
+                @endcan
+
                 @can('idari', 'idari')
                     @include('layouts.sidebar_idare')
                 @endcan
