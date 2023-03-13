@@ -36,19 +36,19 @@ return [
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
+            'host' => env('MAIL_HOST', 'smtp.gmail.com'),
             'port' => env('MAIL_PORT', 587),
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
             'username' => env('MAIL_USERNAME'),
-            'from' => ['address' => 'moradchalaby@gmail.com', 'name' => 'Akmescid Erkek Öğrenci Yurdu'],
+            'from' => ['address' => 'yaziliminyuzaki@gmail.com', 'name' => 'Akmescid Erkek Öğrenci Yurdu'],
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
             'auth_mode' => null,
-            'ssl' => [
+            'stream' => ['ssl' => [
                 'verify_peer' => false,
                 'verify_peer_name' => false,
                 'allow_self_signed' => true,
-            ],
+            ],]
         ],
 
         'ses' => [
