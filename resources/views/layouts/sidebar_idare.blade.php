@@ -52,7 +52,14 @@
                     </a>
                 </li>
             @endcan
-
+            @can('yetkili', 'hafizlik')
+                <li class="nav-item">
+                    <a href="{{ route('hocahafizlik.index') }}" class="nav-link {{ active('hocahafizlik.index') }}">
+                        <i class="fa-solid fa-row nav-icon"></i>
+                        <p>Hafızlık Hoca Rapor </p>
+                    </a>
+                </li>
+            @endcan
 
 
         </ul>
