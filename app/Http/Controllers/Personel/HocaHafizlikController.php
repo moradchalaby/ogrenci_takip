@@ -79,7 +79,7 @@ class HocaHafizlikController extends Controller
 
                 ->leftJoin('hrapor', function ($join) use ($bast, $sont) {
                     $join->on('hrapor.kullanici_id', '=', 'users.id')
-                        ->WhereBetween('hrapor.hrapor_tarih', ['2023-03-01', '2023-03-11']);
+                        ->WhereBetween('hrapor.hrapor_tarih', [$bast, $sont]);
                 }, null, null, 'FULL')
                 ->orderBy('users.name', 'asc')
                 ->select(

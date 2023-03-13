@@ -66,7 +66,7 @@
                       </button>
                   </div>
                   <div class="modal-body">
-                      <form method="POST" id="filter" action="{{ route('hafizlik.indexpost') }}">
+                      <form method="POST" id="filter" action="{{ route('hocahafizlik.indexpost') }}">
                           @csrf
                           <div class="form-group">
                               <label>Tarih Aralığı:</label>
