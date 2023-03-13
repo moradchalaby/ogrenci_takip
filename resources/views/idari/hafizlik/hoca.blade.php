@@ -66,7 +66,7 @@
                       </button>
                   </div>
                   <div class="modal-body">
-                      <form method="POST" id="filter" action="{{ route('hafizlik.indexpost') }}">
+                      <form method="POST" id="filter" action="{{ route('hocahafizlik.indexpost') }}">
                           @csrf
                           <div class="form-group">
                               <label>Tarih Aralığı:</label>
@@ -93,23 +93,15 @@
                           </div>
 
 
-                          <div class="form-group">
-                              <select id="durum" name="durum" class="form-control select2" style="width: 100%;">
-                                  <option value="">Hafızlık Tüm Durumlar</option>
-                                  <option value="Ham">Ham</option>
-                                  <option value="Has">Has</option>
-                                  <option value="Hafız">Hafız</option>
-                                  <option value="Yüzüne">Yüzüne</option>
-                                  <option value="Komisyon">Komisyon</option>
-                              </select>
 
-                          </div>
                           <div class="form-group">
+                              <label>Birim:</label>
                               <select id="birim" name="birim_id" class="form-control select2" style="width: 100%;">
                               </select>
 
                           </div>
                           <div class="form-group">
+                              <label>Hoca:</label>
                               <select id="hoca" name="hoca_id" class="form-control select2" style="width: 100%;">
                               </select>
 
