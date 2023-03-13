@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 */
 use App\Http\Controllers\CalenderController;
 use App\Http\Controllers\Personel\PersonelController;
+use App\Http\Controllers\Root\RoleController;
 //use App\Http\Controllers\Personel\BirimhocaController;
 //use App\Http\Controllers\Personel\BirimsorumluController;
 //use App\Http\Controllers\Personel\BekarhocaController;
@@ -65,7 +66,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::get('/getEmployees', [PersonelController::class, 'getEmployees'])->name('personel.getEmployees');
         Route::post('/update', [PersonelController::class, 'update'])->name('personel.update');
     });
-    /* 
+    /*
     Route::prefix('birimhoca')->group(function () {
         //?BirimHoca
         Route::get('/getBirim', [BirimhocaController::class, 'getBirim'])->name('birimhoca.getBirim');
@@ -74,7 +75,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::get('/', [BirimhocaController::class, 'index'])->name('birimhoca.index');
         Route::post('/hocagetir', [BirimhocaController::class, 'hocagetir'])->name('birimhoca.hocagetir');
         Route::post('/birimgetir', [BirimhocaController::class, 'birimgetir'])->name('birimhoca.birimgetir');
-    }); 
+    });
     Route::prefix('birimsorumlu')->group(function () {
         //?IhtisasHoca
         Route::get('/getBirim', [BirimsorumluController::class, 'getBirim'])->name('birimsorumlu.getBirim');
@@ -233,6 +234,15 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::post('/hocagetir', [ProjeHafizlikController::class, 'hocagetir'])->name('projehafizlik.hocagetir');
         Route::post('/birimhocagetir', [ProjeHafizlikController::class, 'birimhocagetir'])->name('projehafizlik.birimhoca');
         Route::post('/birimgetir', [ProjeHafizlikController::class, 'birimgetir'])->name('projehafizlik.birimgetir');
+    });
+    Route::prefix('root')->group(function () {
+        Route::get('/', [RoleController::class, 'index'])->name('root.index');
+        Route::post('/', [RoleController::class, 'index'])->name('root.indexpost');
+        Route::post('/rolegetir', [RoleController::class, 'rolegetir'])->name('root.rolegetir');
+        Route::post('/birimgetir', [RoleController::class, 'birimgetir'])->name('root.birimgetir');
+        Route::post('/edit', [RoleController::class, 'edit'])->name('root.edit');
+        Route::get('/getEmployees', [RoleController::class, 'getEmployees'])->name('root.getEmployees');
+        Route::post('/update', [RoleController::class, 'update'])->name('root.update');
     });
     Route::get('/routes', [RoutesController::class, 'showApplicationRoutes'])->name('routes.index');
 });
