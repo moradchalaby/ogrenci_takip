@@ -24,7 +24,7 @@
         @can('yetkili', 'ihtisasogrenci')
             <li class="nav-item">
 
-                <a href="{{ route('ihtisasogrenci.index') }}" class="nav-link {{ active('ihtsasogrenci.index') }}">
+                <a href="{{ route('ihtisasogrenci.index', 4) }}" class="nav-link {{ active('ihtsasogrenci.index') }}">
                     <i class="fa-solid fa-row nav-icon"></i>
                     <p>Öğrenci Listesi </p>
                 </a>
@@ -34,7 +34,7 @@
 
         @can('yetkili', 'ihtisashafizlik')
             <li class="nav-item">
-                <a href="{{ route('ihtisashafizlik.index') }}" class="nav-link {{ active('ihtisashafizlik.index') }}">
+                <a href="{{ route('ihtisashafizlik.index', 4) }}" class="nav-link {{ active('ihtisashafizlik.index') }}">
                     <i class="fa-solid fa-row nav-icon"></i>
                     <p>Öğrenci Hafızlık Listesi </p>
                 </a>
