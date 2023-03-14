@@ -1,4 +1,4 @@
-@can('projesorumlu', 'projesorumlu')
+@can('ihtisassorumlu', 'ihtisassorumlu')
     <li class="nav-item">
         <a href="#" class="nav-link">
             <i class="nav-icon fas fa-users-gear"></i>
