@@ -18,7 +18,7 @@
                 </span>
                 <div class="card-body login-box-msg">
                     <div class="mb-4 text-sm text-gray-600">
-                        {{ __('Şifrenizi sıfırlamak için size bi rmail göndereceğiz.') }}
+                        {{ __('Şifrenizi sıfırlamak için size bir mail göndereceğiz.') }}
                     </div>
 
                     <x-auth-session-status class="mb-4" :status="session('status')" />
@@ -40,7 +40,12 @@
                         <div class="row">
                             <div class="col-12">
                                 <button type="submit"
+                                    onclick="event.preventDefault();
+                                                                 document.getElementById('logout-form').submit();"
                                     class="btn btn-primary btn-block">{{ __('Email Password Reset Link') }}</button>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
                             </div>
                             <!-- /.col -->
                         </div>

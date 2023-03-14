@@ -171,10 +171,11 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
     Route::prefix('root')->group(function () {
         Route::get('/', [RoleController::class, 'index'])->name('root.index');
         Route::post('/', [RoleController::class, 'index'])->name('root.indexpost');
-        Route::post('/rolegetir', [RoleController::class, 'rolegetir'])->name('root.rolegetir');
-        Route::post('/birimgetir', [RoleController::class, 'birimgetir'])->name('root.birimgetir');
+
         Route::post('/edit', [RoleController::class, 'edit'])->name('root.edit');
-        Route::get('/getEmployees', [RoleController::class, 'getEmployees'])->name('root.getEmployees');
+        Route::post('/destroy', [RoleController::class, 'destroy'])->name('root.delete');
+
+        Route::post('/store', [RoleController::class, 'store'])->name('root.store');
         Route::post('/update', [RoleController::class, 'update'])->name('root.update');
     });
     Route::get('/routes', [RoutesController::class, 'showApplicationRoutes'])->name('routes.index');

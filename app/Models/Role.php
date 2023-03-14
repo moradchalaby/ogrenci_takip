@@ -12,6 +12,7 @@ class Role extends Model
     protected $fillable = [
         'id',
         'name',
+        'roles_slug',
         'parent_id',
         'vazife_id'
 

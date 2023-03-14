@@ -8,13 +8,15 @@ use \Illuminate\Http\Request;
 use \Yajra\Datatables\Datatables;
 use Yajra\DataTables\Html\Builder;
 
+
 class RoleController extends Controller
 {
 
     public function __construct()
     {
+        $this->middleware('can:root');
 
-        $this->middleware('can:yetkili');
+        //|| $this->middleware('can:root');
     }
     /**
      * Display a listing of the resource.
@@ -59,7 +61,23 @@ class RoleController extends Controller
                         return $row['vazife_id'];
                     }
                 })
-                ->rawColumns(['name', 'slug', 'vazife', 'parent'])
+                ->addColumn(
+                    'action',
+                    function ($row) {
+                        $btn = ' <a type="button" class="btn btn-success reset btn-xs editmodal" data-toggle="modal" data-id="' . $row['id'] . '"
+                                          data-target="#modalEdit">
+                                           <i class="fa-solid fa-pen-to-square"></i>
+                                      </a>
+
+
+                                      <a id="rolesil" type="button" class="btn btn-danger btn-xs" data-id="' . $row['id'] . '">
+
+<i class="fa-solid fa-trash"></i>                    </a>';
+                        return $btn;
+                    }
+                )
+
+                ->rawColumns(['name', 'slug', 'vazife', 'parent', 'action'])
                 ->make(true);
         }
         $html = $builder->ajax([
@@ -77,6 +95,7 @@ class RoleController extends Controller
             ['data' => 'slug', 'name' => 'slug', 'title' => 'Slug'],
             ['data' => 'parent', 'name' => 'parent', 'title' => 'Parent'],
             ['data' => 'vazife', 'name' => 'vazife', 'title' => 'Vazife'],
+            ['data' => 'action', 'name' => 'action', 'title' => 'İşlemler'],
 
         ])->lengthMenu([
             [-1, 10, 25, 50],
@@ -106,6 +125,7 @@ class RoleController extends Controller
     public function create()
     {
         //
+
     }
 
     /**
@@ -117,6 +137,19 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         //
+        if ($request->ajax()) {
+            $data = Role::create(
+                [
+                    'name' => $request->name,
+                    'roles_slug' => $request->roles_slug,
+                    'parent_id' => $request->parent,
+                    'vazife_id' => $request->vazife,
+                ]
+
+            );
+
+            return response()->json($data);
+        }
     }
 
     /**
@@ -136,9 +169,13 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function edit(Role $role)
+    public function edit(Request $request)
     {
         //
+        if ($request->ajax()) {
+            $data = Role::find($request->id);
+            return response()->json($data);
+        }
     }
 
     /**
@@ -148,9 +185,18 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request)
     {
         //
+        if ($request->ajax()) {
+            $data = Role::where('id', $request->id)->update([
+                'name' => $request->name,
+                'roles_slug' => $request->slug,
+                'parent_id' => $request->parent,
+                'vazife_id' => $request->vazife
+            ]);
+            return response()->json($data);
+        }
     }
 
     /**
@@ -159,8 +205,12 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Role $role)
+    public function destroy(Request $request)
     {
         //
+        if ($request->ajax()) {
+            $data = Role::where('id', $request->id)->delete();
+            return response()->json($data);
+        }
     }
 }
