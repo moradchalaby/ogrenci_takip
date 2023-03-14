@@ -127,6 +127,33 @@
 
                              </div>
                          </div>
+                         <div class="card card-teal card-outline">
+                             <div class="card-header">
+                                 <h5 class="card-title">İhtisas Sorumlu Yetkiler</h5>
+                                 <div class="card-tools">
+
+
+                                 </div>
+                             </div>
+                             <div class="card-body">
+                                 @foreach ($yetki as $yet)
+                                     @if ($yet->parent_id == 8)
+                                         <div class="custom-control custom-checkbox">
+                                             <input
+                                                 class="custom-control-input @if ($yet->vazife_id != 1) yetki{{ $yet->parent_id }} @endif checkbox3 "
+                                                 value="{{ $yet->id }}" type="checkbox" tur="yetki" name="check"
+                                                 id="customCheckbox{{ $yet->id }}"
+                                                 @if (App\Models\User::hasRol($yet->roles_slug, $id)) checked @endif>
+                                             <label for="customCheckbox{{ $yet->id }}"
+                                                 class="custom-control-label">{{ $yet->name }}</label>
+                                         </div>
+                                     @else
+                                     @endif
+                                 @endforeach
+
+
+                             </div>
+                         </div>
                      </div>
                  </div>
                  <div class="card card-row card-info">
@@ -186,8 +213,8 @@
                                          <div class="custom-control custom-checkbox">
                                              <input
                                                  class="custom-control-input @if ($yet->vazife_id != 1) yetki{{ $yet->parent_id }} @endif checkbox5 "
-                                                 value="{{ $yet->id }}" type="checkbox" tur="yetki" name="check"
-                                                 id="customCheckbox{{ $yet->id }}"
+                                                 value="{{ $yet->id }}" type="checkbox" tur="yetki"
+                                                 name="check" id="customCheckbox{{ $yet->id }}"
                                                  @if (App\Models\User::hasRol($yet->roles_slug, $id)) checked @endif>
                                              <label for="customCheckbox{{ $yet->id }}"
                                                  class="custom-control-label">{{ $yet->name }}</label>
