@@ -24,7 +24,7 @@
         @can('yetkili', 'ihtisasogrenci')
             <li class="nav-item">
 
-                <a href="{{ route('ihtisas.index') }}" class="nav-link {{ active('ihtsasogrenci.index') }}">
+                <a href="{{ route('ihtisasogrenci.index') }}" class="nav-link {{ active('ihtsasogrenci.index') }}">
                     <i class="fa-solid fa-row nav-icon"></i>
                     <p>Öğrenci Listesi </p>
                 </a>
