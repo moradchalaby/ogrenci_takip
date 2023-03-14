@@ -77,9 +77,9 @@
                 @can('birimsorumlu', 'birimsorumlu')
                     @include('layouts.sidebar_birim')
                 @endcan
-                @can('projesorumlu', 'projesorumlu')
-                    @include('layouts.sidebar_proje')
-                @endcan
+
+                @include('layouts.sidebar_ihtisas')
+
                 {{-- @endcan --}}
                 {{-- @include('layouts.sidebar_muhasebe') --}}
             </ul>
