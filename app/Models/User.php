@@ -64,6 +64,18 @@ class User extends Authenticatable
 
         return false;
     }
+    public  function hasRoleparent($role)
+    {
+        $id = Role::where('roles_slug', $role)->first();
+        if (!is_null($id)) {
+
+            if ($this->roles()->where('parent_id', $id->parent_id)->first()) return true;
+
+            return false;
+        } else {
+            return false;
+        }
+    }
 
     public function hasUser($id)
     {

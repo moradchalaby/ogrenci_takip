@@ -1,9 +1,9 @@
 @php
-$user_birim = App\Models\Birim::leftJoin('birimhoca', 'birim.birim_id', '=', 'birimhoca.birim_id')
-    ->select()
-    ->where('birimhoca.kullanici_id', Auth::user()->id)
-    ->get();
-
+    $user_birim = App\Models\Birim::leftJoin('birimhoca', 'birim.birim_id', '=', 'birimhoca.birim_id')
+        ->select()
+        ->where('birimhoca.kullanici_id', Auth::user()->id)
+        ->get();
+    
 @endphp
 
 @foreach ($user_birim as $birim)
@@ -29,7 +29,7 @@ $user_birim = App\Models\Birim::leftJoin('birimhoca', 'birim.birim_id', '=', 'bi
                 EĞİTİM <i class="fa-solid fa-row nav-icon"></i>
             </li>
 
-            @can('yetkili', 'birimogrenci')
+            @canany(['birimogrenci', 'ihtisasogrenci', 'projeogrenci'], 'yetkili')
                 <li class="nav-item">
 
                     <a href="{{ route('birimogrenci.index', $birim->birim_id) }}"
@@ -39,9 +39,9 @@ $user_birim = App\Models\Birim::leftJoin('birimhoca', 'birim.birim_id', '=', 'bi
                     </a>
 
                 </li>
-            @endcan
+            @endcanany
 
-            @can('yetkili', 'birimhafizlik')
+            @canany(['birimhafizlik', 'ihtisashafizlik', 'projehafizlik'], 'yetkili')
                 <li class="nav-item">
                     <a href="{{ route('birimhafizlik.index', $birim->birim_id) }}"
                         class="nav-link {{ active('hafizlik.index') }}">
@@ -49,7 +49,7 @@ $user_birim = App\Models\Birim::leftJoin('birimhoca', 'birim.birim_id', '=', 'bi
                         <p>Öğrenci Hafızlık Listesi </p>
                     </a>
                 </li>
-            @endcan
+            @endcanany
 
 
         </ul>
