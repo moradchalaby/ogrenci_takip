@@ -15,7 +15,22 @@
 
                 {{ $birim->birim_ad }}
 
+                @switch($birim->birim_ad)
+                    @case('İHTİSAS')
+                        @php
+                            $link = 'ihtisas';
+                        @endphp
+                    @break
 
+                    @case('PROJE')
+                        @php  $link = 'proje'; @endphp
+                    @break
+
+                    $
+
+                    @default
+                        @php $link = 'birim'; @endphp
+                @endswitch
 
 
                 <i class="fas fa-angle-left right"></i>
@@ -29,27 +44,29 @@
                 EĞİTİM <i class="fa-solid fa-row nav-icon"></i>
             </li>
 
-            @canany(['birimogrenci', 'ihtisasogrenci', 'projeogrenci'], 'yetkili')
+            @can('yet', 'birimogrenci,ihtisasogrenci,projeogrenci')
                 <li class="nav-item">
 
-                    <a href="{{ route('birimogrenci.index', $birim->birim_id) }}"
-                        class="nav-link {{ active('ogrenci.index') }}">
+
+
+                    <a href="{{ route($link . 'ogrenci.index', $birim->birim_id) }}"
+                        class="nav-link {{ active($link . 'ogrenci..index') }}">
                         <i class="fa-solid fa-row nav-icon"></i>
                         <p>Öğrenci Listesi </p>
                     </a>
 
                 </li>
-            @endcanany
+            @endcan
 
-            @canany(['birimhafizlik', 'ihtisashafizlik', 'projehafizlik'], 'yetkili')
+            @can('yet', 'birimhafizlik,ihtisashafizlik,projehafizlik')
                 <li class="nav-item">
-                    <a href="{{ route('birimhafizlik.index', $birim->birim_id) }}"
-                        class="nav-link {{ active('hafizlik.index') }}">
+                    <a href="{{ route($link . 'hafizlik.index', $birim->birim_id) }}"
+                        class="nav-link {{ active($link . 'hafizlik.index') }}">
                         <i class="fa-solid fa-row nav-icon"></i>
                         <p>Öğrenci Hafızlık Listesi </p>
                     </a>
                 </li>
-            @endcanany
+            @endcan
 
 
         </ul>

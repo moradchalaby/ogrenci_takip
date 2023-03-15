@@ -68,6 +68,7 @@ class AuthServiceProvider extends ServiceProvider
             if (str_contains($arr, ',')) {
                 $arr = explode(',', $arr);
             }
+            $val = '';
             if (is_array($arr)) {
 
                 $bole = false;
@@ -75,20 +76,22 @@ class AuthServiceProvider extends ServiceProvider
                 foreach ($arr as $key => $value) {
                     $rout = $value;
 
-                    if ($user->hasRole($rout) || $user->hasRole('root')) {
+                    if ($user->hasRole($rout) || $user->hasRole('root') || $user->hasRole('/' . $rout)) {
                         $bole = true;
+                        $val = $value;
+                        break;
                     }
                 }
                 if (
                     $bole
                 ) {
-                    return   Response::allow();
+                    return   Response::allow($val);
                 } else {
                     return  Response::deny('Bu işlem için yetkiniz yok!');
                 }
             } else {
                 if ($user->hasRole($arr) || $user->hasRole('root')) {
-                    return   Response::allow();
+                    return   Response::allow($val);
                 } else {
                     return  Response::deny('Bu işlem için yetkiniz yok!');
                 }
@@ -109,7 +112,7 @@ class AuthServiceProvider extends ServiceProvider
                 foreach ($arr as $key => $value) {
                     $rout = $value;
 
-                    if ($user->hasRoleparent($rout) || $user->hasRoleparent('root')) {
+                    if ($user->hasRoleparent($rout) || $user->hasRoleparent('root') || $user->hasRoleparent('/' . $rout)) {
                         $bole = true;
                     }
                 }

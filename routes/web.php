@@ -144,40 +144,28 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
     Route::prefix('projeogrenci')->group(function () {
         //?Öğrenci
 
-        Route::post('/store', [ProjeOgrenciController::class, 'store'])->name('projeogrenci.store');
-        Route::post('/edit', [ProjeOgrenciController::class, 'edit'])->name('projeogrenci.edit');
-        Route::post('/update', [ProjeOgrenciController::class, 'update'])->name('projeogrenci.update');
-        Route::post('/hocagetir', [ProjeOgrenciController::class, 'hocagetir'])->name('projeogrenci.hocagetir');
-        Route::post('/ogrencicek', [ProjeOgrenciController::class, 'ogrencicek'])->name('projeogrenci.ogrencicek');
-
-        Route::get('/', [ProjeOgrenciController::class, 'index'])->name('projeogrenci.index');
-    });
-    Route::prefix('projeogrenci')->group(function () {
-        //?Öğrenci
-
-        Route::post('/store', [ProjeOgrenciController::class, 'store'])->name('projeogrenci.store');
-        Route::post('/edit', [ProjeOgrenciController::class, 'edit'])->name('projeogrenci.edit');
-        Route::post('/update', [ProjeOgrenciController::class, 'update'])->name('projeogrenci.update');
-        Route::post('/hocagetir', [ProjeOgrenciController::class, 'hocagetir'])->name('projeogrenci.hocagetir');
-        Route::post('/ogrencicek', [ProjeOgrenciController::class, 'ogrencicek'])->name('projeogrenci.ogrencicek');
-
-        Route::get('/', [ProjeOgrenciController::class, 'index'])->name('projeogrenci.index');
+        Route::post('/store', [BirimOgrenciController::class, 'store'])->name('projeogrenci.store');
+        Route::post('/edit', [BirimOgrenciController::class, 'edit'])->name('projeogrenci.edit');
+        Route::post('/update', [BirimOgrenciController::class, 'update'])->name('projeogrenci.update');
+        Route::post('/birimgetir', [BirimOgrenciController::class, 'birimgetir'])->name('projeogrenci.birimgetir');
+        Route::get('/{id}', [BirimOgrenciController::class, 'index'])->name('projeogrenci.index');
     });
     Route::prefix('projehafizlik')->group(function () {
         //?hafizlik
+        Route::get('/', [BirimHafizlikController::class, 'index'])->name('projehafizlik.index');
 
-        Route::post('/durum', [ProjeHafizlikController::class, 'durum'])->name('projehafizlik.durum');
-        Route::post('/ders', [ProjeHafizlikController::class, 'ders'])->name('projehafizlik.ders');
-        Route::post('/dersekle', [ProjeHafizlikController::class, 'dersekle'])->name('projehafizlik.dersekle');
-        Route::post('/dersguncelle', [ProjeHafizlikController::class, 'dersguncelle'])->name('projehafizlik.dersguncelle');
+        Route::post('/durum', [BirimHafizlikController::class, 'durum'])->name('projehafizlik.durum');
+        Route::post('/ders', [BirimHafizlikController::class, 'ders'])->name('projehafizlik.ders');
+        Route::post('/dersekle', [BirimHafizlikController::class, 'dersekle'])->name('projehafizlik.dersekle');
+        Route::post('/dersguncelle', [BirimHafizlikController::class, 'dersguncelle'])->name('projehafizlik.dersguncelle');
 
-        Route::post('/durumguncel', [ProjeHafizlikController::class, 'durumguncel'])->name('projehafizlik.durumguncel');
-        Route::post('/hocaguncel', [ProjeHafizlikController::class, 'hocaguncel'])->name('projehafizlik.hocaguncel');
-        Route::post('/', [ProjeHafizlikController::class, 'index'])->name('projehafizlik.indexpost');
-        Route::get('/', [ProjeHafizlikController::class, 'index'])->name('projehafizlik.index');
-        Route::post('/hocagetir', [ProjeHafizlikController::class, 'hocagetir'])->name('projehafizlik.hocagetir');
-        Route::post('/birimhocagetir', [ProjeHafizlikController::class, 'birimhocagetir'])->name('projehafizlik.birimhoca');
-        Route::post('/birimgetir', [ProjeHafizlikController::class, 'birimgetir'])->name('projehafizlik.birimgetir');
+        Route::post('/durumguncel', [BirimHafizlikController::class, 'durumguncel'])->name('projehafizlik.durumguncel');
+        Route::post('/hocaguncel', [BirimHafizlikController::class, 'hocaguncel'])->name('projehafizlik.hocaguncel');
+        Route::post('/{id}', [BirimHafizlikController::class, 'index'])->name('projehafizlik.indexpost');
+        Route::get('/{id}', [BirimHafizlikController::class, 'index'])->name('projehafizlik.index');
+        Route::post('/hocagetir', [BirimHafizlikController::class, 'hocagetir'])->name('projehafizlik.hocagetir');
+        Route::post('/birimhocagetir', [BirimHafizlikController::class, 'birimhocagetir'])->name('projehafizlik.birimhoca');
+        Route::post('/birimgetir', [BirimHafizlikController::class, 'birimgetir'])->name('projehafizlik.birimgetir');
     });
 
     //İHTİSAS

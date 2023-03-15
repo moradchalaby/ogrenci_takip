@@ -79,7 +79,7 @@
                     @include('layouts.sidebar_birim')
                 @endcan
 
-                @include('layouts.sidebar_ihtisas')
+
 
                 {{-- @endcan --}}
                 {{-- @include('layouts.sidebar_muhasebe') --}}

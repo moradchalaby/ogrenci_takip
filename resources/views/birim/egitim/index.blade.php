@@ -546,7 +546,7 @@
 
               $.ajax({
                   type: 'post',
-                  url: "{{ route('birimogrenci.edit') }}",
+                  url: "{{ route($veri['link'] . 'ogrenci.edit') }}",
                   dataType: 'json',
                   data: {
                       id: id
@@ -727,7 +727,7 @@
               // file_button.after('<br><br><hr><br><img src="' + file_data + '" width="350px">');
               $.ajax({
 
-                  url: "{{ route('birimogrenci.store') }}",
+                  url: "{{ route($veri['link'] . 'ogrenci.store') }}",
                   type: 'POST',
                   contentType: false,
                   cache: false,
@@ -800,7 +800,7 @@
               // file_button.after('<br><br><hr><br><img src="' + file_data + '" width="350px">');
               $.ajax({
 
-                  url: "{{ route('birimogrenci.update') }}",
+                  url: "{{ route($veri['link'] . 'ogrenci.update') }}",
                   type: 'POST',
                   contentType: false,
                   cache: false,
@@ -857,7 +857,7 @@
           function birimgetir(id) {
               $.ajax({
                   type: 'post',
-                  url: "{{ route('birimogrenci.birimgetir') }}",
+                  url: "{{ route($veri['link'] . 'ogrenci.birimgetir') }}",
                   data: {
                       get_option: true
                   },
