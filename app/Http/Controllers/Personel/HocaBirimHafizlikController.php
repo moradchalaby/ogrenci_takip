@@ -87,15 +87,14 @@ class HocaBirimHafizlikController extends Controller
                     $join->on('role_user.user_id', '=', 'users.id')
                         ->Where('role_user.role_id', '=', 37);
                 }, null, null, 'FULL')
-                ->leftJoin('birimhoca', function ($join) use ($birim_id) {
+                ->rightJoin('birimhoca', function ($join) use ($birim_id) {
                     $join->on('users.id', '=', 'birimhoca.kullanici_id')
-                        ->when($birim_id > 0, function ($q) use ($birim_id) {
-                            return $q->where('birimhoca.birim_id', $birim_id);
-                        }, function ($q) use ($birim_id) {
-                            return $q;
-                        });
+                        ->where('birimhoca.birim_id', '=', $birim_id);
                 })
-
+                /*   ->rightJoin('ogrencibirim', function ($join) use ($birim_id) {
+                    $join->on('ogrenci.id', '=', 'ogrencibirim.ogrenci_id')
+                        ->where('ogrencibirim.birim_id', '=', $birim_id);
+                }) */
 
                 ->leftJoin('birim', 'birim.birim_id', '=', 'birimhoca.birim_id')
                 ->when($birim_id > 0, function ($q) use ($birim_id) {
@@ -245,8 +244,8 @@ class HocaBirimHafizlikController extends Controller
         } */
         $html = $builder->ajax([
 
-            'url' => route('hocahafizlik.indexpost'),
-            'type' => 'Post',
+            'url' => route('hocabirimhafizlik.index', $birim_id),
+            'type' => 'Get',
             'data' => "function(d) { d.tarihar = '{$bast} - {$sont} ';
             d.birim_id = '{$id}';
             d.hoca_id = '{$request->hoca_id}';
@@ -285,7 +284,7 @@ class HocaBirimHafizlikController extends Controller
         /* dd($html);
         exit; */
 
-        return view('idari.hafizlik.hoca', compact('html', 'veri'));
+        return view('birim.hafizlik.hoca', compact('html', 'veri'));
     }
     public function hocagetir(Request $request)
     {

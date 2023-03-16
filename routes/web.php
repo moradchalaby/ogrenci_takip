@@ -123,7 +123,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
 
 
 
-        Route::post('/', [HocaBirimHafizlikController::class, 'index'])->name('hocabirimhafizlik.indexpost');
+        Route::post('/{id}', [HocaBirimHafizlikController::class, 'index'])->name('hocabirimhafizlik.indexpost');
         Route::get('/{id}', [HocaBirimHafizlikController::class, 'index'])->name('hocabirimhafizlik.index');
         Route::post('/hocagetir', [HocaBirimHafizlikController::class, 'hocagetir'])->name('hocabirimhafizlik.hocagetir');
         Route::post('/birimhocagetir', [HocaBirimHafizlikController::class, 'birimhocagetir'])->name('hocabirimhafizlik.birimhoca');
