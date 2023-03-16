@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Egitim;
+namespace App\Http\Controllers\Personel;
 
 use App\Http\Controllers\Controller;
 use App\Models\Birim;
