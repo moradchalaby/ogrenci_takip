@@ -1,9 +1,9 @@
 @php
-$user_birim = App\Models\Birim::leftJoin('birimhoca', 'birim.birim_id', '=', 'birimhoca.birim_id')
-    ->select()
-    ->where('birimhoca.kullanici_id', Auth::user()->id)
-    ->get();
-
+    $user_birim = App\Models\Birim::leftJoin('birimhoca', 'birim.birim_id', '=', 'birimhoca.birim_id')
+        ->select()
+        ->where('birimhoca.kullanici_id', Auth::user()->id)
+        ->get();
+    
 @endphp
 
 @foreach ($user_birim as $birim)
@@ -50,7 +50,15 @@ $user_birim = App\Models\Birim::leftJoin('birimhoca', 'birim.birim_id', '=', 'bi
                     </a>
                 </li>
             @endcan
-
+            @can('yetkili', 'hocabirimhafizlik')
+                <li class="nav-item">
+                    <a href="{{ route('hocabirimhafizlik.index', $birim->birim_id) }}"
+                        class="nav-link {{ active('hocabirimhafizlik.index') }}">
+                        <i class="fa-solid fa-row nav-icon"></i>
+                        <p>Hoca Hafızlık Rapor </p>
+                    </a>
+                </li>
+            @endcan
 
         </ul>
     </li>

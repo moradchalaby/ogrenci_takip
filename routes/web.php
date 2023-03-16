@@ -28,6 +28,8 @@ use App\Http\Controllers\Egitim\BirimOgrenciController;
 use App\Http\Controllers\Egitim\ProjeOgrenciController;
 use App\Http\Controllers\Egitim\HafizlikController;
 use App\Http\Controllers\Egitim\BirimHafizlikController;
+use App\Http\Controllers\Personel\HocaBirimHafizlikController;
+
 use App\Http\Controllers\Personel\HocaHafizlikController;
 use App\Http\Controllers\Egitim\ProjeHafizlikController;
 use App\Http\Controllers\Yapi\BirimController;
@@ -114,6 +116,18 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::post('/hocagetir', [HafizlikController::class, 'hocagetir'])->name('hafizlik.hocagetir');
         Route::post('/birimhocagetir', [HafizlikController::class, 'birimhocagetir'])->name('hafizlik.birimhoca');
         Route::post('/birimgetir', [HafizlikController::class, 'birimgetir'])->name('hafizlik.birimgetir');
+    });
+
+    Route::prefix('hocabirimhafizlik')->group(function () {
+        //?hafizlik
+
+
+
+        Route::post('/', [HocaBirimHafizlikController::class, 'index'])->name('hocabirimhafizlik.indexpost');
+        Route::get('/', [HocaBirimHafizlikController::class, 'index'])->name('hocabirimhafizlik.index');
+        Route::post('/hocagetir', [HocaBirimHafizlikController::class, 'hocagetir'])->name('hocabirimhafizlik.hocagetir');
+        Route::post('/birimhocagetir', [HocaBirimHafizlikController::class, 'birimhocagetir'])->name('hocabirimhafizlik.birimhoca');
+        Route::post('/birimgetir', [HocaBirimHafizlikController::class, 'birimgetir'])->name('hocabirimhafizlik.birimgetir');
     });
     Route::prefix('birimogrenci')->group(function () {
         //?Öğrenci
