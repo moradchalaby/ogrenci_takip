@@ -124,7 +124,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
 
 
         Route::post('/', [HocaBirimHafizlikController::class, 'index'])->name('hocabirimhafizlik.indexpost');
-        Route::get('/', [HocaBirimHafizlikController::class, 'index'])->name('hocabirimhafizlik.index');
+        Route::get('/{id}', [HocaBirimHafizlikController::class, 'index'])->name('hocabirimhafizlik.index');
         Route::post('/hocagetir', [HocaBirimHafizlikController::class, 'hocagetir'])->name('hocabirimhafizlik.hocagetir');
         Route::post('/birimhocagetir', [HocaBirimHafizlikController::class, 'birimhocagetir'])->name('hocabirimhafizlik.birimhoca');
         Route::post('/birimgetir', [HocaBirimHafizlikController::class, 'birimgetir'])->name('hocabirimhafizlik.birimgetir');
