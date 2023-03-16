@@ -316,7 +316,7 @@ class HocaBirimHafizlikController extends Controller
         /* dd($html);
         exit; */
 
-        return view('birim.hafizlik.index', compact('html', 'veri'));
+        return view('idari.hafizlik.hoca', compact('html', 'veri'));
     }
     public function hocagetir(Request $request)
     {
