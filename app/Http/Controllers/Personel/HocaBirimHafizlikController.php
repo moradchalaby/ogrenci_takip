@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
 
-class HocaHafizlikController extends Controller
+class HocaBirimHafizlikController extends Controller
 {
 
     public function __construct()
