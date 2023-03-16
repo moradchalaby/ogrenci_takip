@@ -49,6 +49,7 @@ class HocaBirimHafizlikController extends Controller
         $birim_id = $id;
 
 
+
         $hoca_id = $request->hoca_id;
 
         if ($request->tarihar != null) {
@@ -71,151 +72,123 @@ class HocaBirimHafizlikController extends Controller
         );
 
 
+
+
         if ($request->ajax()) {
 
 
 
             $data =
-                Ogrenci::where(['ogrenci.ogrenci_kytdurum' => '1'])
-
-                ->rightJoin('ogrencibirim', function ($join) use ($birim_id) {
-                    $join->on('ogrenci.id', '=', 'ogrencibirim.ogrenci_id')
-                        ->where('ogrencibirim.birim_id', '=', $birim_id);
+                User::whereNotIn('users.id', [1])->where(['users.kullanici_durum' => '1'])
+                ->when($hoca_id > 0, function ($q) use ($hoca_id) {
+                    return $q->where('users.id', $hoca_id);
                 })
-
-
-                ->leftJoin('birim', 'birim.birim_id', '=', 'ogrencibirim.birim_id')
-                ->rightJoin('hafizlikdurum', function ($join) use ($hoca_id) {
-                    $join->on('ogrenci.id', '=', 'hafizlikdurum.ogrenci_id')
-                        ->when($hoca_id > 0, function ($q) use ($hoca_id) {
-                            return $q->where('hafizlikdurum.hoca', $hoca_id);
-                        }, function ($q) use ($hoca_id) {
+                ->rightJoin('role_user', function ($join) {
+                    $join->on('role_user.user_id', '=', 'users.id')
+                        ->Where('role_user.role_id', '=', 37);
+                }, null, null, 'FULL')
+                ->leftJoin('birimhoca', function ($join) use ($birim_id) {
+                    $join->on('users.id', '=', 'birimhoca.kullanici_id')
+                        ->when($birim_id > 0, function ($q) use ($birim_id) {
+                            return $q->where('birimhoca.birim_id', $birim_id);
+                        }, function ($q) use ($birim_id) {
                             return $q;
                         });
                 })
-                ->leftJoin('hfzlkders', function ($join) use ($bast, $sont) {
-                    $join->on('hfzlkders.ogrenci_id', '=', 'ogrenci.id')
-                        ->WhereBetween('hfzlkders.hafizlik_tarih', [$bast, $sont]);
+
+
+                ->leftJoin('birim', 'birim.birim_id', '=', 'birimhoca.birim_id')
+                ->when($birim_id > 0, function ($q) use ($birim_id) {
+                    return $q->where('birimhoca.birim_id', $birim_id);
+                })
+
+                ->leftJoin('hrapor', function ($join) use ($bast, $sont) {
+                    $join->on('hrapor.kullanici_id', '=', 'users.id')
+                        ->WhereBetween('hrapor.hrapor_tarih', [$bast, $sont]);
                 }, null, null, 'FULL')
-
-                ->orderBy('ogrenci.ogrenci_adsoyad', 'asc')
-
+                ->orderBy('users.name', 'asc')
                 ->select(
-                    'ogrenci.id as id',
-                    'ogrenci.ogrenci_resim',
-                    'ogrenci.ogrenci_adsoyad as adsoyad',
+                    'users.id as id',
+                    'users.kullanici_resim as resim',
+                    'users.name as adsoyad',
+                    'birim.birim_ad as birim_ad',
 
-                    'birim.birim_id as birim_id',
-                    'birim.birim_ad as birim',
-                    'hafizlikdurum.hafizlik_durum as durum',
-                    'hafizlikdurum.hoca as hoca',
-                    'hafizlikdurum.bast as bast',
-                    'hafizlikdurum.donus_suresi as donus',
-                    'hafizlikdurum.sont as sont',
-                    'hafizlikdurum.hafizlik_son as sonders',
-                    DB::raw("SUBSTRING_INDEX(hafizlikdurum.hafizlik_son, '/', 1) AS sayfa"),
+                    DB::raw('SUM(CASE WHEN hrapor.kullanici_id = users.id THEN hrapor.hrapor_ders ELSE 0 END ) topders '),
+                    DB::raw('SUM(CASE WHEN hrapor.kullanici_id = users.id THEN hrapor.hrapor_sayfa ELSE 0 END ) topsayfa '),
 
-                    DB::raw('SUM(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.hafizlik_topl ELSE 0 END )  say '),
-                    DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.hafizlik_ders ELSE NULL END
-                     ORDER BY hfzlkders.id ASC SEPARATOR "*") AS dersler '),
-                    /* DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.hafizlik_topl ELSE NULL END
-                     WITH ROLLUP) AS say'), */
-                    DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.hafizlik_tarih ELSE NULL END
-                     ORDER BY hfzlkders.id ASC SEPARATOR ",") AS gunler'),
-                    DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.id ELSE NULL END
-                     ORDER BY hfzlkders.id ASC SEPARATOR ",") AS dersId')
+                    DB::raw('GROUP_CONCAT(CASE WHEN hrapor.kullanici_id = users.id  THEN hrapor.hrapor_sayfa ELSE NULL END
+                     ORDER BY hrapor.id ASC SEPARATOR "*") AS sayfa '),
+                    DB::raw('GROUP_CONCAT(CASE WHEN hrapor.kullanici_id = users.id THEN hrapor.hrapor_tarih ELSE NULL END
+                     ORDER BY hrapor.id ASC SEPARATOR ",") AS gunler'),
+                    DB::raw('GROUP_CONCAT(CASE WHEN hrapor.kullanici_id = users.id THEN hrapor.hrapor_ders ELSE NULL END
+                     ORDER BY hrapor.id ASC SEPARATOR "*") AS ders'),
+                    DB::raw('GROUP_CONCAT(CASE WHEN hrapor.kullanici_id = users.id THEN hrapor.ogrenci_id ELSE NULL END
+                     ORDER BY hrapor.id ASC SEPARATOR ",") AS ogrenci_id'),
+                    DB::raw('GROUP_CONCAT(CASE WHEN hrapor.kullanici_id = users.id THEN hrapor.ders_id ELSE NULL END
+                     ORDER BY hrapor.id ASC SEPARATOR ",") AS ders_id'),
+                    DB::raw('GROUP_CONCAT(CASE WHEN hrapor.kullanici_id = users.id THEN hrapor.id ELSE NULL END
+                     ORDER BY hrapor.id ASC SEPARATOR ",") AS hraporid')
 
-                )
-                ->groupBy('ogrenci.id')->when($request->kota != null, function ($q) use ($request) {
-                    return $q->havingRaw("say >= {$request->kota}");
-                }, function ($q) {
-                    return $q;
-                })->when($request->sayfa != null, function ($q) use ($request) {
-                    return $q->havingRaw("sayfa >= {$request->sayfa}");
-                }, function ($q) {
-                    return $q;
-                })->when($request->durum != null, function ($q) use ($request) {
-                    return $q->where("hafizlikdurum.hafizlik_durum", "like", "%{$request->durum}%");
-                }, function ($q) {
-                    return $q;
-                })->get();
-
+                )->groupBy('users.id')
+                ->get();
 
             $dt = DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('adsoyad', function ($row) {
-                    $name = ' <a  class="ekleDers text-navy" data-toggle="modal" data-id="' . $row['id'] . '"data-target="#modalDersekle">' . $row['adsoyad']
-                        . '</a> ';
+                    $name =  $row['adsoyad'];
 
                     return $name;
                 })
-                ->addColumn('hoca', function ($row) {
+                /*   ->addColumn('birim', function ($row) {
 
-                    $hoca = ' <a  class="editHoca" data-toggle="modal" data-ogrenci="' . $row['id'] . '" data-birim="' . $row['birim_id'] . '" data-id="0" data-target="#modalHoca">-</a> ';
-                    if ($row['hoca'] != null) {
-                        $hocam = User::find($row['hoca']);
-                        $hoca = ' <a  class="editHoca" data-toggle="modal" data-ogrenci="' . $row['id'] . '" data-birim="' . $row['birim_id'] . '" data-id="' . $hocam->id . '"data-target="#modalHoca">' . $hocam->name . '</a> ';
+                    $birimler = explode(',', $row['birim_idler']);
+                    $birim = '';
+                    $s = 0;
+                    foreach ($birimler as $key => $value) {
+                        $b = Birim::find($value);
+
+                        if ($s > 0) {
+                            $birim = $birim . ', ' . $b->birim_ad;
+                        } else {
+                            $birim = $b->birim_ad;
+                        }
+
+                        $s++;
                     }
 
-                    return $hoca;
+                    return $birim;
+                }) */
+
+                ->addColumn('tsayfa', function ($row) {
+                    //$sayfa = explode('*', $row['sayfa']);
+                    //$sayfa = array_sum($sayfa);
+                    return $row['topsayfa'];
                 })
 
-                ->addColumn('hfzlkdurum', function ($row) {
-                    $durum = ' <a  class="editDurum" data-toggle="modal" data-id="' . $row['id'] . '"data-target="#modalDurum">' . $row['durum']
-                        . '</a> ';
-
-                    $simdiki_tarih = Carbon::now();
-                    $ileriki_tarih = Carbon::parse($row['bast'])->addDay(intval($row['donus']));
-                    $gun_farki    = $simdiki_tarih->diffInDays($ileriki_tarih, false);
-
-                    if ($gun_farki  <= 0) {
-                        $durum = $durum . '<br> <span class="text-danger">' . $gun_farki . ' gün geçti </span>';
-                    } else {
-                        $durum = $durum .
-                            '<br> <span class="text-info">' . $gun_farki . ' gün kaldı </span>';
-                    }
-
-
-
-
-                    return $durum;
+                ->addColumn('tders', function ($row) {
+                    // $sayfa = explode('*', $row['ders']);
+                    // $sayfa = array_sum($sayfa);
+                    return $row['topders'];
                 })
 
-                ->addColumn('sayfa', function ($row) {
 
-                    $sayfa = $row['sayfa'];
-
-
-                    return intval($sayfa);
-                })
-
-                ->addColumn('toplam', function ($row) use ($request) {
-
-
-
-                    $toplam = $row['say'];
-
-
-
-                    return $toplam;
-                })
 
                 ->addColumn('resim', function ($row) {
-                    if ($row['ogrenci_resim'] == '') {
+
+                    if ($row['resim'] == '') {
                         $resim = "<img alt=\"Avatar\" class=\"avatar\" src=\"/storage/dimg/logo-yok.png\">";
                     } else {
-                        $resim = "<img alt=\"Avatar\" class=\"avatar\" src=\"{$row['ogrenci_resim']}\">";
+                        $resim = "<img alt=\"Avatar\" class=\"avatar\" src=\"{$row['resim']}\">";
                     }
-
 
                     return $resim;
                 });
 
             $raw = [
                 'adsoyad',
-                'resim', 'action', 'hfzlkdurum', 'toplam', 'sayfa', 'hoca'
+                'resim', 'action',  'tsayfa', 'tders'
             ];
-            foreach ($daterange as $date) {
+            /* foreach ($daterange as $date) {
 
                 $gun = $date->format('Y-m-d');
 
@@ -244,7 +217,7 @@ class HocaBirimHafizlikController extends Controller
                     return $ders;
                 });
                 $raw[] = $gun;
-            }
+            } */
             $dt->rawColumns($raw);
 
             return  $dt->make(true);
@@ -254,11 +227,10 @@ class HocaBirimHafizlikController extends Controller
             ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'Id'],
             ['data' => 'resim', 'name' => 'resim', 'title' => 'Resim'],
             ['data' => 'adsoyad', 'name' => 'adsoyad', 'title' => 'Ad Soyad'],
-            ['data' => 'hoca', 'name' => 'hoca', 'title' => 'Hocası'],
-            ['data' => 'birim', 'name' => 'birim', 'title' => 'Birimx'],
-            ['data' => 'hfzlkdurum', 'name' => 'hfzlkdurum', 'title' => 'Durum'],
-            ['data' => 'sayfa', 'name' => 'sayfa', 'title' => 'Tur'],
-            ['data' => 'toplam', 'name' => 'toplam', 'title' => 'Toplam'],
+            // ['data' => 'birim', 'name' => 'birim', 'title' => 'Birim'],
+            ['data' => 'tsayfa', 'name' => 'tsayfa', 'title' => 'Toplam Sayfa'],
+            ['data' => 'tders', 'name' => 'tders', 'title' => 'Toplam Ders'],
+
 
         ];
 
@@ -266,21 +238,19 @@ class HocaBirimHafizlikController extends Controller
 
 
 
-        foreach ($daterange as $date) {
+        /*  foreach ($daterange as $date) {
 
             $gun = $date->format('Y-m-d');
             array_push($ekle, ['data' => $gun, 'name' => $gun, 'title' => $gun]);
-        }
+        } */
         $html = $builder->ajax([
 
-            'url' => route('birimhafizlik.index', $birim_id),
-            'type' => 'Get',
+            'url' => route('hocahafizlik.indexpost'),
+            'type' => 'Post',
             'data' => "function(d) { d.tarihar = '{$bast} - {$sont} ';
-            d.birim_id = '{$birim_id}';
+            d.birim_id = '{$id}';
             d.hoca_id = '{$request->hoca_id}';
-            d.kota = '{$request->kota}';
-            d.sayfa = '{$request->sayfa}';
-            d.durum = '{$request->durum}';
+
         }",
         ])->columns($ekle);
         if ($request->responsive) {
@@ -291,7 +261,7 @@ class HocaBirimHafizlikController extends Controller
         $html->lengthMenu([
             [-1, 10, 25, 50],
             ["Tümü", 10, 25, 50]
-        ],)->serverSide(true)->search([
+        ],)->serverSide(false)->search([
             "caseInsensitive" => true
         ])->parameters([
             'columnDefs' => [
@@ -304,15 +274,14 @@ class HocaBirimHafizlikController extends Controller
 
 
 
-        $veri['title'] = 'Öğrenciler';
-        $veri['name'] = 'Ogrenci';
+        $veri['title'] = 'Hafızlık Hocaları';
+        $veri['name'] = 'Hoca';
         $veri['bast'] = $bast;
         $veri['sont'] = $sont;
-        $veri['kota'] = $request->kota;
-        $veri['sayfa'] = $request->sayfa;
+
         $veri['hoca'] = $request->hoca_id;
-        $veri['birim'] = $birim_id;
-        $veri['durum'] = $request->durum;
+        $veri['birim'] = $id;
+
         /* dd($html);
         exit; */
 
