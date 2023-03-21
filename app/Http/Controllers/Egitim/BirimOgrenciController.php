@@ -35,7 +35,18 @@ class BirimOgrenciController extends Controller
     public function index(Request $request, Builder $builder, $id)
     {
         $birim_id = $id;
+        switch (Birim::find($id)->birim_ad) {
+            case 'İHTİSAS':
+                $veri['link'] = 'ihtisas';
+                break;
+            case 'PROJE':
+                $veri['link'] = 'proje';
+                break;
 
+            default:
+                $veri['link'] = 'birim';
+                break;
+        }
         if (request()->ajax()) {
             $data = Ogrenci::select('*')
                 ->rightJoin('ogrencibirim', function ($join) use ($birim_id) {

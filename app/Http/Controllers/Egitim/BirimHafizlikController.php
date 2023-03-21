@@ -46,6 +46,18 @@ class BirimHafizlikController extends Controller
                 break;
             }
         } */
+        switch (Birim::find($id)->birim_ad) {
+            case 'İHTİSAS':
+                $veri['link'] = 'ihtisas';
+                break;
+            case 'PROJE':
+                $veri['link'] = 'proje';
+                break;
+
+            default:
+                $veri['link'] = 'birim';
+                break;
+        }
         $birim_id = $id;
 
 
@@ -273,7 +285,7 @@ class BirimHafizlikController extends Controller
         }
         $html = $builder->ajax([
 
-            'url' => route('birimhafizlik.index', $birim_id),
+            'url' => route($veri['link'] . 'hafizlik.index', $birim_id),
             'type' => 'Get',
             'data' => "function(d) { d.tarihar = '{$bast} - {$sont} ';
             d.birim_id = '{$birim_id}';
@@ -369,6 +381,7 @@ class BirimHafizlikController extends Controller
             return response()->json($gonder);
         }
     }
+
     public function birimgetir(Request $request)
     {
 

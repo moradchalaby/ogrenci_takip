@@ -70,15 +70,16 @@
                     </li>
                 @endcan
 
-                @can('idari', 'idari')
+                @can('parent', 'idari')
                     @include('layouts.sidebar_idare')
                 @endcan
-                {{-- @can('birimsorumlu', 'birimsorumlu') --}}
-                @can('birimsorumlu', 'birimsorumlu')
+
+
+                @can('parent', 'projehafizlik,ihtisassorumlu,birimsorumlusu')
                     @include('layouts.sidebar_birim')
                 @endcan
 
-                @include('layouts.sidebar_ihtisas')
+
 
                 {{-- @endcan --}}
                 {{-- @include('layouts.sidebar_muhasebe') --}}

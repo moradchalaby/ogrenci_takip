@@ -69,7 +69,8 @@
                       </button>
                   </div>
                   <div class="modal-body">
-                      <form method="POST" id="filter" action="{{ route('birimhafizlik.indexpost', $veri['birim']) }}">
+                      <form method="POST" id="filter"
+                          action="{{ route($veri['link'] . 'hafizlik.indexpost', $veri['birim']) }}">
                           @csrf
                           <input type="hidden" name="id" value={{ $veri['birim'] }}>
                           <div class="form-group">
@@ -476,7 +477,7 @@
                       beforeSend: function(xhr) {
                           document.getElementById("modalDurum").style.filter = "blur(10px)";
                       },
-                      url: "{{ route('birimhafizlik.durum') }}",
+                      url: "{{ route($veri['link'] . 'hafizlik.durum') }}",
                       dataType: 'json',
                       data: {
                           id: id
@@ -693,7 +694,7 @@
                       document.getElementById("modalDersekle").style.filter = "blur(0px)";
                   },
 
-                  url: "{{ route('birimhafizlik.ders') }}",
+                  url: "{{ route($veri['link'] . 'hafizlik.ders') }}",
 
                   dataType: 'json',
                   data: {
@@ -864,7 +865,7 @@
                   beforeSend: function(xhr) {
                       document.getElementById("modalDersduzenle").style.filter = "blur(10px)";
                   },
-                  url: "{{ route('birimhafizlik.ders') }}",
+                  url: "{{ route($veri['link'] . 'hafizlik.ders') }}",
                   dataType: 'json',
                   data: {
                       ders_id: id
@@ -1146,7 +1147,7 @@
                   beforeSend: function(xhr) {
                       document.getElementById("modalDersekle").style.filter = "blur(10px)";
                   },
-                  url: "{{ route('birimhafizlik.birimgetir') }}",
+                  url: "{{ route($veri['link'] . 'hafizlik.birimgetir') }}",
                   data: {
                       get_option: true
                   },
@@ -1171,7 +1172,7 @@
                   beforeSend: function(xhr) {
                       document.getElementById("modalDersekle").style.filter = "blur(10px)";
                   },
-                  url: "{{ route('hafizlik.birimhoca') }}",
+                  url: "{{ route($veri['link'] . 'hafizlik.birimhoca') }}",
                   data: {
                       get_option: true,
                       birim_id: birim_id
@@ -1203,7 +1204,7 @@
 
               $.ajax({
 
-                  url: "{{ route('birimhafizlik.durumguncel') }}",
+                  url: "{{ route($veri['link'] . 'hafizlik.durumguncel') }}",
                   type: 'post',
 
                   contentType: false,
@@ -1274,7 +1275,7 @@
 
               $.ajax({
 
-                  url: "{{ route('birimhafizlik.hocaguncel') }}",
+                  url: "{{ route($veri['link'] . 'hafizlik.hocaguncel') }}",
                   type: 'post',
 
                   contentType: false,
@@ -1406,7 +1407,7 @@
               console.log(data);
               $.ajax({
 
-                  url: "{{ route('birimhafizlik.dersguncelle') }}",
+                  url: "{{ route($veri['link'] . 'hafizlik.dersguncelle') }}",
                   type: 'post',
 
                   contentType: false,
