@@ -607,7 +607,7 @@
                           'Geçen Ay': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
                               'month').endOf('month')]
                       },
-                      startDate: moment().subtract(29, 'days'),
+                      startDate: moment(),
                       endDate: moment(),
                       "locale": {
                           "format": "DD/MM/YYYY",
