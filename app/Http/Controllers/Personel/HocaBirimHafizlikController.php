@@ -48,7 +48,18 @@ class HocaBirimHafizlikController extends Controller
         } */
         $birim_id = $id;
 
+        switch (Birim::find($id)->birim_ad) {
+            case 'İHTİSAS':
+                $veri['link'] = 'ihtisas';
+                break;
+            case 'PROJE':
+                $veri['link'] = 'proje';
+                break;
 
+            default:
+                $veri['link'] = 'birim';
+                break;
+        }
 
         $hoca_id = $request->hoca_id;
 
@@ -244,7 +255,7 @@ class HocaBirimHafizlikController extends Controller
         } */
         $html = $builder->ajax([
 
-            'url' => route('hocabirimhafizlik.index', $birim_id),
+            'url' => route($veri['link'] . 'hocahafizlik.index', $birim_id),
             'type' => 'Get',
             'data' => "function(d) { d.tarihar = '{$bast} - {$sont} ';
             d.birim_id = '{$id}';

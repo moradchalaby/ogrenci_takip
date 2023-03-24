@@ -67,10 +67,10 @@
                     </a>
                 </li>
             @endcan
-            @can('yetkili', 'hocabirimhafizlik')
+            @can('yet', 'birimhocahafizlik,ihtisashocahafizlik,projehocahafizlik')
                 <li class="nav-item">
-                    <a href="{{ route('hocabirimhafizlik.index', $birim->birim_id) }}"
-                        class="nav-link {{ active('hocabirimhafizlik.index') }}">
+                    <a href="{{ route($link . 'hocahafizlik.index', $birim->birim_id) }}"
+                        class="nav-link {{ active($link . 'hocahafizlik.index') }}">
                         <i class="fa-solid fa-row nav-icon"></i>
                         <p>Hoca Hafızlık Rapor </p>
                     </a>

@@ -118,16 +118,16 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::post('/birimgetir', [HafizlikController::class, 'birimgetir'])->name('hafizlik.birimgetir');
     });
 
-    Route::prefix('hocabirimhafizlik')->group(function () {
+    Route::prefix('birimhocahafizlik')->group(function () {
         //?hafizlik
 
 
 
-        Route::post('/{id}', [HocaBirimHafizlikController::class, 'index'])->name('hocabirimhafizlik.indexpost');
-        Route::get('/{id}', [HocaBirimHafizlikController::class, 'index'])->name('hocabirimhafizlik.index');
-        Route::post('/hocagetir', [HocaBirimHafizlikController::class, 'hocagetir'])->name('hocabirimhafizlik.hocagetir');
-        Route::post('/birimhocagetir', [HocaBirimHafizlikController::class, 'birimhocagetir'])->name('hocabirimhafizlik.birimhoca');
-        Route::post('/birimgetir', [HocaBirimHafizlikController::class, 'birimgetir'])->name('hocabirimhafizlik.birimgetir');
+        Route::post('/{id}', [HocaBirimHafizlikController::class, 'index'])->name('birimhocahafizlik.indexpost');
+        Route::get('/{id}', [HocaBirimHafizlikController::class, 'index'])->name('birimhocahafizlik.index');
+        Route::post('/hocagetir', [HocaBirimHafizlikController::class, 'hocagetir'])->name('birimhocahafizlik.hocagetir');
+        Route::post('/birimhocagetir', [HocaBirimHafizlikController::class, 'birimhocagetir'])->name('birimhocahafizlik.birimhoca');
+        Route::post('/birimgetir', [HocaBirimHafizlikController::class, 'birimgetir'])->name('birimhocahafizlik.birimgetir');
     });
     Route::prefix('birimogrenci')->group(function () {
         //?Öğrenci
@@ -182,6 +182,17 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::post('/birimgetir', [BirimHafizlikController::class, 'birimgetir'])->name('projehafizlik.birimgetir');
     });
 
+    Route::prefix('projehocahafizlik')->group(function () {
+        //?hafizlik
+
+
+
+        Route::post('/{id}', [HocaBirimHafizlikController::class, 'index'])->name('projehocahafizlik.indexpost');
+        Route::get('/{id}', [HocaBirimHafizlikController::class, 'index'])->name('projehocahafizlik.index');
+        Route::post('/hocagetir', [HocaBirimHafizlikController::class, 'hocagetir'])->name('projehocahafizlik.hocagetir');
+        Route::post('/birimhocagetir', [HocaBirimHafizlikController::class, 'birimhocagetir'])->name('projehocahafizlik.birimhoca');
+        Route::post('/birimgetir', [HocaBirimHafizlikController::class, 'birimgetir'])->name('projehocahafizlik.birimgetir');
+    });
     //İHTİSAS
     Route::prefix('ihtisasogrenci')->group(function () {
         //?Öğrenci
@@ -209,6 +220,18 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::post('/birimhocagetir', [BirimHafizlikController::class, 'birimhocagetir'])->name('ihtisashafizlik.birimhoca');
         Route::post('/birimgetir', [BirimHafizlikController::class, 'birimgetir'])->name('ihtisashafizlik.birimgetir');
     });
+    Route::prefix('ihtisashocahafizlik')->group(function () {
+        //?hafizlik
+
+
+
+        Route::post('/{id}', [HocaBirimHafizlikController::class, 'index'])->name('ihtisashocahafizlik.indexpost');
+        Route::get('/{id}', [HocaBirimHafizlikController::class, 'index'])->name('ihtisashocahafizlik.index');
+        Route::post('/hocagetir', [HocaBirimHafizlikController::class, 'hocagetir'])->name('ihtisashocahafizlik.hocagetir');
+        Route::post('/birimhocagetir', [HocaBirimHafizlikController::class, 'birimhocagetir'])->name('ihtisashocahafizlik.birimhoca');
+        Route::post('/birimgetir', [HocaBirimHafizlikController::class, 'birimgetir'])->name('ihtisashocahafizlik.birimgetir');
+    });
+
 
     Route::prefix('root')->group(function () {
         Route::get('/', [RoleController::class, 'index'])->name('root.index');

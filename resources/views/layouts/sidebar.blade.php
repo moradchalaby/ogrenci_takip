@@ -75,7 +75,7 @@
                 @endcan
 
 
-                @can('parent', 'projehafizlik,ihtisassorumlu,birimsorumlusu')
+                @can('parent', 'projehafizlik,ihtisassorumlu,birimsorumlu')
                     @include('layouts.sidebar_birim')
                 @endcan
 

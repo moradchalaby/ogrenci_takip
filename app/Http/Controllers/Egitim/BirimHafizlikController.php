@@ -109,6 +109,8 @@ class BirimHafizlikController extends Controller
                     $join->on('hfzlkders.ogrenci_id', '=', 'ogrenci.id')
                         ->WhereBetween('hfzlkders.hafizlik_tarih', [$bast, $sont]);
                 }, null, null, 'FULL')
+                ->leftJoin('ogrenciokul', 'ogrenciokul.ogrenci_id', '=', 'ogrenci.id')
+
 
                 ->orderBy('ogrenci.ogrenci_adsoyad', 'asc')
 
@@ -116,7 +118,7 @@ class BirimHafizlikController extends Controller
                     'ogrenci.id as id',
                     'ogrenci.ogrenci_resim',
                     'ogrenci.ogrenci_adsoyad as adsoyad',
-
+                    'ogrenciokul.aciklama as sinif',
                     'birim.birim_id as birim_id',
                     'birim.birim_ad as birim',
                     'hafizlikdurum.hafizlik_durum as durum',
@@ -134,6 +136,10 @@ class BirimHafizlikController extends Controller
                      WITH ROLLUP) AS say'), */
                     DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.hafizlik_tarih ELSE NULL END
                      ORDER BY hfzlkders.id ASC SEPARATOR ",") AS gunler'),
+                    DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.hafizlik_topl ELSE NULL END
+                     ORDER BY hfzlkders.id ASC SEPARATOR "*") AS toplamlar'),
+
+
                     DB::raw('GROUP_CONCAT(CASE WHEN hfzlkders.ogrenci_id = ogrenci.id THEN hfzlkders.id ELSE NULL END
                      ORDER BY hfzlkders.id ASC SEPARATOR ",") AS dersId')
 
@@ -171,7 +177,12 @@ class BirimHafizlikController extends Controller
 
                     return $hoca;
                 })
+                ->addColumn('sinif', function ($row) {
 
+
+
+                    return $row['sinif'];
+                })
                 ->addColumn('hfzlkdurum', function ($row) {
                     $durum = ' <a  class="editDurum" data-toggle="modal" data-id="' . $row['id'] . '"data-target="#modalDurum">' . $row['durum']
                         . '</a> ';
@@ -193,6 +204,39 @@ class BirimHafizlikController extends Controller
                     return $durum;
                 })
 
+                ->addColumn('+ -', function ($row) use ($beign, $end) {
+
+                    //2 hhizb 0 4 hizb +1 yapar 10 sayfa 1 ders tamam
+                    /*  $arti = -1;
+                    foreach ($daterange as $date) {
+                        $gun = $date->format('Y-m-d');
+
+                        $gunler = explode(',', $row['gunler']);
+
+                        $toplamlar = explode('*', $row['toplamlar']);
+                        if (in_array($gun, $gunler)) {
+
+
+                            $tekrar =   array_count_values($gunler);
+                            $say = $tekrar[$gun];
+                            $arti = $arti + $toplamlar[array_search($gun, $gunler)];
+
+                            for ($i = 1; $i < $say; $i++) {
+
+                                $arti = $arti + $toplamlar[array_search($gun, $gunler) + $i];
+                            }
+                        } else {
+                            $arti--;
+                        }
+                    } */
+                    $guns = $beign->diff($end)->d;
+                    $arti = $row['say'];
+
+
+
+
+                    return strval((2 * $arti) - $guns);
+                })
                 ->addColumn('sayfa', function ($row) {
 
                     $sayfa = $row['sayfa'];
@@ -200,9 +244,7 @@ class BirimHafizlikController extends Controller
 
                     return intval($sayfa);
                 })
-
                 ->addColumn('toplam', function ($row) use ($request) {
-
 
 
                     $toplam = $row['say'];
@@ -225,7 +267,7 @@ class BirimHafizlikController extends Controller
 
             $raw = [
                 'adsoyad',
-                'resim', 'action', 'hfzlkdurum', 'toplam', 'sayfa', 'hoca'
+                'resim', 'action', 'hfzlkdurum', '+ -', 'toplam', 'sayfa', 'hoca'
             ];
             foreach ($daterange as $date) {
 
@@ -267,8 +309,11 @@ class BirimHafizlikController extends Controller
             ['data' => 'resim', 'name' => 'resim', 'title' => 'Resim'],
             ['data' => 'adsoyad', 'name' => 'adsoyad', 'title' => 'Ad Soyad'],
             ['data' => 'hoca', 'name' => 'hoca', 'title' => 'Hocası'],
+            ['data' => 'sinif', 'name' => 'sinif', 'title' => 'Sınıf'],
             ['data' => 'birim', 'name' => 'birim', 'title' => 'Birimx'],
             ['data' => 'hfzlkdurum', 'name' => 'hfzlkdurum', 'title' => 'Durum'],
+            ['data' => '+ -', 'name' => '+ -', 'title' => '+ -'],
+
             ['data' => 'sayfa', 'name' => 'sayfa', 'title' => 'Tur'],
             ['data' => 'toplam', 'name' => 'toplam', 'title' => 'Toplam'],
 

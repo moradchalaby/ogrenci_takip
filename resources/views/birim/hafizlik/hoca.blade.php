@@ -67,7 +67,7 @@
                   </div>
                   <div class="modal-body">
                       <form method="POST" id="filter"
-                          action="{{ route('hocabirimhafizlik.indexpost', $veri['birim']) }}">
+                          action="{{ route($veri['link'] . 'hocahafizlik.indexpost', $veri['birim']) }}">
                           @csrf
                           <div class="form-group">
                               <label>Tarih Aralığı:</label>
