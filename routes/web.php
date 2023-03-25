@@ -42,8 +42,6 @@ use App\Http\Controllers\RoutesController;
 
 /* Auth::routes(); */
 
-require __DIR__ . '/auth.php';
-
 Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
 
     Route::get('/', [CalenderController::class, 'index']);
@@ -71,7 +69,6 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::get('/getEmployees', [PersonelController::class, 'getEmployees'])->name('personel.getEmployees');
         Route::post('/update', [PersonelController::class, 'update'])->name('personel.update');
     });
-<<<<<<< Updated upstream
 
     Route::prefix('birim')->group(function () {
 
@@ -258,9 +255,6 @@ Route::get('/login/redirect', function () {
 })->name('/'); */
 
 /*
-=======
-    /*
->>>>>>> Stashed changes
     Route::prefix('birimhoca')->group(function () {
         //?BirimHoca
         Route::get('/getBirim', [BirimhocaController::class, 'getBirim'])->name('birimhoca.getBirim');
@@ -339,106 +333,4 @@ Route::get('/login/redirect', function () {
         Route::post('/birimgetir', [IdarihocaController::class, 'birimgetir'])->name('idarihoca.birimgetir');
     });
 */
-<<<<<<< Updated upstream
 require __DIR__ . '/auth.php';
-=======
-    Route::prefix('birim')->group(function () {
-
-        Route::get('/', [BirimController::class, 'index'])->name('birim.index');
-
-        Route::post('/birimadd', [BirimController::class, 'store'])->name('birim.store');
-        Route::post('/birimdelete', [BirimController::class, 'destroy'])->name('birim.destroy');
-        Route::post('/birimupdate', [BirimController::class, 'update'])->name('birim.update');
-    });
-
-    Route::prefix('ogrenci')->group(function () {
-        //?Öğrenci
-        // Route::get('/getBirim', [OgrenciController::class, 'getBirim'])->name('ogrenci.getBirim');
-        Route::post('/store', [OgrenciController::class, 'store'])->name('ogrenci.store');
-        Route::post('/edit', [OgrenciController::class, 'edit'])->name('ogrenci.edit');
-        Route::post('/update', [OgrenciController::class, 'update'])->name('ogrenci.update');
-        // Route::post('/create', [OgrenciController::class, 'create'])->name('ogrenci.create');
-        Route::get('/', [OgrenciController::class, 'index'])->name('ogrenci.index');
-        // Route::get('/hocagetir', [OgrenciController::class, 'hocagetir'])->name('ogrenci.hocagetir');
-        Route::post('/birimgetir', [OgrenciController::class, 'birimgetir'])->name('ogrenci.birimgetir');
-    });
-
-    Route::prefix('hafizlik')->group(function () {
-        //?hafizlik
-
-        Route::post('/durum', [HafizlikController::class, 'durum'])->name('hafizlik.durum');
-        Route::post('/ders', [HafizlikController::class, 'ders'])->name('hafizlik.ders');
-        Route::post('/dersekle', [HafizlikController::class, 'dersekle'])->name('hafizlik.dersekle');
-        Route::post('/dersguncelle', [HafizlikController::class, 'dersguncelle'])->name('hafizlik.dersguncelle');
-
-        Route::post('/durumguncel', [HafizlikController::class, 'durumguncel'])->name('hafizlik.durumguncel');
-        Route::post('/hocaguncel', [HafizlikController::class, 'hocaguncel'])->name('hafizlik.hocaguncel');
-        Route::post('/', [HafizlikController::class, 'index'])->name('hafizlik.indexpost');
-        Route::get('/', [HafizlikController::class, 'index'])->name('hafizlik.index');
-        Route::post('/hocagetir', [HafizlikController::class, 'hocagetir'])->name('hafizlik.hocagetir');
-        Route::post('/birimhocagetir', [HafizlikController::class, 'birimhocagetir'])->name('hafizlik.birimhoca');
-        Route::post('/birimgetir', [HafizlikController::class, 'birimgetir'])->name('hafizlik.birimgetir');
-    });
-    Route::prefix('birimogrenci')->group(function () {
-        //?Öğrenci
-
-        Route::post('/store', [BirimOgrenciController::class, 'store'])->name('birimogrenci.store');
-        Route::post('/edit', [BirimOgrenciController::class, 'edit'])->name('birimogrenci.edit');
-        Route::post('/update', [BirimOgrenciController::class, 'update'])->name('birimogrenci.update');
-        Route::post('/birimgetir', [BirimOgrenciController::class, 'birimgetir'])->name('birimogrenci.birimgetir');
-        Route::get('/{id}', [BirimOgrenciController::class, 'index'])->name('birimogrenci.index');
-    });
-    Route::prefix('birimhafizlik')->group(function () {
-        //?hafizlik
-        Route::get('/', [BirimHafizlikController::class, 'index'])->name('birimhafizlik.index');
-
-        Route::post('/durum', [BirimHafizlikController::class, 'durum'])->name('birimhafizlik.durum');
-        Route::post('/ders', [BirimHafizlikController::class, 'ders'])->name('birimhafizlik.ders');
-        Route::post('/dersekle', [BirimHafizlikController::class, 'dersekle'])->name('birimhafizlik.dersekle');
-        Route::post('/dersguncelle', [BirimHafizlikController::class, 'dersguncelle'])->name('birimhafizlik.dersguncelle');
-
-        Route::post('/durumguncel', [BirimHafizlikController::class, 'durumguncel'])->name('birimhafizlik.durumguncel');
-        Route::post('/hocaguncel', [BirimHafizlikController::class, 'hocaguncel'])->name('birimhafizlik.hocaguncel');
-        Route::post('/', [BirimHafizlikController::class, 'index'])->name('birimhafizlik.indexpost');
-        Route::get('/{id}', [BirimHafizlikController::class, 'index'])->name('birimhafizlik.index');
-        Route::post('/hocagetir', [BirimHafizlikController::class, 'hocagetir'])->name('birimhafizlik.hocagetir');
-        Route::post('/birimhocagetir', [BirimHafizlikController::class, 'birimhocagetir'])->name('birimhafizlik.birimhoca');
-        Route::post('/birimgetir', [BirimHafizlikController::class, 'birimgetir'])->name('birimhafizlik.birimgetir');
-    });
-    Route::prefix('projeogrenci')->group(function () {
-        //?Öğrenci
-
-        Route::post('/store', [ProjeOgrenciController::class, 'store'])->name('projeogrenci.store');
-        Route::post('/edit', [ProjeOgrenciController::class, 'edit'])->name('projeogrenci.edit');
-        Route::post('/update', [ProjeOgrenciController::class, 'update'])->name('projeogrenci.update');
-        Route::post('/hocagetir', [ProjeOgrenciController::class, 'hocagetir'])->name('projeogrenci.hocagetir');
-        Route::post('/ogrencicek', [ProjeOgrenciController::class, 'ogrencicek'])->name('projeogrenci.ogrencicek');
-
-        Route::get('/', [ProjeOgrenciController::class, 'index'])->name('projeogrenci.index');
-    });
-    Route::prefix('projehafizlik')->group(function () {
-        //?hafizlik
-
-        Route::post('/durum', [ProjeHafizlikController::class, 'durum'])->name('projehafizlik.durum');
-        Route::post('/ders', [ProjeHafizlikController::class, 'ders'])->name('projehafizlik.ders');
-        Route::post('/dersekle', [ProjeHafizlikController::class, 'dersekle'])->name('projehafizlik.dersekle');
-        Route::post('/dersguncelle', [ProjeHafizlikController::class, 'dersguncelle'])->name('projehafizlik.dersguncelle');
-
-        Route::post('/durumguncel', [ProjeHafizlikController::class, 'durumguncel'])->name('projehafizlik.durumguncel');
-        Route::post('/hocaguncel', [ProjeHafizlikController::class, 'hocaguncel'])->name('projehafizlik.hocaguncel');
-        Route::post('/', [ProjeHafizlikController::class, 'index'])->name('projehafizlik.indexpost');
-        Route::get('/', [ProjeHafizlikController::class, 'index'])->name('projehafizlik.index');
-        Route::post('/hocagetir', [ProjeHafizlikController::class, 'hocagetir'])->name('projehafizlik.hocagetir');
-        Route::post('/birimhocagetir', [ProjeHafizlikController::class, 'birimhocagetir'])->name('projehafizlik.birimhoca');
-        Route::post('/birimgetir', [ProjeHafizlikController::class, 'birimgetir'])->name('projehafizlik.birimgetir');
-    });
-    Route::get('/routes', [RoutesController::class, 'showApplicationRoutes'])->name('routes.index');
-});
-
-/* Route::get('/login/redirect', function () {
-    return redirect(route('auth.login'));
-})->name('login');
-Route::get('/login/redirect', function () {
-    return redirect(route('auth.login'));
-})->name('/'); */
->>>>>>> Stashed changes
