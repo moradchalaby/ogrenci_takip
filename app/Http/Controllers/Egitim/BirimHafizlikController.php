@@ -245,11 +245,12 @@ class BirimHafizlikController extends Controller
                     return doubleval((2 * $arti) - $guns);
                 })
                 ->addColumn('sayfa', function ($row) {
-
-                    $sayfa = $row['sayfa'];
-
-
-                    return intval($sayfa);
+                    if (str_contains($row['durum'], 'Hafız')) {
+                        return 'HAFIZ';
+                    } else {
+                        $sayfa = $row['sayfa'];
+                        return intval($sayfa);
+                    }
                 })
                 ->addColumn('toplam', function ($row) use ($request) {
 
@@ -302,16 +303,17 @@ class BirimHafizlikController extends Controller
                         if (in_array($dersler[array_search($gun, $gunler)], $array2)) {
                             $class = 'bg-danger';
                         }
+                        $thisders = str_contains($row['durum'], 'Hafız') ?  str_Replace('20/', '', $dersler[array_search($gun, $gunler)]) : $dersler[array_search($gun, $gunler)];
                         $ders =
-                            '<a  class="duzenleDers btn-xs ' . $class . '  col-6 user-select-none" data-toggle="modal" data-dersid="' . $dersid[array_search($gun, $gunler)] . '"data-target="#modalDersduzenle">' . $dersler[array_search($gun, $gunler)]
-                            . '</a> ';
+                            '<a  class="duzenleDers btn-xs ' . $class . '  col-6 user-select-none" data-toggle="modal" data-dersid="' . $dersid[array_search($gun, $gunler)] . '"data-target="#modalDersduzenle">' . $thisders . '</a> ';
                         for ($i = 1; $i < $say; $i++) {
+                            $thisders = str_contains($row['durum'], 'Hafız') ?  str_Replace('20/', '', $dersler[array_search($gun, $gunler) + $i]) : $dersler[array_search($gun, $gunler) + $i];
                             $class = 'bg-info';
                             if (in_array($dersler[array_search($gun, $gunler) + $i], $array2)) {
                                 $class = 'bg-danger';
                             }
                             $ders = $ders
-                                . ' <a  class="duzenleDers btn-xs ' . $class . '  col-6 user-select-none" data-toggle="modal" data-dersid="' . $dersid[array_search($gun, $gunler) + $i] . '"data-target="#modalDersduzenle">' . $dersler[array_search($gun, $gunler) + $i]
+                                . ' <a  class="duzenleDers btn-xs ' . $class . '  col-6 user-select-none" data-toggle="modal" data-dersid="' . $dersid[array_search($gun, $gunler) + $i] . '"data-target="#modalDersduzenle">' . $thisders
                                 . '</a> ';
                         }
                     } else {
