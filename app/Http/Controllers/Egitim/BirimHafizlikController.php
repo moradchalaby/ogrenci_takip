@@ -46,17 +46,22 @@ class BirimHafizlikController extends Controller
                 break;
             }
         } */
-        switch (Birim::find($id)->birim_ad) {
-            case 'İHTİSAS':
-                $veri['link'] = 'ihtisas';
-                break;
-            case 'PROJE':
-                $veri['link'] = 'proje';
-                break;
+        if (Auth::user()->hasRole('birimsorumlu')) {
+            $veri['link'] = 'birim';
+        } else {
 
-            default:
-                $veri['link'] = 'birim';
-                break;
+            switch (Birim::find($id)->birim_ad) {
+                case 'İHTİSAS':
+                    $veri['link'] = 'ihtisas';
+                    break;
+                case 'PROJE':
+                    $veri['link'] = 'proje';
+                    break;
+
+                default:
+                    $veri['link'] = 'birim';
+                    break;
+            }
         }
         $birim_id = $id;
 
@@ -229,13 +234,15 @@ class BirimHafizlikController extends Controller
                             $arti--;
                         }
                     } */
-                    $guns = $beign->diff($end)->d;
+                    $interval = $beign->diff($end);
+                    $interval->format('%a');
+                    $guns = $interval->format('%a');
                     $arti = $row['say'];
 
 
 
 
-                    return strval((2 * $arti) - $guns);
+                    return doubleval((2 * $arti) - $guns);
                 })
                 ->addColumn('sayfa', function ($row) {
 
@@ -277,24 +284,40 @@ class BirimHafizlikController extends Controller
                     $dersid = explode(',', $row['dersId']);
                     $gunler = explode(',', $row['gunler']);
                     $dersler = explode('*', $row['dersler']);
+                    $array_new = array_count_values($dersler);
+                    $array2 = array();
+                    foreach ($array_new as $key => $val) {
+                        if ($val > 1) { //or do $val >2 based on your desire
+                            $array2[] = $key;
+                        }
+                    }
+
+
                     if (in_array($gun, $gunler)) {
 
 
                         $tekrar =   array_count_values($gunler);
                         $say = $tekrar[$gun];
-                        ' <a  class="duzenleDers btn-xs bg-info  col-6 user-select-none" data-toggle="modal" data-dersid="' . $dersid[array_search($gun, $gunler)] . '"data-target="#modalDersduzenle">' . $dersler[array_search($gun, $gunler)]
-                            . '</a> ';
+                        $class = 'bg-info';
+                        if (in_array($dersler[array_search($gun, $gunler)], $array2)) {
+                            $class = 'bg-danger';
+                        }
                         $ders =
-                            ' <a  class="duzenleDers btn-xs bg-info  col-6 user-select-none" data-toggle="modal" data-dersid="' . $dersid[array_search($gun, $gunler)] . '"data-target="#modalDersduzenle">' . $dersler[array_search($gun, $gunler)]
+                            '<a  class="duzenleDers btn-xs ' . $class . '  col-6 user-select-none" data-toggle="modal" data-dersid="' . $dersid[array_search($gun, $gunler)] . '"data-target="#modalDersduzenle">' . $dersler[array_search($gun, $gunler)]
                             . '</a> ';
                         for ($i = 1; $i < $say; $i++) {
+                            $class = 'bg-info';
+                            if (in_array($dersler[array_search($gun, $gunler) + $i], $array2)) {
+                                $class = 'bg-danger';
+                            }
                             $ders = $ders
-                                . ' <a  class="duzenleDers btn-xs bg-info  col-6 user-select-none" data-toggle="modal" data-dersid="' . $dersid[array_search($gun, $gunler) + $i] . '"data-target="#modalDersduzenle">' . $dersler[array_search($gun, $gunler) + $i]
+                                . ' <a  class="duzenleDers btn-xs ' . $class . '  col-6 user-select-none" data-toggle="modal" data-dersid="' . $dersid[array_search($gun, $gunler) + $i] . '"data-target="#modalDersduzenle">' . $dersler[array_search($gun, $gunler) + $i]
                                 . '</a> ';
                         }
                     } else {
                         $ders = '';
                     }
+
                     return $ders;
                 });
                 $raw[] = $gun;
@@ -310,7 +333,7 @@ class BirimHafizlikController extends Controller
             ['data' => 'adsoyad', 'name' => 'adsoyad', 'title' => 'Ad Soyad'],
             ['data' => 'hoca', 'name' => 'hoca', 'title' => 'Hocası'],
             ['data' => 'sinif', 'name' => 'sinif', 'title' => 'Sınıf'],
-            ['data' => 'birim', 'name' => 'birim', 'title' => 'Birimx'],
+            ['data' => 'birim', 'name' => 'birim', 'title' => 'Birim'],
             ['data' => 'hfzlkdurum', 'name' => 'hfzlkdurum', 'title' => 'Durum'],
             ['data' => '+ -', 'name' => '+ -', 'title' => '+ -'],
 

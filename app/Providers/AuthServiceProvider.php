@@ -46,7 +46,7 @@ class AuthServiceProvider extends ServiceProvider
             ) {
                 return   Response::allow();
             } else {
-                return  Response::deny('Bu işlem için yetkiniz yok!');
+                return  Response::deny('Bu işlem ' . $rout . ' için yetkiniz yok!');
             } /* return
                 $user->hasRole('admin') ? Response::allow() : Response::deny('Bu işlem için admin olmalısınız!'); */
         });
@@ -59,7 +59,7 @@ class AuthServiceProvider extends ServiceProvider
             if ($user->hasRole($post . '/islem') || $user->hasRole('root')) {
                 return   Response::allow();
             } else {
-                return  Response::deny('Bu işlem için yetkiniz yok!');
+                return  Response::deny('Bu işlem ' . $post . '  için yetkiniz yok!');
             }
             /* return
                 $user->hasRole('admin') ? Response::allow() : Response::deny('Bu işlem için admin olmalısınız!'); */
@@ -87,13 +87,13 @@ class AuthServiceProvider extends ServiceProvider
                 ) {
                     return   Response::allow($val);
                 } else {
-                    return  Response::deny('Bu işlem için yetkiniz yok!');
+                    return  Response::deny('Bu işlem ' . $val . ' için yetkiniz yok!');
                 }
             } else {
                 if ($user->hasRole($arr) || $user->hasRole('root')) {
                     return   Response::allow($val);
                 } else {
-                    return  Response::deny('Bu işlem için yetkiniz yok!');
+                    return  Response::deny('Bu işlem ' . $val . ' için yetkiniz yok!');
                 }
             }
 
@@ -105,6 +105,7 @@ class AuthServiceProvider extends ServiceProvider
             if (str_contains($arr, ',')) {
                 $arr = explode(',', $arr);
             }
+            $rout = '';
             if (is_array($arr)) {
 
                 $bole = false;
@@ -121,13 +122,13 @@ class AuthServiceProvider extends ServiceProvider
                 ) {
                     return   Response::allow();
                 } else {
-                    return  Response::deny('Bu işlem için yetkiniz yok!');
+                    return  Response::deny('Bu işlem ' . $rout . ' için yetkiniz yok!');
                 }
             } else {
                 if ($user->hasRoleparent($arr) || $user->hasRoleparent('root')) {
                     return   Response::allow();
                 } else {
-                    return  Response::deny('Bu işlem için yetkiniz yok!');
+                    return  Response::deny('Bu işlem ' . $rout . ' için yetkiniz yok!');
                 }
             }
 
@@ -156,14 +157,14 @@ class AuthServiceProvider extends ServiceProvider
             if ($user->hasRole('idari') || $user->hasRole('root')) {
                 return   Response::allow();
             } else {
-                return  Response::deny('Bu işlem için yetkiniz yok!');
+                return  Response::deny('Bu işlem İDARİ için yetkiniz yok!');
             }
         });
         Gate::define('birimsorumlu', function ($user) {
             if ($user->hasRole('birimsorumlu') || $user->hasRole('root')) {
                 return   Response::allow();
             } else {
-                return  Response::deny('Bu işlem için yetkiniz yok!');
+                return  Response::deny('Bu işlem BİRİMSORUMLU için yetkiniz yok!');
             }
         });
         /*   Gate::define('ihtisassorumlu', function ($user) {
@@ -180,14 +181,14 @@ class AuthServiceProvider extends ServiceProvider
             if ($user->hasRole('birims') || $user->hasRole('root')) {
                 return   Response::allow();
             } else {
-                return  Response::deny('Bu işlem için yetkiniz yok!');
+                return  Response::deny('Bu işlem BİRİM için yetkiniz yok!');
             }
         });
         Gate::define('root', function ($user) {
             if ($user->hasRole('root') || $user->hasRole('root')) {
                 return   Response::allow();
             } else {
-                return  Response::deny('Bu işlem için yetkiniz yok!');
+                return  Response::deny('Bu işlem ROOT için yetkiniz yok!');
             }
         });
     }

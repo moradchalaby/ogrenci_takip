@@ -11,27 +11,26 @@
         <a href="#" class="nav-link">
             <i class="nav-icon fas fa-users-gear"></i>
             <p>
-
+                @php $link = 'birim'; @endphp
 
                 {{ $birim->birim_ad }}
+                @can('yetkili', 'birimsorumlu')
+                    @php $link = 'birim'; @endphp
+                @elsecan('yet','ihtisassorumlu,projesorumlu')
+                    @switch($birim->birim_ad)
+                        @case('İHTİSAS')
+                            @php
+                                $link = 'ihtisas';
+                            @endphp
+                        @break
 
-                @switch($birim->birim_ad)
-                    @case('İHTİSAS')
-                        @php
-                            $link = 'ihtisas';
-                        @endphp
-                    @break
+                        @case('PROJE')
+                            @php  $link = 'proje'; @endphp
+                        @break
 
-                    @case('PROJE')
-                        @php  $link = 'proje'; @endphp
-                    @break
-
-                    $
-
-                    @default
-                        @php $link = 'birim'; @endphp
-                @endswitch
-
+                        @default
+                    @endswitch
+                @endcan
 
                 <i class="fas fa-angle-left right"></i>
 
@@ -50,7 +49,7 @@
 
 
                     <a href="{{ route($link . 'ogrenci.index', $birim->birim_id) }}"
-                        class="nav-link {{ active($link . 'ogrenci..index') }}">
+                        class="nav-link {{ active($link . 'ogrenci.index') }}">
                         <i class="fa-solid fa-row nav-icon"></i>
                         <p>Öğrenci Listesi </p>
                     </a>

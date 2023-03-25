@@ -58,7 +58,7 @@
           </section>
           <!-- /.content -->
       </div>
-
+      {{ $veri['link'] }}
       <div class="modal fade" id="modalFilter">
           <div class="modal-dialog ">
               <div class="modal-content">

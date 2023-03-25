@@ -47,19 +47,24 @@ class HocaBirimHafizlikController extends Controller
             }
         } */
         $birim_id = $id;
+        if (Auth::user()->hasRole('birimsorumlu')) {
+            $veri['link'] = 'birim';
+        } else {
 
-        switch (Birim::find($id)->birim_ad) {
-            case 'İHTİSAS':
-                $veri['link'] = 'ihtisas';
-                break;
-            case 'PROJE':
-                $veri['link'] = 'proje';
-                break;
+            switch (Birim::find($id)->birim_ad) {
+                case 'İHTİSAS':
+                    $veri['link'] = 'ihtisas';
+                    break;
+                case 'PROJE':
+                    $veri['link'] = 'proje';
+                    break;
 
-            default:
-                $veri['link'] = 'birim';
-                break;
+                default:
+                    $veri['link'] = 'birim';
+                    break;
+            }
         }
+
 
         $hoca_id = $request->hoca_id;
 

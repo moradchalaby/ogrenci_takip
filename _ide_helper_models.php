@@ -87,6 +87,114 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\HafizlikHoca
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|HafizlikHoca newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|HafizlikHoca newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|HafizlikHoca query()
+ */
+	class HafizlikHoca extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Hafizlikders
+ *
+ * @property int $id
+ * @property int $ogrenci_id
+ * @property int $kullanici_id
+ * @property string|null $hafizlik_sayfa
+ * @property string|null $hafizlik_cuz
+ * @property string|null $hafizlik_ders
+ * @property string|null $hafizlik_topl
+ * @property string|null $hafizlik_tarih
+ * @property string|null $hafizlik_hata
+ * @property string|null $hafizlik_usul
+ * @property string|null $hafizlik_durum
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikders newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikders newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikders query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikders whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikders whereHafizlikCuz($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikders whereHafizlikDers($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikders whereHafizlikDurum($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikders whereHafizlikHata($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikders whereHafizlikSayfa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikders whereHafizlikTarih($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikders whereHafizlikTopl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikders whereHafizlikUsul($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikders whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikders whereKullaniciId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikders whereOgrenciId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikders whereUpdatedAt($value)
+ */
+	class Hafizlikders extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Hafizlikdurum
+ *
+ * @property int $id
+ * @property int $ogrenci_id
+ * @property string $hafizlik_durum
+ * @property string|null $bast
+ * @property string|null $sont
+ * @property string|null $hafizlik_son
+ * @property int|null $hoca
+ * @property string $donus_suresi
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikdurum newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikdurum newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikdurum query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikdurum whereBast($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikdurum whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikdurum whereDonusSuresi($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikdurum whereHafizlikDurum($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikdurum whereHafizlikSon($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikdurum whereHoca($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikdurum whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikdurum whereOgrenciId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikdurum whereSont($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hafizlikdurum whereUpdatedAt($value)
+ */
+	class Hafizlikdurum extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Hocarapor
+ *
+ * @property int $id
+ * @property int $kullanici_id
+ * @property int $ogrenci_id
+ * @property int $ders_id
+ * @property string $hrapor_sayfa
+ * @property string $hrapor_ders
+ * @property string $hrapor_tarih
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Hocarapor newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Hocarapor newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Hocarapor query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Hocarapor whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hocarapor whereDersId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hocarapor whereHraporDers($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hocarapor whereHraporSayfa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hocarapor whereHraporTarih($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hocarapor whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hocarapor whereKullaniciId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hocarapor whereOgrenciId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hocarapor whereUpdatedAt($value)
+ */
+	class Hocarapor extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Kullanici
  *
  * @property int $id
