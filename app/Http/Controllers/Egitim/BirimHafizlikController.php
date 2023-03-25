@@ -353,8 +353,8 @@ class BirimHafizlikController extends Controller
         }
         $html = $builder->ajax([
 
-            'url' => route($veri['link'] . 'hafizlik.index', $birim_id),
-            'type' => 'Get',
+            'url' => route($veri['link'] . 'hafizlik.indexpost', $birim_id),
+            'type' => 'Post',
             'data' => "function(d) { d.tarihar = '{$bast} - {$sont} ';
             d.birim_id = '{$birim_id}';
             d.hoca_id = '{$request->hoca_id}';
