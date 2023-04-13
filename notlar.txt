@@ -17,3 +17,8 @@ php artisan storage:link
 
 //chache temisleme
 php artisan optimize:clear
+
+
+//php artisan migrate path
+
+ php artisan migrate --path=database/migrations/new/
