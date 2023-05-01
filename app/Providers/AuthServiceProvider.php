@@ -31,8 +31,10 @@ class AuthServiceProvider extends ServiceProvider
 
         // Admin  mi ?
         Gate::define('yetkili', function ($user, $rout = '') {
+
             if ($rout == '') {
                 $rout =  Request::route()->getPrefix();
+
             }
             if (empty($rout)) {
                 $rout = '/takvim';
@@ -44,6 +46,7 @@ class AuthServiceProvider extends ServiceProvider
             if (
                 $user->hasRole($rout) || $user->hasRole('root')
             ) {
+               // echo $rout;
                 return   Response::allow();
             } else {
                 return  Response::deny('Bu işlem ' . $rout . ' için yetkiniz yok!');
@@ -57,6 +60,7 @@ class AuthServiceProvider extends ServiceProvider
                 $post = '/' . $post;
             }
             if ($user->hasRole($post . '/islem') || $user->hasRole('root')) {
+
                 return   Response::allow();
             } else {
                 return  Response::deny('Bu işlem ' . $post . '  için yetkiniz yok!');

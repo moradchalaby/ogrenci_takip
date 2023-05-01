@@ -73,6 +73,9 @@
                 @can('parent', 'idari')
                     @include('layouts.sidebar_idare')
                 @endcan
+                @can('parent', 'muhasebe')
+                    @include('layouts.sidebar_muhasebe')
+                @endcan
 
 
                 @can('parent', 'projehafizlik,ihtisassorumlu,birimsorumlu')

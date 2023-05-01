@@ -41,29 +41,7 @@
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed sidebar-collapse">
-    <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.11.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.11.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyAER8D7oOI4J--S0aS2bw6mev8eWG04xKY",
-    authDomain: "webapp-c187f.firebaseapp.com",
-    projectId: "webapp-c187f",
-    storageBucket: "webapp-c187f.appspot.com",
-    messagingSenderId: "884095726890",
-    appId: "1:884095726890:web:04a11c10deb995a5215a53",
-    measurementId: "G-8T07J9QCCF"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
     <div class="wrapper">
         @if (!Auth::check())
             <script>
@@ -82,6 +60,7 @@
 
 
             @yield('content')
+            @yield('modal')
         @endif
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">

@@ -10812,7 +10812,7 @@ a.text-dark:hover, a.text-dark:focus {
     page-break-after: avoid;
   }
   @page {
-    size: a3;
+    size: a5;
   }
   body {
     min-width: 992px !important;
@@ -45977,14 +45977,14 @@ blockquote.quote-gray-dark h6 {
   }
   .invoice-col {
     float: left;
-    width: 33.3333333%;
+    width: 100%;
   }
   .table-responsive {
     overflow: auto;
   }
   .table-responsive > .table tr th,
   .table-responsive > .table tr td {
-    white-space: normal !important;
+    white-space: nowrap !important;
   }
 }
 

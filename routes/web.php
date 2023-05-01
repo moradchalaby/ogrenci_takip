@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Muhasebe\MakbuzSetController;
+use App\Http\Controllers\Muhasebe\MuhasebeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 /*
@@ -231,8 +233,59 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::post('/birimhocagetir', [HocaBirimHafizlikController::class, 'birimhocagetir'])->name('ihtisashocahafizlik.birimhoca');
         Route::post('/birimgetir', [HocaBirimHafizlikController::class, 'birimgetir'])->name('ihtisashocahafizlik.birimgetir');
     });
+    Route::prefix('muhasebe')->group(function () {
+        Route::get('/{id}', [MuhasebeController::class, 'index'])->name('muhasebe.index');
+        //Route::post('/{id}', [MuhasebeController::class, 'index'])->name('muhasebe.indexpost');
+
+        Route::post('/edit', [MuhasebeController::class, 'edit'])->name('muhasebe.edit');
+        Route::post('/destroy', [MuhasebeController::class, 'destroy'])->name('muhasebe.delete');
+
+        Route::post('/store', [MuhasebeController::class, 'store'])->name('muhasebe.store');
+        Route::post('/show/{id}', [MuhasebeController::class, 'show'])->name('muhasebe.show');
+        Route::post('/update/{id}', [MuhasebeController::class, 'update'])->name('muhasebe.update');
+
+        Route::post('/{id}/odemeturgetir', [MuhasebeController::class, 'odemeturgetir'])->name('muhasebe.odemeturgetir');
+        Route::post('/{id}/odemesekligetir', [MuhasebeController::class, 'odemesekligetir'])->name('muhasebe.odemesekligetir');
+        Route::post('/{id}/kurgetir', [MuhasebeController::class, 'kurgetir'])->name('muhasebe.kurgetir');
 
 
+
+
+        Route::post('/hoca', [MuhasebeController::class, 'hocaodeme'])->name('muhasebe.hoca');
+
+
+        Route::post('/ayar', [MakbuzSetController::class, 'index'])->name('makbuzset.index');
+        Route::post('/makbuz', [MuhasebeController::class, 'makbuz'])->name('muhasebe.makbuz');
+    });
+
+    Route::prefix('ogrenciodeme')->group(function (){
+        Route::get('/', [MuhasebeController::class, 'ogrenciodeme'])->name('muhasebe.ogrenci');
+        Route::post('/edit', [MuhasebeController::class, 'editOgrenci'])->name('muhasebe.ogrenci.edit');
+        Route::post('/destroy', [MuhasebeController::class, 'destroyOgrenci'])->name('muhasebe.ogrenci.delete');
+
+        Route::post('/store', [MuhasebeController::class, 'storeOgrenci'])->name('muhasebe.ogrenci.store');
+        Route::post('/show/{id}', [MuhasebeController::class, 'showOgrenci'])->name('muhasebe.ogrenci.show');
+        Route::post('/update/{id}', [MuhasebeController::class, 'updateOgrenci'])->name('muhasebe.ogrenci.update');
+
+    });
+    Route::prefix('hocaodeme')->group(function (){
+        Route::get('/', [MuhasebeController::class, 'hocaodeme'])->name('muhasebe.hoca');
+        Route::post('/edit', [MuhasebeController::class, 'editHoca'])->name('muhasebe.hoca.edit');
+        Route::post('/destroy', [MuhasebeController::class, 'destroyHoca'])->name('muhasebe.hoca.delete');
+
+        Route::post('/store', [MuhasebeController::class, 'storeHoca'])->name('muhasebe.hoca.store');
+        Route::post('/show/{id}', [MuhasebeController::class, 'showHoca'])->name('muhasebe.hoca.show');
+        Route::post('/update/{id}', [MuhasebeController::class, 'updateHoca'])->name('muhasebe.hoca.update');
+
+    });
+    Route::prefix('makbuzset')->group(function () {
+
+        Route::get('/', [MakbuzSetController::class, 'index'])->name('makbuzset.index');
+
+        Route::post('/store', [MakbuzSetController::class, 'store'])->name('makbuzset.store');
+        Route::post('/destroy', [MakbuzSetController::class, 'destroy'])->name('makbuzset.destroy');
+        Route::post('/update', [MakbuzSetController::class, 'update'])->name('makbuzset.update');
+    });
     Route::prefix('root')->group(function () {
         Route::get('/', [RoleController::class, 'index'])->name('root.index');
         Route::post('/', [RoleController::class, 'index'])->name('root.indexpost');
@@ -244,6 +297,11 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::post('/update', [RoleController::class, 'update'])->name('root.update');
     });
     Route::get('/routes', [RoutesController::class, 'showApplicationRoutes'])->name('routes.index');
+
+    //selectbox getir
+
+
+    Route::post('/birimgetir', [HafizlikController::class, 'birimgetir'])->name('muhasebe.birimgetir');
 });
 
 
