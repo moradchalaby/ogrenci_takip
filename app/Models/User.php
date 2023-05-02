@@ -102,21 +102,21 @@ class User extends Authenticatable
 
         return false;
     }
-    public static function hasRol($role, $user)
+    public static function hasRol($role, $user): bool
     {
 
         if (User::find($user)->roles()->where('roles_slug', $role)->first()) return true;
 
         return false;
     }
-    public  function hasRoleparent($role)
+    public function hasRoleparent($role): bool
     {
         $id = Role::where('roles_slug', $role)->first();
-        if (!is_null($id)) {
-
-            if ($this->roles()->where('parent_id', $id->parent_id)->first()) return true;
+        if (is_null($id)) {
 
             return false;
+        }elseif ($this->roles()->where('parent_id', $id->parent_id)->first()){
+             return true;
         } else {
             return false;
         }

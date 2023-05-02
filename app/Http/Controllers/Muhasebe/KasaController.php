@@ -3,35 +3,32 @@
 namespace App\Http\Controllers\Muhasebe;
 
 use App\Http\Controllers\Controller;
-use App\Models\Birim;
 use App\Models\Kasa;
 use App\Models\Makbuz;
 use App\Models\MakbuzSet;
-use App\Models\Ogrenci;
-use App\Models\OgrenciOdeme;
-use Carbon\Carbon;
-use DateInterval;
-use DatePeriod;
-use DateTime;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 
-class MuhasebeController extends Controller
+class KasaController extends Controller
 {
-  public function __construct()
+    //
+    public function __construct()
     {
 
-        $this->middleware('can:yetkili');
+       // $this->middleware('can:yetkili');
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return string
      * @throws \Exception
      */
     public function index(Request $request, Builder $builder, $id)
@@ -68,275 +65,7 @@ class MuhasebeController extends Controller
 
 
             $data =
-                Makbuz::where('user_id','=',$id)
-                   // ->WhereBetween('tarih', [$bast, $sont])
-                    ->orderBy('tarih', 'desc')
-                    ->when($request->fiyat != null, function ($q) use ($request) {
-                        return $q->havingRaw("tutar >= {$request->fiyat}");
-                    }, function ($q) {
-                        return $q;
-                    })->when($request->tur != null, function ($q) use ($request) {
-                        return $q->where("tur", "=", $request->tur);
-                    }, function ($q) {
-                        return $q;
-                    })->when($request->kur != null, function ($q) use ($request) {
-                        return $q->where("kur", "=", $request->kur);
-                    })->when($request->odeme_sekli != null, function ($q) use ($request) {
-                        return $q->where("odeme_sekli", "=", $request->odeme_sekli);
-                    }, function ($q) {
-                        return $q;
-                    })
-                    ->select(
-                        '*',
-                        DB::raw('(SELECT SUM(makbuzs.tutar)
-                  FROM makbuzs
-                 WHERE makbuzs.kur = "₺") AS tltop'),
-                        DB::raw('(SELECT SUM(makbuzs.tutar)
-                  FROM makbuzs
-                 WHERE makbuzs.kur = "₺") AS tltop'),
-                        DB::raw('(SELECT SUM(makbuzs.tutar)
-                  FROM makbuzs
-                 WHERE makbuzs.kur = "$") AS ustop'), )
-                    ->get();
-
-           $data= $data->push(['id'=>'0','adsoyad'=>'TOPLAM','kullanici'=>'TL','tutar'=>intval($data[0]->tltop).' ₺','odeme_sekli'=>'EURO','tarih'=>intval($data[0]->eutop).' €','tur'=>'DOLAR','aciklama'=>intval($data[0]->ustop).' $','kur'=>'']);
-
-
-            $dt = DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('adsoyad', function ($row) {
-
-
-                    $name=$row['adsoyad'];
-                    return $name;
-                })
-                ->addColumn('kullanici', function ($row) {
-
-
-
-                    return $row['kullanici'];
-                })
-                ->addColumn('fiyat', function ($row) {
-
-
-
-                    return $row['tutar'].' '.$row['kur'];
-                })
-
-
-                ->addColumn('odemeSekli', function ($row) {
-                    return $row['odeme_sekli'];
-                })
-                ->addColumn('tarih', function ($row) use ($request) {
-
-
-                    $toplam = $row['tarih'];
-
-
-
-                    return $toplam;
-                })
-
-                ->addColumn('tur', function ($row) {
-
-
-                    return $row['tur'];
-                })
-            ->addColumn('aciklama', function ($row) {
-
-
-                return $row['aciklama'];
-            })->addColumn('action', function ($row) {
-
-                    $btn= '<a type="button" class="btn btn-success btn-xs editmodal" data-toggle="modal" data-id="' . $row['id'] . '" data-target="#modalEdit">
-
-                                          Düzenle
-                                      </a>
-                                      <a type="button" class="btn btn-primary btn-xs showmodal" data-toggle="modal" data-id="' . $row['id'] . '" data-target="#modalShow">
-
-                                          Görüntüle
-                                      </a>
-                                      ';
-
-                                    /*  <a href="/yetki/' . $row['id'] . '" type="button" class="btn btn-success btn-xs">
-
-                                        Yetkiler
-                                      </a>*/
-                    return $btn;
-                });
-
-            $raw = [
-                'adsoyad',
-                'tur', 'action', 'tarih', 'fiyat', 'aciklama', 'kullanici','odemeSekli',
-            ];
-          /*  foreach ($daterange as $date) {
-
-                $gun = $date->format('Y-m-d');
-
-                $dt->addColumn($gun, function ($row) use ($gun) {
-                    $dersid = explode(',', $row['dersId']);
-                    $gunler = explode(',', $row['gunler']);
-                    $dersler = explode('*', $row['dersler']);
-                    $array_new = array_count_values($dersler);
-                    $array2 = array();
-                    foreach ($array_new as $key => $val) {
-                        if ($val > 1) { //or do $val >2 based on your desire
-                            $array2[] = $key;
-                        }
-                    }
-
-
-                    if (in_array($gun, $gunler)) {
-
-
-                        $tekrar =   array_count_values($gunler);
-                        $say = $tekrar[$gun];
-                        $class = 'bg-info';
-                        if (in_array($dersler[array_search($gun, $gunler)], $array2)) {
-                            $class = 'bg-danger';
-                        }
-                        $thisders = str_contains($row['durum'], 'Hafız') ?  str_Replace('20/', '', $dersler[array_search($gun, $gunler)]) : $dersler[array_search($gun, $gunler)];
-                        $ders =
-                            '<a  class="duzenleDers btn-xs ' . $class . '  col-6 user-select-none" data-toggle="modal" data-dersid="' . $dersid[array_search($gun, $gunler)] . '"data-target="#modalDersduzenle">' . $thisders . '</a> ';
-                        for ($i = 1; $i < $say; $i++) {
-                            $thisders = str_contains($row['durum'], 'Hafız') ?  str_Replace('20/', '', $dersler[array_search($gun, $gunler) + $i]) : $dersler[array_search($gun, $gunler) + $i];
-                            $class = 'bg-info';
-                            if (in_array($dersler[array_search($gun, $gunler) + $i], $array2)) {
-                                $class = 'bg-danger';
-                            }
-                            $ders = $ders
-                                . ' <a  class="duzenleDers btn-xs ' . $class . '  col-6 user-select-none" data-toggle="modal" data-dersid="' . $dersid[array_search($gun, $gunler) + $i] . '"data-target="#modalDersduzenle">' . $thisders
-                                . '</a> ';
-                        }
-                    } else {
-                        $ders = '';
-                    }
-
-                    return $ders;
-                });
-                $raw[] = $gun;
-            }*/
-            $dt->rawColumns($raw);
-
-            return  $dt->make(true);
-        }
-
-        $ekle = [
-
-            ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'Id'],
-            ['data' => 'adsoyad', 'name' => 'adsoyad', 'title' => 'Ad Soyad'],
-            ['data' => 'kullanici', 'name' => 'kullanici', 'title' => 'Ödeme Alan'],
-            ['data' => 'fiyat', 'name' => 'fiyat', 'title' => 'Tutar'],
-            ['data' => 'odemeSekli', 'name' => 'odemeSekli', 'title' => 'Ödeme Şekli'],
-            ['data' => 'tarih', 'name' => 'tarih', 'title' => 'Tarih'],
-            ['data' => 'tur', 'name' => 'tur', 'title' => 'Ödeme Türü'],
-
-            ['data' => 'aciklama', 'name' => 'aciklama', 'title' => 'Açıklama'],
-            ['data' => 'action', 'name' => 'tactionur', 'title' => 'İşlem'],
-
-        ];
-
-
-
-
-
-     /*   foreach ($daterange as $date) {
-
-            $gun = $date->format('Y-m-d');
-            array_push($ekle, ['data' => $gun, 'name' => $gun, 'title' => $gun]);
-        }*/
-      $html = $builder
-        /* ->ajax([
-
-            'url' => route('muhasebe.indexpost',Auth::id()),
-            'type' => 'POST',
-            'data' => "function(d) { d.tarihar = '{$bast} - {$sont} ';
-            d.user_id = '{$id}';
-            d.hoca_id = '{$request->hoca_id}';
-            d.kota = '{$request->kota}';
-            d.sayfa = '{$request->sayfa}';
-            d.durum = '{$request->durum}';
-        }",
-        ])*/->columns($ekle)->initComplete("function() {
-
-
-        window.LaravelDataTables['example1'].buttons().container().appendTo($('.col-md-6:eq(0)', window.LaravelDataTables['example1'].table().container()));
-
-
-        }");
-        if ($request->responsive) {
-            $html->responsive(true);
-        } else {
-            $html->scrollX(true);
-        };
-
-
-
-        $html->lengthMenu([
-            [-1, 10, 25, 50],
-            ["Tümü", 10, 25, 50]
-        ],)->serverSide(true)->search([
-            "caseInsensitive" => true
-        ])->parameters([
-            'columnDefs' => [
-                ['targets' => [2, 3, 4], "orderDataType" => "dom-text", "type" => "locale-compare"],
-                ['targets' => [0],  "type" => "numeric"]
-
-            ]
-        ]);
-
-
-
-        $veri['title'] = 'Muhasebe';
-        $veri['name'] = 'Muhasebe';
-        $veri['bast'] = $bast;
-        $veri['sont'] = $sont;
-        $veri['kota'] = $request->kota;
-        $veri['sayfa'] = $request->sayfa;
-        $veri['hoca'] = $request->hoca_id;
-        $veri['birim'] = $id;
-        $veri['durum'] = $request->durum;
-        /* dd($html);
-        exit; */
-
-        return view('muhasebe.makbuzlar.index', compact('html', 'veri'));
-    }
-
-    public function hocaodeme(Request $request, Builder $builder, $id)
-    {
-
-
-
-        $user_id= $id;
-
-//dd(MakbuzSet::whereSetParent('1'));
-
-
-        if ($request->tarihar != null) {
-
-            $tarihar = explode(' - ', $request->tarihar);
-        } else {
-            $tarihar = [date("Y-m-d"), date("Y-m-d")];
-        };
-        $bast = date("Y-m-d", strtotime($tarihar[0]));
-        $sont =
-            date("Y-m-d", strtotime($tarihar[1]));
-        $beign = new DateTime($bast);
-        $end = new DateTime($sont);
-        $end = $end->modify('+1 day');
-        $interval = new DateInterval('P1D');
-        $daterange = new DatePeriod(
-            $beign,
-            $interval,
-            $end
-        );
-
-
-        if ($request->ajax()) {
-
-
-            $data =
-                Makbuz::where('user_id','=',$id)
+                Kasa::where('user_id','=',$id)
                     // ->WhereBetween('tarih', [$bast, $sont])
                     ->orderBy('tarih', 'desc')
                     ->when($request->fiyat != null, function ($q) use ($request) {
@@ -353,21 +82,59 @@ class MuhasebeController extends Controller
                         return $q->where("odeme_sekli", "=", $request->odeme_sekli);
                     }, function ($q) {
                         return $q;
+                    })->when($request->durum != null, function ($q) use ($request) {
+                        return $q->where("durum", "=", $request->durum);
+                    }, function ($q) {
+                        return $q;
                     })
                     ->select(
                         '*',
-                        DB::raw('(SELECT SUM(makbuzs.tutar)
-                  FROM makbuzs
-                 WHERE makbuzs.kur = "₺") AS tltop'),
-                        DB::raw('(SELECT SUM(makbuzs.tutar)
-                  FROM makbuzs
-                 WHERE makbuzs.kur = "₺") AS tltop'),
-                        DB::raw('(SELECT SUM(makbuzs.tutar)
-                  FROM makbuzs
-                 WHERE makbuzs.kur = "$") AS ustop'), )
-                    ->get();
+                        DB::raw("(SELECT SUM(kasas.tutar)
+                  FROM kasas
+                 WHERE kasas.kur = '₺' AND kasas.durum = '1' AND kasas.user_id = ".$id. ") AS tldah"),
 
-            $data= $data->push(['id'=>'0','adsoyad'=>'TOPLAM','kullanici'=>'TL','tutar'=>intval($data[0]->tltop).' ₺','odeme_sekli'=>'EURO','tarih'=>intval($data[0]->eutop).' €','tur'=>'DOLAR','aciklama'=>intval($data[0]->ustop).' $','kur'=>'']);
+
+                        DB::raw('(SELECT SUM(kasas.tutar)
+                  FROM kasas
+                 WHERE kasas.kur = "₺" AND kasas.durum = "0" AND kasas.user_id = '.$id. ') AS tlhar'),
+
+                        DB::raw("(SELECT SUM(kasas.tutar)
+                  FROM kasas
+                 WHERE kasas.kur = '€' AND kasas.durum = '1' AND kasas.user_id = ".$id. ") AS eudah"),
+
+
+                        DB::raw('(SELECT SUM(kasas.tutar)
+                  FROM kasas
+                 WHERE kasas.kur = "€" AND kasas.durum = "0" AND kasas.user_id = '.$id. ') AS euhar'),
+
+                        DB::raw("(SELECT SUM(kasas.tutar)
+                  FROM kasas
+                 WHERE kasas.kur = '$' AND kasas.durum = '1' AND kasas.user_id = ".$id. ") AS usdah"),
+
+
+                        DB::raw('(SELECT SUM(kasas.tutar)
+                  FROM kasas
+                 WHERE kasas.kur = "$" AND kasas.durum = "0" AND kasas.user_id = '.$id. ') AS ushar'),
+
+
+                        DB::raw('(SELECT SUM(kasas.tutar)
+                  FROM kasas
+                 WHERE kasas.kur = "₺" AND kasas.user_id = '.$id. ') AS tltop'),
+
+
+                        DB::raw('(SELECT SUM(kasas.tutar)
+                  FROM kasas
+                 WHERE kasas.kur = "$" AND kasas.user_id = '.$id. ') AS ustop'),
+                        DB::raw('(SELECT SUM(kasas.tutar)
+                  FROM kasas
+                 WHERE kasas.kur = "€" AND kasas.user_id = '.$id. ') AS uetop'))
+                    ->get();
+$tlfark=intval($data[0]->tldah)-intval($data[0]->tlhar);
+            $usfark=intval($data[0]->usdah)-intval($data[0]->ushar);
+            $eufark=intval($data[0]->eudah)-intval($data[0]->euhar);
+
+
+            $data= $data->push(['id'=>'0','adsoyad'=>'TOPLAM','kullanici'=>'=','tutar'=>$tlfark.' ₺','odeme_sekli'=>$eufark==0?'':'-','tarih'=>$eufark==0?'':intval($eufark).' €','tur'=>$usfark==0?'':'-','aciklama'=>$usfark==0?'':intval($usfark).' $','kur'=>'', 'durum'=>'3']);
 
 
             $dt = DataTables::of($data)
@@ -378,11 +145,26 @@ class MuhasebeController extends Controller
                     $name=$row['adsoyad'];
                     return $name;
                 })
-                ->addColumn('kullanici', function ($row) {
+                ->addColumn('durum', function ($row) {
+                    if(isset($row->durum)){
+                    switch ($row->durum) {
+                        case 0:
+                            return "Hariç";
+                            break;
+                        case 1:
+                            return "Dahil";
+                            break;
+                        case 3:
+                            return "=";
+                            break;
+                        default:
+                            return '';
+                    }
+                    }else{
+                        return '=';
+                    }
 
 
-
-                    return $row['kullanici'];
                 })
                 ->addColumn('fiyat', function ($row) {
 
@@ -416,14 +198,11 @@ class MuhasebeController extends Controller
                     return $row['aciklama'];
                 })->addColumn('action', function ($row) {
 
-                    $btn= '<a type="button" class="btn btn-success btn-xs editmodal" data-toggle="modal" data-id="' . $row['id'] . '" data-target="#modalEdit">
+                    $btn= '<a type="button" class="btn btn-warning btn-xs editmodal" data-toggle="modal" data-id="' . $row['id'] . '" data-target="#modalEdit">
 
                                           Düzenle
                                       </a>
-                                      <a type="button" class="btn btn-primary btn-xs showmodal" data-toggle="modal" data-id="' . $row['id'] . '" data-target="#modalShow">
 
-                                          Görüntüle
-                                      </a>
                                       ';
 
                     /*  <a href="/yetki/' . $row['id'] . '" type="button" class="btn btn-success btn-xs">
@@ -431,11 +210,32 @@ class MuhasebeController extends Controller
                         Yetkiler
                       </a>*/
                     return $btn;
+                })
+                ->setRowClass(function ($row) {
+if(isset($row->durum)){
+
+    switch ($row->durum) {
+        case 0:
+            return "bg-red disabled";
+            break;
+        case 1:
+            return "bg-olive";
+            break;
+        case 3:
+            return "alert-info";
+            break;
+        default:
+            return '';
+    }
+}else{
+    return 'bg-info';
+}
+                    // $row->durum == 1 ? 'alert-success' : '';
                 });
 
             $raw = [
                 'adsoyad',
-                'tur', 'action', 'tarih', 'fiyat', 'aciklama', 'kullanici','odemeSekli',
+                'tur', 'action', 'tarih', 'fiyat', 'aciklama', 'durum','odemeSekli',
             ];
             /*  foreach ($daterange as $date) {
 
@@ -493,7 +293,7 @@ class MuhasebeController extends Controller
 
             ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'title' => 'Id'],
             ['data' => 'adsoyad', 'name' => 'adsoyad', 'title' => 'Ad Soyad'],
-            ['data' => 'kullanici', 'name' => 'kullanici', 'title' => 'Ödeme Alan'],
+            ['data' => 'durum', 'name' => 'durum', 'title' => 'Durum'],
             ['data' => 'fiyat', 'name' => 'fiyat', 'title' => 'Tutar'],
             ['data' => 'odemeSekli', 'name' => 'odemeSekli', 'title' => 'Ödeme Şekli'],
             ['data' => 'tarih', 'name' => 'tarih', 'title' => 'Tarih'],
@@ -525,7 +325,9 @@ class MuhasebeController extends Controller
                 d.sayfa = '{$request->sayfa}';
                 d.durum = '{$request->durum}';
             }",
-            ])*/->columns($ekle)->initComplete("function() {
+            ])*/->columns($ekle)
+->select()
+            ->initComplete("function() {
 
 
         window.LaravelDataTables['example1'].buttons().container().appendTo($('.col-md-6:eq(0)', window.LaravelDataTables['example1'].table().container()));
@@ -567,94 +369,14 @@ class MuhasebeController extends Controller
         /* dd($html);
         exit; */
 
-        return view('muhasebe.makbuzlar.index', compact('html', 'veri'));
+        return view('muhasebe.kasa.index', compact('html', 'veri'));
     }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function odemeturgetir(Request $request)
-    {
 
-        //
-     if ($request->ajax()) {
-           // $gonder[] = "<option value='0'> Seçiniz </option>";
-            $data = MakbuzSet::where('set_parent','=','odemeturu')->get();
-            foreach ($data as $veri) {
-                if($veri['set_data']=='SADAKA'){
-                    $gonder[] = '<option selected value="' . $veri['set_data'] . '" >' . $veri['set_data'] . '</option>';
 
-                }else{
-                    $gonder[] = '<option value="' . $veri['set_data'] . '">' . $veri['set_data'] . '</option>';
-
-                }
-            }
-
-            return response()->json($gonder);
-        }
-    }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return JsonResponse
-     */
-    public function odemesekligetir(Request $request)
-    {
-
-        //
-        $gonder[] = "<option value=\"\">SEÇİNİZ</option>";
-        if ($request->ajax()) {
-
-            $data = MakbuzSet::whereSetParent('odemesekli')->get();
-
-            foreach ($data as $veri) {
-                if($veri['set_data']=='NAKİT'){
-                    $gonder[] = "<option selected value=\"" . $veri['set_data'] . "\" >" . $veri['set_data'] . "</option>";
-
-                }else{
-                    $gonder[] = "<option value=\"" . $veri['set_data'] . "\">" . $veri['set_data'] . "</option>";
-
-                }
-
-            }
-
-            return response()->json($gonder);
-        }
-    }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return JsonResponse
-     */
-    public function kurgetir(Request $request)
-    {
-
-        //
-
-        if ($request->ajax()) {
-
-            $data = MakbuzSet::whereSetParent('kur')->get();
-
-            foreach ($data as $veri) {
-                if($veri['set_data']=='₺'){
-                    $gonder[] = "<option value=\"" . $veri['set_data'] . "\" selected>" . $veri['set_data'] . "</option>";
-
-                }
-                $gonder[] = "<option value=\"" . $veri['set_data'] . "\">" . $veri['set_data'] . "</option>";
-
-            }
-
-            return response()->json($gonder);
-        }
-    }
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -664,31 +386,18 @@ class MuhasebeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         //
         if ($request->ajax()) {
 
-          $makbuz= Makbuz::create([
-              'kullanici'=>$request->kullanici_adsoyad,
-             'user_id' =>$request->kullanici_id,
-              'kur'=>$request->kur,
-              'aciklama'=>$request->makbuz_aciklama,
-              'adsoyad'=>$request->makbuz_adsoyad,
-              'odeme_sekli'=>$request->odemeSekli,
-              'tur'=>$request->odenen,
-              'tarih'=>$request->tarih,
-              'tutar'=>$request->tutar,
-
-          ]);
             $data= Kasa::create([
                 'kullanici'=>$request->kullanici_adsoyad,
                 'user_id' =>$request->kullanici_id,
                 'kur'=>$request->kur,
-                'makbuz_id'=>$makbuz->id,
                 'aciklama'=>$request->makbuz_aciklama,
                 'adsoyad'=>$request->makbuz_adsoyad,
                 'odeme_sekli'=>$request->odemeSekli,
@@ -696,7 +405,7 @@ class MuhasebeController extends Controller
                 'ay'=>date('Y-m', strtotime($request->tarih)),
                 'tarih'=>$request->tarih,
                 'tutar'=>$request->tutar,
-                'durum'=>'1',
+                'durum'=>'0',
 
             ]);
 //$data=$request->all();
@@ -707,10 +416,10 @@ class MuhasebeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return JsonResponse
      */
-    public function show($id)
+    public function show(int $id): JsonResponse
     {
         //
         if ($id>0) {
@@ -728,7 +437,7 @@ class MuhasebeController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($id)
     {
@@ -738,29 +447,32 @@ class MuhasebeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, $id)
     {
         //
         if ($request->ajax()) {
+if($request->durum==0){
+    $data = Kasa::updateorCreate( ['id' => $id], [
+        'kullanici' => $request->kullanici,
+        'user_id' => $request->user_id,
+        'kur' => $request->kur,
+        'aciklama' => $request->aciklama,
+        'adsoyad' => $request->adsoyad,
+        'odeme_sekli' => $request->odeme_sekli,
+        'tur' => $request->tur,
+        'tarih' => $request->tarih,
+        'tutar' => $request->tutar,
 
-            $data = Makbuz::updateorCreate( ['id' => $id], [
-                'kullanici' => $request->kullanici,
-                'user_id' => $request->user_id,
-                'kur' => $request->kur,
-                'aciklama' => $request->aciklama,
-                'adsoyad' => $request->adsoyad,
-                'odeme_sekli' => $request->odeme_sekli,
-                'tur' => $request->tur,
-                'tarih' => $request->tarih,
-                'tutar' => $request->tutar,
+    ]);
+    return response()->json($data);
+}
 
-            ]);
 //$data=$request->all();
-            return response()->json($data);
+
         }
     }
 

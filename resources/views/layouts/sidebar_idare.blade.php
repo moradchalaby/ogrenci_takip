@@ -1,5 +1,6 @@
+@can('parent', 'idari')
 <li class="nav-item">
-    @can('yetkili', 'idari')
+    @can('yet', 'idari')
         <a href="#" class="nav-link">
             <i class="nav-icon fas fa-users-gear"></i>
             <p>
@@ -12,7 +13,7 @@
     <ul class="nav nav-treeview">
 
 
-        @can('yetkili', 'personel')
+        @can('yet', 'personel')
             <li class="nav-item">
                 <a href="{{ route('personel.index') }}" class="nav-link {{ active('personel.index') }}">
                     <i class="fa-solid fa-people-group nav-icon"></i>
@@ -20,7 +21,7 @@
                 </a>
             </li>
         @endcan
-        @can('yetkili', 'birim')
+        @can('yet', 'birim')
             <li class="nav-item">
                 <a href="{{ route('birim.index') }}" class="nav-link {{ active('birim.index') }}">
                     <i class="fa-solid fa-address-card nav-icon"></i>
@@ -36,7 +37,7 @@
             EĞİTİM <i class="fa-solid fa-row nav-icon"></i>
         </li>
 
-        @can('yetkili', 'ogrenci')
+        @can('yet', 'ogrenci')
             <li class="nav-item">
                 <a href="{{ route('ogrenci.index') }}" class="nav-link {{ active('ogrenci.index') }}">
                     <i class="fa-solid fa-row nav-icon"></i>
@@ -45,7 +46,7 @@
             </li>
         @endcan
 
-        @can('yetkili', 'hafizlik')
+        @can('yet', 'hafizlik')
             <li class="nav-item">
                 <a href="{{ route('hafizlik.index') }}" class="nav-link {{ active('hafizlik.index') }}">
                     <i class="fa-solid fa-row nav-icon"></i>
@@ -53,7 +54,7 @@
                 </a>
             </li>
         @endcan
-        @can('yetkili', 'hafizlik')
+        @can('yet', 'hafizlik')
             <li class="nav-item">
                 <a href="{{ route('hocahafizlik.index') }}" class="nav-link {{ active('hocahafizlik.index') }}">
                     <i class="fa-solid fa-row nav-icon"></i>
@@ -65,3 +66,4 @@
 
     </ul>
 </li>
+@endcan

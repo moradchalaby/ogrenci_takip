@@ -18,7 +18,7 @@ class MakbuzSetController extends Controller
     public function __construct()
     {
 
-        $this->middleware('can:yetkili');
+        $this->middleware('can:root');
     }
     /**
      * Display a listing of the resource.

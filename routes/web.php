@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Muhasebe\KasaController;
 use App\Http\Controllers\Muhasebe\MakbuzSetController;
 use App\Http\Controllers\Muhasebe\MuhasebeController;
 use Illuminate\Support\Facades\Route;
@@ -50,10 +51,10 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
 
     Route::prefix('takvim')->group(function () {
 
-        Route::get('/', [CalenderController::class, 'index']);
-        Route::post('/editEvents', [CalenderController::class, 'editEvents'])->name('update');
-        Route::post('/editFormEvents', [CalenderController::class, 'editFormEvents'])->name('formupdate');
-        Route::post('/addEvents', [CalenderController::class, 'addEvents'])->name('insert');
+        Route::get('/', [CalenderController::class, 'index'])->middleware('can:yet','takvim');
+        Route::post('/editEvents', [CalenderController::class, 'editEvents'])->middleware('can:yet','idari')->name('update');
+        Route::post('/editFormEvents', [CalenderController::class, 'editFormEvents'])->middleware('can:yet','idari')->name('formupdate');
+        Route::post('/addEvents', [CalenderController::class, 'addEvents'])->middleware('can:yet','idari')->name('insert');
     });
     Route::prefix('yetki')->group(function () {
         Route::get('/{id}', [YetkilerController::class, 'index'])->name('personel.yetki');
@@ -234,69 +235,71 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::post('/birimgetir', [HocaBirimHafizlikController::class, 'birimgetir'])->name('ihtisashocahafizlik.birimgetir');
     });
     Route::prefix('muhasebe')->group(function () {
-        Route::get('/{id}', [MuhasebeController::class, 'index'])->name('muhasebe.index');
+        Route::get('/{id}', [MuhasebeController::class, 'index'])->can('yet','muhasebe')->name('muhasebe.index');
         //Route::post('/{id}', [MuhasebeController::class, 'index'])->name('muhasebe.indexpost');
 
-        Route::post('/edit', [MuhasebeController::class, 'edit'])->name('muhasebe.edit');
-        Route::post('/destroy', [MuhasebeController::class, 'destroy'])->name('muhasebe.delete');
+        Route::post('/edit', [MuhasebeController::class, 'edit'])->can('islem','muhasebe')->name('muhasebe.edit');
+        Route::post('/destroy', [MuhasebeController::class, 'destroy'])->can('islem','muhasebe')->name('muhasebe.delete');
 
-        Route::post('/store', [MuhasebeController::class, 'store'])->name('muhasebe.store');
-        Route::post('/show/{id}', [MuhasebeController::class, 'show'])->name('muhasebe.show');
-        Route::post('/update/{id}', [MuhasebeController::class, 'update'])->name('muhasebe.update');
+        Route::post('/store', [MuhasebeController::class, 'store'])->can('islem','muhasebe')->name('muhasebe.store');
+        Route::post('/show/{id}', [MuhasebeController::class, 'show'])->can('yet','muhasebe')->name('muhasebe.show');
+        Route::post('/update/{id}', [MuhasebeController::class, 'update'])->can('islem','muhasebe')->name('muhasebe.update');
 
-        Route::post('/{id}/odemeturgetir', [MuhasebeController::class, 'odemeturgetir'])->name('muhasebe.odemeturgetir');
-        Route::post('/{id}/odemesekligetir', [MuhasebeController::class, 'odemesekligetir'])->name('muhasebe.odemesekligetir');
-        Route::post('/{id}/kurgetir', [MuhasebeController::class, 'kurgetir'])->name('muhasebe.kurgetir');
+        Route::post('/{id}/odemeturgetir', [MuhasebeController::class, 'odemeturgetir'])->can('yet','muhasebe')->name('muhasebe.odemeturgetir');
+        Route::post('/{id}/odemesekligetir', [MuhasebeController::class, 'odemesekligetir'])->can('yet','muhasebe')->name('muhasebe.odemesekligetir');
+        Route::post('/{id}/kurgetir', [MuhasebeController::class, 'kurgetir'])->can('yet','muhasebe')->name('muhasebe.kurgetir');
 
-
-
-
-        Route::post('/hoca', [MuhasebeController::class, 'hocaodeme'])->name('muhasebe.hoca');
-
-
-        Route::post('/ayar', [MakbuzSetController::class, 'index'])->name('makbuzset.index');
-        Route::post('/makbuz', [MuhasebeController::class, 'makbuz'])->name('muhasebe.makbuz');
     });
 
     Route::prefix('ogrenciodeme')->group(function (){
-        Route::get('/', [MuhasebeController::class, 'ogrenciodeme'])->name('muhasebe.ogrenci');
-        Route::post('/edit', [MuhasebeController::class, 'editOgrenci'])->name('muhasebe.ogrenci.edit');
-        Route::post('/destroy', [MuhasebeController::class, 'destroyOgrenci'])->name('muhasebe.ogrenci.delete');
+        Route::get('/', [MuhasebeController::class, 'ogrenciodeme'])->can('yet','ogrenciodeme')->name('muhasebe.ogrenci');
+        Route::post('/edit', [MuhasebeController::class, 'editOgrenci'])->can('islem','ogrenciodeme')->name('muhasebe.ogrenci.edit');
+        Route::post('/destroy', [MuhasebeController::class, 'destroyOgrenci'])->can('islem','ogrenciodeme')->name('muhasebe.ogrenci.delete');
 
-        Route::post('/store', [MuhasebeController::class, 'storeOgrenci'])->name('muhasebe.ogrenci.store');
-        Route::post('/show/{id}', [MuhasebeController::class, 'showOgrenci'])->name('muhasebe.ogrenci.show');
-        Route::post('/update/{id}', [MuhasebeController::class, 'updateOgrenci'])->name('muhasebe.ogrenci.update');
+        Route::post('/store', [MuhasebeController::class, 'storeOgrenci'])->can('islem','ogrenciodeme')->name('muhasebe.ogrenci.store');
+        Route::post('/show/{id}', [MuhasebeController::class, 'showOgrenci'])->can('islem','ogrenciodeme')->name('muhasebe.ogrenci.show');
+        Route::post('/update/{id}', [MuhasebeController::class, 'updateOgrenci'])->can('islem','ogrenciodeme')->name('muhasebe.ogrenci.update');
 
     });
     Route::prefix('hocaodeme')->group(function (){
-        Route::get('/', [MuhasebeController::class, 'hocaodeme'])->name('muhasebe.hoca');
-        Route::post('/edit', [MuhasebeController::class, 'editHoca'])->name('muhasebe.hoca.edit');
-        Route::post('/destroy', [MuhasebeController::class, 'destroyHoca'])->name('muhasebe.hoca.delete');
+        Route::get('/', [MuhasebeController::class, 'hocaodeme'])->can('yet','muhasebe')->name('muhasebe.hoca');
+        Route::post('/edit', [MuhasebeController::class, 'editHoca'])->can('islem','hocaodeme')->name('muhasebe.hoca.edit');
+        Route::post('/destroy', [MuhasebeController::class, 'destroyHoca'])->can('islem','hocaodeme')->name('muhasebe.hoca.delete');
 
-        Route::post('/store', [MuhasebeController::class, 'storeHoca'])->name('muhasebe.hoca.store');
-        Route::post('/show/{id}', [MuhasebeController::class, 'showHoca'])->name('muhasebe.hoca.show');
-        Route::post('/update/{id}', [MuhasebeController::class, 'updateHoca'])->name('muhasebe.hoca.update');
+        Route::post('/store', [MuhasebeController::class, 'storeHoca'])->can('islem','hocaodeme')->name('muhasebe.hoca.store');
+        Route::post('/show/{id}', [MuhasebeController::class, 'showHoca'])->can('islem','hocaodeme')->name('muhasebe.hoca.show');
+        Route::post('/update/{id}', [MuhasebeController::class, 'updateHoca'])->can('islem','hocaodeme')->name('muhasebe.hoca.update');
+
+    });
+    Route::prefix('kasa')->group(function (){
+        Route::get('/{id}', [KasaController::class, 'index'])->can('yet','kasa')->name('kasa.index');
+        Route::post('/edit', [KasaController::class, 'edit'])->can('islem','kasa')->name('kasa.edit');
+        Route::post('/destroy', [KasaController::class, 'destroy'])->can('islem','kasa')->name('kasa.delete');
+
+        Route::post('/store', [KasaController::class, 'store'])->can('islem','kasa')->name('kasa.store');
+        Route::post('/show/{id}', [KasaController::class, 'show'])->can('islem','kasa')->name('kasa.show');
+        Route::post('/update/{id}', [KasaController::class, 'update'])->can('islem','kasa')->name('kasa.update');
 
     });
     Route::prefix('makbuzset')->group(function () {
 
-        Route::get('/', [MakbuzSetController::class, 'index'])->name('makbuzset.index');
+        Route::get('/', [MakbuzSetController::class, 'index'])->can('root','root')->name('makbuzset.index');
 
-        Route::post('/store', [MakbuzSetController::class, 'store'])->name('makbuzset.store');
-        Route::post('/destroy', [MakbuzSetController::class, 'destroy'])->name('makbuzset.destroy');
-        Route::post('/update', [MakbuzSetController::class, 'update'])->name('makbuzset.update');
+        Route::post('/store', [MakbuzSetController::class, 'store'])->can('root','root')->name('makbuzset.store');
+        Route::post('/destroy', [MakbuzSetController::class, 'destroy'])->can('root','root')->name('makbuzset.destroy');
+        Route::post('/update', [MakbuzSetController::class, 'update'])->can('root','root')->name('makbuzset.update');
     });
     Route::prefix('root')->group(function () {
-        Route::get('/', [RoleController::class, 'index'])->name('root.index');
-        Route::post('/', [RoleController::class, 'index'])->name('root.indexpost');
+        Route::get('/', [RoleController::class, 'index'])->can('root','root')->name('root.index');
+        Route::post('/', [RoleController::class, 'index'])->can('root','root')->name('root.indexpost');
 
-        Route::post('/edit', [RoleController::class, 'edit'])->name('root.edit');
-        Route::post('/destroy', [RoleController::class, 'destroy'])->name('root.delete');
+        Route::post('/edit', [RoleController::class, 'edit'])->can('root','root')->name('root.edit');
+        Route::post('/destroy', [RoleController::class, 'destroy'])->can('root','root')->name('root.delete');
 
-        Route::post('/store', [RoleController::class, 'store'])->name('root.store');
-        Route::post('/update', [RoleController::class, 'update'])->name('root.update');
+        Route::post('/store', [RoleController::class, 'store'])->can('root','root')->name('root.store');
+        Route::post('/update', [RoleController::class, 'update'])->can('root','root')->name('root.update');
     });
-    Route::get('/routes', [RoutesController::class, 'showApplicationRoutes'])->name('routes.index');
+    Route::get('/routes', [RoutesController::class, 'showApplicationRoutes'])->can('root','root')->name('routes.index');
 
     //selectbox getir
 
@@ -305,90 +308,4 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
 });
 
 
-/* Route::get('/login/redirect', function () {
-    return redirect(route('auth.login'));
-})->name('login');
-Route::get('/login/redirect', function () {
-    return redirect(route('auth.login'));
-})->name('/'); */
-
-/*
-    Route::prefix('birimhoca')->group(function () {
-        //?BirimHoca
-        Route::get('/getBirim', [BirimhocaController::class, 'getBirim'])->name('birimhoca.getBirim');
-        Route::get('/store', [BirimhocaController::class, 'store'])->name('birimhoca.store');
-        Route::post('/create', [BirimhocaController::class, 'create'])->name('birimhoca.create');
-        Route::get('/', [BirimhocaController::class, 'index'])->name('birimhoca.index');
-        Route::post('/hocagetir', [BirimhocaController::class, 'hocagetir'])->name('birimhoca.hocagetir');
-        Route::post('/birimgetir', [BirimhocaController::class, 'birimgetir'])->name('birimhoca.birimgetir');
-    });
-    Route::prefix('birimsorumlu')->group(function () {
-        //?IhtisasHoca
-        Route::get('/getBirim', [BirimsorumluController::class, 'getBirim'])->name('birimsorumlu.getBirim');
-        Route::post('/birimehocaekle', [BirimsorumluController::class, 'create'])->name('birimsorumlu.create');
-        Route::get('/', [BirimsorumluController::class, 'index'])->name('birimsorumlu.index');
-        Route::post('/hocagetir', [BirimsorumluController::class, 'hocagetir'])->name('birimsorumlu.hocagetir');
-        Route::post('/birimgetir', [BirimsorumluController::class, 'birimgetir'])->name('birimsorumlu.birimgetir');
-    });
-
-    Route::prefix('bekarhoca')->group(function () {
-        //?BekarHoca
-        Route::get('/getBirim', [BekarhocaController::class, 'getBirim'])->name('bekarhoca.getBirim');
-        Route::post('/create', [BekarhocaController::class, 'create'])->name('bekarhoca.create');
-        Route::get('/', [BekarhocaController::class, 'index'])->name('bekarhoca.index');
-        Route::post('/hocagetir', [BekarhocaController::class, 'hocagetir'])->name('bekarhoca.hocagetir');
-        Route::post('/birimgetir', [BekarhocaController::class, 'birimgetir'])->name('bekarhoca.birimgetir');
-    });
-
-
-    Route::prefix('muhtelifhoca')->group(function () {
-        //?MuhtelifHoca
-        Route::get('/getBirim', [MuhtelifhocaController::class, 'getBirim'])->name('muhtelifhoca.getBirim');
-        Route::post('/muhtelifhocaekle', [MuhtelifhocaController::class, 'create'])->name('muhtelifhoca.create');
-        Route::get('/', [MuhtelifhocaController::class, 'index'])->name('muhtelifhoca.index');
-        Route::post('/hocagetir', [MuhtelifhocaController::class, 'hocagetir'])->name('muhtelifhoca.hocagetir');
-        Route::post('/birimgetir', [MuhtelifhocaController::class, 'birimgetir'])->name('muhtelifhoca.birimgetir');
-    });
-
-
-    Route::prefix('hafizlikhoca')->group(function () {
-        //?HafizlikHoca
-        Route::get('/getBirim', [HafizlikhocaController::class, 'getBirim'])->name('hafizlikhoca.getBirim');
-        Route::post('/hafizlikhocaekle', [HafizlikhocaController::class, 'create'])->name('hafizlikhoca.create');
-        Route::get('/', [HafizlikhocaController::class, 'index'])->name('hafizlikhoca.index');
-        Route::post('/hocagetir', [HafizlikhocaController::class, 'hocagetir'])->name('hafizlikhoca.hocagetir');
-        Route::post('/birimgetir', [HafizlikhocaController::class, 'birimgetir'])->name('hafizlikhoca.birimgetir');
-    });
-
-
-    Route::prefix('ihtisashoca')->group(function () {
-        //?IhtisasHoca
-        Route::get('/getBirim', [IhtisashocaController::class, 'getBirim'])->name('ihtisashoca.getBirim');
-        Route::post('/ihtisashocaekle', [IhtisashocaController::class, 'create'])->name('ihtisashoca.create');
-        Route::get('/', [IhtisashocaController::class, 'index'])->name('ihtisashoca.index');
-        Route::post('/hocagetir', [IhtisashocaController::class, 'hocagetir'])->name('ihtisashoca.hocagetir');
-        Route::post('/birimgetir', [IhtisashocaController::class, 'birimgetir'])->name('ihtisashoca.birimgetir');
-    });
-
-
-
-    Route::prefix('teknikhoca')->group(function () {
-        //?TeknikHoca
-        Route::get('/getBirim', [TeknikhocaController::class, 'getBirim'])->name('teknikhoca.getBirim');
-        Route::post('/teknikhocaekle', [TeknikhocaController::class, 'create'])->name('teknikhoca.create');
-        Route::get('/', [TeknikhocaController::class, 'index'])->name('teknikhoca.index');
-        Route::post('/hocagetir', [TeknikhocaController::class, 'hocagetir'])->name('teknikhoca.hocagetir');
-        Route::post('/birimgetir', [TeknikhocaController::class, 'birimgetir'])->name('teknikhoca.birimgetir');
-    });
-
-
-    Route::prefix('idarihoca')->group(function () {
-        //?İdariHoca
-        Route::get('/getBirim', [IdarihocaController::class, 'getBirim'])->name('idarihoca.getBirim');
-        Route::post('/idarihocaekle', [IdarihocaController::class, 'create'])->name('idarihoca.create');
-        Route::get('/', [IdarihocaController::class, 'index'])->name('idarihoca.index');
-        Route::post('/hocagetir', [IdarihocaController::class, 'hocagetir'])->name('idarihoca.hocagetir');
-        Route::post('/birimgetir', [IdarihocaController::class, 'birimgetir'])->name('idarihoca.birimgetir');
-    });
-*/
 require __DIR__ . '/auth.php';
