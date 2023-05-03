@@ -129,7 +129,7 @@ class KasaController extends Controller
                   FROM kasas
                  WHERE kasas.kur = "€" AND kasas.user_id = '.$id. ') AS uetop'))
                     ->get();
-$tlfark=intval($data[0]->tldah)-intval($data[0]->tlhar);
+            $tlfark=intval($data[0]->tldah)-intval($data[0]->tlhar);
             $usfark=intval($data[0]->usdah)-intval($data[0]->ushar);
             $eufark=intval($data[0]->eudah)-intval($data[0]->euhar);
 

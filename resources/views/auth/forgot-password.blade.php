@@ -25,7 +25,7 @@
 
                     <!-- Validation Errors -->
                     <x-auth-validation-errors class="mb-4" :errors="$errors" />
-                    <form method="POST" action="{{ route('password.email') }}">
+                    <form method="POST" action="{{ route('password.email') }}" id="emailrest">
                         @csrf
 
                         <div class="input-group mb-3">
@@ -38,24 +38,98 @@
                             </div>
                         </div>
                         <div class="row">
+<!--                            <button type="submit"
+
+                                    class="btn btn-danger btn-block">{{ __('Email Password Reset Link') }}</button>-->
                             <div class="col-12">
-                                <button type="submit"
-                                    onclick="event.preventDefault();
-                                                                 document.getElementById('logout-form').submit();"
-                                    class="btn btn-primary btn-block">{{ __('Email Password Reset Link') }}</button>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                <button type="submit" class="btn btn-primary btn-block" id="sbmt">{{ __('Email Password Reset Link') }} </button>
+<!--                                    onclick="event.preventDefault();
+                                                                 document.getElementById('logoutforming').submit();"-->
+
+<!--                                <form id="logoutforming" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
-                                </form>
+                                </form>-->
                             </div>
                             <!-- /.col -->
                         </div>
 
                     </form>
                     <p class="mt-3 mb-1">
-                        <a href="login.html">Login</a>
+                        <a href="{{ route('login') }}">Login</a>
                     </p>
                 </div>
                 <!-- /.login-card-body -->
             </div>
         </div>
+
     @endsection
+@section('script')
+
+    <script >
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $('#sbmt').on("click", function(e) {
+            e.preventDefault();
+            var formdata = $('#emailrest').serializeArray();
+            var mail=$('#email').val();
+            $.ajax({
+
+                url: "{{ route('password.email') }}",
+                type: 'POST',
+                data: {"email":mail},
+                dataType: 'text',
+                success: (data) => {
+                    console.log('başarılı')
+                    var Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    Toast.fire({
+                        icon: 'success',
+                        title: "{{ __('Şifrenizi sıfırlamak için size bir mail göndereceğiz.') }}",
+                    })
+                    $.ajax({
+
+                        url: "{{ route('logout') }}",
+                        type: 'POST',
+                        data: formdata,
+                        dataType: 'text',
+                        success: (data) => {
+                            console.log('success');
+
+                        },
+                        error: function(data) {
+
+                            console.log('error');
+
+                        },
+                    });
+
+                },
+                error: function(data) {
+                    console.log('başarısısz')
+                    console.log(data.responseText)
+                    var Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    Toast.fire({
+                        icon: 'error',
+                        title: "{{ __('Bir hata oluştu.') }}",
+                    })
+
+                },
+            });
+
+
+
+        })
+    </script>
+@endsection
