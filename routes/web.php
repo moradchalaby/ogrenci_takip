@@ -41,6 +41,7 @@ use App\Http\Controllers\RoutesController;
 
 
 
+
 /* Auth::routes(); */
 
 Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
