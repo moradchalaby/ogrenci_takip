@@ -30,26 +30,9 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
- $alertim = "
-<script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js\"></script>
-<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js\"></script>
-<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css?family=Lato:300\" >
-<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css\" >
 
- <script>
- var Toast = Swal.mixin({
-                        toast: true,
-                        position: \'top\',
-                        showConfirmButton: false,
-                        timer: 3000
-                    });
-                    Toast.fire({
-                        icon: \'success\',
-                        title: \'<br>  Bu işlem **** için yetkiniz yok! <br>\',
-                    })
-                    </script>";
         // Admin  mi ?
-        Gate::define('yetkili', function ($user, $rout = '') use ($alertim ) {
+        Gate::define('yetkili', function ($user, $rout = '') {
 
             if ($rout == '') {
                 $rout =  Request::route()->getPrefix();
@@ -62,19 +45,17 @@ class AuthServiceProvider extends ServiceProvider
                 $rout = '/' . $rout;
             }
 
-            if (
-                $user->hasRole($rout)
-            ) {
+            if ($user->hasRole($rout)) {
                // echo $rout;
                 return   Response::allow();
             } else {
-                return  Response::deny(str_replace('****','** Yetkili **'.$rout.'**',$alertim ));
+                return  Response::deny('Bu işlem için yetkiniz yoktur.');
             } /* return
                 $user->hasRole('admin') ? Response::allow() : Response::deny('Bu işlem için admin olmalısınız!'); */
         });
 
 
-        Gate::define('islem', function ($user, $post) use ($alertim ) {
+        Gate::define('islem', function ($user, $post) {
             $post =  Request::route()->getPrefix();
             if (!str_contains($post[0], '/')) {
                 $post = '/' . $post;
@@ -83,12 +64,12 @@ class AuthServiceProvider extends ServiceProvider
 
                 return   Response::allow();
             } else {
-                return  Response::deny(str_replace('****','** İşlem **'.$post.'**',$alertim ));
+                return  Response::deny('Bu işlem için yetkiniz yoktur.');
             }
             /* return
                 $user->hasRole('admin') ? Response::allow() : Response::deny('Bu işlem için admin olmalısınız!'); */
         });
-        Gate::define('yet', function ($user, $arr) use ($alertim ) {
+        Gate::define('yet', function ($user, $arr)  {
             if (str_contains($arr, ',')) {
                 $arr = explode(',', $arr);
             }elseif ($arr == '') {
@@ -117,13 +98,13 @@ if ($user->hasRole($value) || $user->hasRole('/' . $value)) {
                 ) {
                     return   Response::allow($val);
                 } else {
-                    return  Response::deny(str_replace('****','** Yet **'.$arr.'**',$alertim ));
+                    return  Response::deny('Bu işlem için yetkiniz yoktur.');
                 }
             } else {
                 if ($user->hasRole($arr) || $user->hasRole('/' . $arr)) {
                     return   Response::allow($val);
                 } else {
-                    return  Response::deny(str_replace('****','** Yet **'.$arr.'**',$alertim ));
+                    return  Response::deny('Bu işlem için yetkiniz yoktur.');
                 }
             }
 
