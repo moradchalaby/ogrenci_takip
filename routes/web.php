@@ -28,13 +28,11 @@ use App\Http\Controllers\Root\RoleController;
 //use App\Http\Controllers\Personel\IdarihocaController;
 use App\Http\Controllers\Egitim\OgrenciController;
 use App\Http\Controllers\Egitim\BirimOgrenciController;
-use App\Http\Controllers\Egitim\ProjeOgrenciController;
 use App\Http\Controllers\Egitim\HafizlikController;
 use App\Http\Controllers\Egitim\BirimHafizlikController;
 use App\Http\Controllers\Personel\HocaBirimHafizlikController;
 
 use App\Http\Controllers\Personel\HocaHafizlikController;
-use App\Http\Controllers\Egitim\ProjeHafizlikController;
 use App\Http\Controllers\Yapi\BirimController;
 use App\Http\Controllers\YetkilerController;
 use App\Http\Controllers\Auth\LoginController;
@@ -252,7 +250,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
     });
 
     Route::prefix('ogrenciodeme')->group(function (){
-        Route::get('/', [MuhasebeController::class, 'ogrenciodeme'])->can('yet','ogrenciodeme')->name('muhasebe.ogrenci');
+        Route::get('/', [MuhasebeController::class, 'index'])->can('yet','ogrenciodeme')->name('muhasebe.ogrenci');
         Route::post('/edit', [MuhasebeController::class, 'editOgrenci'])->can('islem','ogrenciodeme')->name('muhasebe.ogrenci.edit');
         Route::post('/destroy', [MuhasebeController::class, 'destroyOgrenci'])->can('islem','ogrenciodeme')->name('muhasebe.ogrenci.delete');
 
