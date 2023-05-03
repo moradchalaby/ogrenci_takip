@@ -3,6 +3,7 @@
 use App\Http\Controllers\Muhasebe\KasaController;
 use App\Http\Controllers\Muhasebe\MakbuzSetController;
 use App\Http\Controllers\Muhasebe\MuhasebeController;
+use App\Http\Controllers\Muhasebe\OgrenciOdemeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 /*
@@ -251,13 +252,13 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
     });
 
     Route::prefix('ogrenciodeme')->group(function (){
-        Route::get('/', [MuhasebeController::class, 'index'])->can('yet','ogrenciodeme')->name('muhasebe.ogrenci');
-        Route::post('/edit', [MuhasebeController::class, 'editOgrenci'])->can('islem','ogrenciodeme')->name('muhasebe.ogrenci.edit');
-        Route::post('/destroy', [MuhasebeController::class, 'destroyOgrenci'])->can('islem','ogrenciodeme')->name('muhasebe.ogrenci.delete');
+        Route::get('/', [OgrenciOdemeController::class, 'index'])->can('yet','ogrenciodeme')->name('muhasebe.ogrenci');
+        Route::post('/edit', [OgrenciOdemeController::class, 'editOgrenci'])->can('islem','ogrenciodeme')->name('muhasebe.ogrenci.edit');
+        Route::post('/destroy', [OgrenciOdemeController::class, 'destroyOgrenci'])->can('islem','ogrenciodeme')->name('muhasebe.ogrenci.delete');
 
-        Route::post('/store', [MuhasebeController::class, 'storeOgrenci'])->can('islem','ogrenciodeme')->name('muhasebe.ogrenci.store');
-        Route::post('/show/{id}', [MuhasebeController::class, 'showOgrenci'])->can('islem','ogrenciodeme')->name('muhasebe.ogrenci.show');
-        Route::post('/update/{id}', [MuhasebeController::class, 'updateOgrenci'])->can('islem','ogrenciodeme')->name('muhasebe.ogrenci.update');
+        Route::post('/store', [OgrenciOdemeController::class, 'storeOgrenci'])->can('islem','ogrenciodeme')->name('muhasebe.ogrenci.store');
+        Route::post('/show/{id}', [OgrenciOdemeController::class, 'showOgrenci'])->can('islem','ogrenciodeme')->name('muhasebe.ogrenci.show');
+        Route::post('/update/{id}', [OgrenciOdemeController::class, 'updateOgrenci'])->can('islem','ogrenciodeme')->name('muhasebe.ogrenci.update');
 
     });
     Route::prefix('hocaodeme')->group(function (){
