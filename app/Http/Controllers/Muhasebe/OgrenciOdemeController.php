@@ -5,16 +5,23 @@ namespace App\Http\Controllers\Muhasebe;
 use App\Http\Controllers\Controller;
 use App\Models\Kasa;
 use App\Models\Makbuz;
+use App\Models\Ogrenci;
 use App\Models\OgrenciOdeme;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
 
 class OgrenciOdemeController extends Controller
 {
     //
+    /**
+     * @throws \Exception
+     */
     public function index(Request $request, Builder $builder)
     {
 
