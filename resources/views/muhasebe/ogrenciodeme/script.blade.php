@@ -214,7 +214,7 @@
                     });
                     Toast.fire({
                         icon: 'success',
-                        title: dat["adsoyad"] + '<br>  İşlem Başarılı <br>',
+                        title: dat["ogrtenci_adsoyad"] + '<br>  İşlem Başarılı <br>',
                     })
 
                     document.getElementById("makbuzadd").reset();
@@ -233,7 +233,7 @@
                     });
                     Toast.fire({
                         icon: 'error',
-                        title: data
+                        title: dat["ogrtenci_adsoyad"]
 
                             +
                             '<br> İşlem başarısız <br>',

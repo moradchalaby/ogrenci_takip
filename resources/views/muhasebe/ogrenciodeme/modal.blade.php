@@ -68,15 +68,15 @@
 
 
                         </select>
-                        <label for="recipient-name" class="col-form-label">Ödenen</label>
+<!--                        <label for="recipient-name" class="col-form-label">Ödenen</label>
                         <select name="odenen" class="form-control" id="odenen">
 
 
-                        </select>
+                        </select>-->
                         <!--label for="recipient-name" class="col-form-label">Açıklama</label>
-                        <textarea name="ac'klama" class="form-control"></textarea-->
+                        <textarea name="ac'klama" class="form-control"></textarea
                         <label for="recipient-name" class="col-form-label">Açıklama</label>
-                        <input type="text" class="form-control" name="makbuz_aciklama" id="makbuz_aciklama"  value="">
+                        <input type="text" class="form-control" name="makbuz_aciklama" id="makbuz_aciklama"  value="">-->
 
                         <input type="hidden" name="ogrenci_id"id="ogrenci_id" value="">
 
