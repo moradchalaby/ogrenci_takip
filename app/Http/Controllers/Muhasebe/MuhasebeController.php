@@ -673,8 +673,8 @@ class MuhasebeController extends Controller
         if ($request->ajax()) {
 
           $makbuz= Makbuz::create([
-              'kullanici'=>$request->kullanici_adsoyad,
-             'user_id' =>$request->kullanici_id,
+              'kullanici'=>Auth::user()->name,
+             'user_id' =>Auth::user()->id,
               'kur'=>$request->kur,
               'aciklama'=>$request->makbuz_aciklama,
               'adsoyad'=>$request->makbuz_adsoyad,

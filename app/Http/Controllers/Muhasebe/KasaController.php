@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Kasa;
 use App\Models\Makbuz;
 use App\Models\MakbuzSet;
+use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -395,8 +396,8 @@ if(isset($row->durum)){
         if ($request->ajax()) {
 
             $data= Kasa::create([
-                'kullanici'=>$request->kullanici_adsoyad,
-                'user_id' =>$request->kullanici_id,
+                'kullanici'=>Auth::user()->name,
+                'user_id' =>Auth::user()->id,
                 'kur'=>$request->kur,
                 'aciklama'=>$request->makbuz_aciklama,
                 'adsoyad'=>$request->makbuz_adsoyad,

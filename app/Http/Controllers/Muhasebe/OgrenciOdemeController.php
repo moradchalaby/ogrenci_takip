@@ -252,8 +252,8 @@ class OgrenciOdemeController extends Controller
             }
 
             $makbuz= Makbuz::create([
-                'kullanici'=>$request->kullanici_adsoyad,
-                'user_id' =>$request->kullanici_id,
+                'kullanici'=>Auth::user()->name,
+                'user_id' =>Auth::user()->id,
                 'kur'=>$request->kur,
                 'ogrenci_id' => intval($request->ogrenci_id),
                 'aciklama'=>$aciklama,
@@ -265,8 +265,8 @@ class OgrenciOdemeController extends Controller
 
             ]);
             $kasa= Kasa::create([
-                'kullanici'=>$request->kullanici_adsoyad,
-                'user_id' =>$request->kullanici_id,
+                'kullanici'=>Auth::user()->name,
+                'user_id' =>Auth::user()->id,
                 'kur'=>$request->kur,
                 'makbuz_id'=>$makbuz->id,
                 'aciklama'=>$aciklama,
@@ -285,7 +285,7 @@ class OgrenciOdemeController extends Controller
 
                 $data=OgrenciOdeme::create([
                     'ogrenci_id' => $request->ogrenci_id,
-                    'user_id' => $request->kullanici_id,
+                    'user_id' => Auth::user()->id,
                     'tutar' => $tutar,
                     'kur' => $request->kur,
                     'odeme_sekli' => $request->odemeSekli,
