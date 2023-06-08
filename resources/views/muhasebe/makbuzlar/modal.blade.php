@@ -317,3 +317,89 @@
     </div>
 </div>
 <!-- /.modal -->
+<div class="modal fade" id="modalFilter">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Filtreler</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="Get" id="filter">
+                    @csrf
+
+                    <div class="form-group">
+                        <label>Tarih Aralığı:</label>
+                        <div class="input-group col-12">
+                            <button type="button" class="btn btn-default float-right col-12" id="daterange-btn">
+                                <div class="row">
+                                    <div class="input-group-prepend col-2">
+                                              <span class="input-group-text">
+                                                  <i class="far fa-calendar-alt"></i>
+                                              </span>
+                                    </div>
+                                    <input type="text" class="form-control col-8" name="tarihar" value=""
+                                           id="tarihar">
+                                    <div class="input-group-prepend col-2">
+                                              <span class="input-group-text">
+                                                  <i class="fas fa-caret-down"></i>
+                                              </span>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+
+                        <!-- /.input group -->
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Ödenen</label>
+                        <select name="odenen" class="form-control" id="odenen">
+
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Ödeme Şekli</label>
+                        <select name="odemeSekli" class="form-control" id="odemeSekli">
+
+
+                        </select>
+
+                    </div>
+                    <div class="form-group row">
+
+                            <input type="text" class="form-control col-6" name="fiyat1" id="fiyat1"
+                                   value="{{ $veri['fiyat1'] }}" placeholder="Min Tutar">
+                            <input type="text" class="form-control col-6" name="fiyat2" id="fiyat2"
+                                   value="{{ $veri['fiyat2'] }}" placeholder="Max Tutar">
+
+
+                    </div>
+
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="kur" id="kur"
+                               value="{{ $veri['kur'] }}" placeholder="Kur">
+                    </div>
+
+
+
+
+
+
+                    <button type="submit" class="btn btn-outline-info" onclick="">Filtrele</button>
+
+                </form>
+            </div>
+            <div class="modal-footer justify-content-between">
+            </div>
+
+
+            <!-- /.modal-content -->
+
+            <!-- /.modal-dialog -->
+        </div>
+    </div>
+</div>

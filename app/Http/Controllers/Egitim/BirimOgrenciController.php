@@ -94,6 +94,11 @@ class BirimOgrenciController extends Controller
                                       <a href="/ogrenci/detay/' . $row['id'] . '" type="button" class="btn btn-outline-primary btn-xs">
 
                                         <i class="fa-solid fa-angles-right"></i>
+                                      </a>
+
+                                      <a type="button" class="btn btn-danger reset btn-xs deletemodal" data-toggle="modal" data-id="' . $row['id'] . '"
+                                          data-target="#modalDelete">
+                                           <i class="fa-solid fa-trash"></i>
                                       </a>';
                     }
 
@@ -136,7 +141,7 @@ class BirimOgrenciController extends Controller
 
 
 
-        return view('birim.egitim.index', compact('html', 'veri'));
+        return view('idari.egitim.index', compact('html', 'veri'));
     }
 
 
@@ -408,8 +413,17 @@ class BirimOgrenciController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         //
+
+        if ($request->ajax()) {
+            $ogrenci=  Ogrenci::find($request->id);
+
+            $ogrenci->ogrenci_kytdurum= '0';
+            $dataf= $ogrenci->save();
+
+        }
+        return response()->json($dataf);
     }
 }

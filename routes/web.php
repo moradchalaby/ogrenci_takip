@@ -88,6 +88,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'User'], function () {
         Route::post('/store', [OgrenciController::class, 'store'])->name('ogrenci.store');
         Route::post('/edit', [OgrenciController::class, 'edit'])->name('ogrenci.edit');
         Route::post('/update', [OgrenciController::class, 'update'])->name('ogrenci.update');
+        Route::post('/destroy/{id}', [OgrenciController::class, 'destroy'])->name('ogrenci.destroy');
         // Route::post('/create', [OgrenciController::class, 'create'])->name('ogrenci.create');
         Route::get('/', [OgrenciController::class, 'index'])->name('ogrenci.index');
         // Route::get('/hocagetir', [OgrenciController::class, 'hocagetir'])->name('ogrenci.hocagetir');

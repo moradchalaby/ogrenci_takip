@@ -1,5 +1,5 @@
   @extends('layouts.app')
-
+  @section('title','Öğrenci Ödemeleri')
   @section('head')
       <!-- BS Stepper -->
       <link rel="stylesheet" href="../../plugins/bs-stepper/css/bs-stepper.min.css">

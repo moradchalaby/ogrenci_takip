@@ -1,4 +1,5 @@
   @extends('layouts.app')
+  @section('title','Akmescid Erkek Öğrenci Yurdu - '.$veri['title'])
 
 
   @section('content')

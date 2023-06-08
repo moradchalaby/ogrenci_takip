@@ -9,10 +9,12 @@
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.7",
+        "jeroennoten/laravel-adminlte": "^3.9",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
+        "livewire/livewire": "^2.12",
         "nesbot/carbon": "^2.57",
         "watson/active": "^6.0",
         "yajra/laravel-datatables": "1.5"

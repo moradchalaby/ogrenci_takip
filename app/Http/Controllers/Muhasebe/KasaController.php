@@ -358,8 +358,8 @@ if(isset($row->durum)){
 
 
 
-        $veri['title'] = 'Muhasebe';
-        $veri['name'] = 'Muhasebe';
+        $veri['title'] = Auth::user()->name .' - Kasa';
+        $veri['name'] = Auth::user()->name .' - Kasa';
         $veri['bast'] = $bast;
         $veri['sont'] = $sont;
         $veri['kota'] = $request->kota;
@@ -425,7 +425,7 @@ if(isset($row->durum)){
         //
         if ($id>0) {
 
-            $data= Makbuz::find($id);
+            $data= Kasa::find($id);
 //$data=$request->all();
             $data['yaziyla']=$this->sayiyiYaziyaCevir($data->tutar,$data->kur,null,"",null,null,null,0);
             return response()->json($data);

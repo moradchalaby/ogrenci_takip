@@ -68,11 +68,13 @@ class MuhasebeController extends Controller
 
 
             $data =
-                Makbuz::where('user_id','=',$id)
-                   // ->WhereBetween('tarih', [$bast, $sont])
+                Makbuz::where('user_id','=',Auth::user()->id)
+                   ->WhereBetween('tarih', [$bast, $sont])
                     ->orderBy('tarih', 'desc')
-                    ->when($request->fiyat != null, function ($q) use ($request) {
-                        return $q->havingRaw("tutar >= {$request->fiyat}");
+                    ->when($request->fiyat1 != null || $request->fiyat2 != null, function ($q) use ($request) {
+                        $request->fiyat1==null ?? $request->fiyat1=0;
+                            $request->fiyat2==null ?? $request->fiyat2=0;
+                        return $q->WhereBetween('tutar', [$request->fiyat1, $request->fiyat2]);
                     }, function ($q) {
                         return $q;
                     })->when($request->tur != null, function ($q) use ($request) {
@@ -291,11 +293,12 @@ class MuhasebeController extends Controller
         $veri['name'] = 'Muhasebe';
         $veri['bast'] = $bast;
         $veri['sont'] = $sont;
-        $veri['kota'] = $request->kota;
-        $veri['sayfa'] = $request->sayfa;
-        $veri['hoca'] = $request->hoca_id;
+        $veri['tur'] = $request->tur;
+        $veri['kur'] = $request->kur;
+        $veri['odeme_sekli'] = $request->odeme_sekli;
         $veri['birim'] = $id;
-        $veri['durum'] = $request->durum;
+        $veri['fiyat1'] = $request->fiyat1;
+        $veri['fiyat2'] = $request->fiyat2;
         /* dd($html);
         exit; */
 

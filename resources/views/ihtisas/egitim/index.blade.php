@@ -1,4 +1,5 @@
   @extends('layouts.app')
+  @section('title','Akmescid Erkek Öğrenci Yurdu - '.$veri['title'])
 
   @section('head')
       <!-- BS Stepper -->
@@ -125,6 +126,32 @@
           <!-- /.modal-dialog -->
       </div>
 
+      <div class="modal fade" id="modalDelete">
+
+          <div class="modal-dialog ">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h4 class="modal-title"><span id="isim" class="font-weight-bold"></span> İsimli öğrenci siliniyor </h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+
+                  </div>
+                  <form method="POST" id="userdelete" action="#">
+                      <div class="modal-body">
+                          Kayıt siliniyor emin misinz?
+                          <input type="hidden" id="ogrenci_id">
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                          <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">İptal</button>
+                          <button type="submit" class="btn btn-danger">Sil</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+
+      </div>
+      <!-- /.modal -->
       <!-- /.modal -->
 
       <!-- /.modal -->
@@ -177,6 +204,36 @@
                       $('#useredit #okuldurum').val(`${datim.okul_id}`);
                       $('#useredit #birime').val(`${datim.birim_id}`);
                       $('#useredit #resim').attr('src', datim.ogrenci_resim);
+                  },
+                  error: function(ogrenciedit) {
+                      var dat = JSON.stringify(ogrenciedit);
+                      var datim = JSON.parse(dat);
+
+
+                      console.log('error: ' + dat);
+                  },
+              });
+          });
+          $(document).on("click", ".deletemodal", function() {
+              var id = $(this).data('id');
+              console.log(id);
+
+              $.ajax({
+                  type: 'post',
+                  url: "{{ route('birimogrenci.edit') }}",
+                  dataType: 'json',
+                  data: {
+                      ogrenci_id: id
+                  },
+                  success: function(ogrenciedit) {
+
+                      var dat = JSON.stringify(ogrenciedit);
+                      var datim = JSON.parse(dat);
+                      console.log(datim);
+                      $('#modalDelete #isim').text(datim['ogrenci_adsoyad']);
+                      $('#userdelete #ogrenci_id').val(datim['id']);
+
+
                   },
                   error: function(ogrenciedit) {
                       var dat = JSON.stringify(ogrenciedit);
@@ -285,7 +342,69 @@
               });
 
           })
+          $('#userdelete').on("submit", function(e) {
 
+              e.preventDefault();
+
+              var id = $('#userdelete #ogrenci_id').val();
+
+
+              console.log('submitdelete');
+              console.log(id);
+
+              $.ajax({
+
+                  url: `{{ route('ogrenci.destroy','') }}/${id}`,
+                  type: 'POST',
+                  contentType: false,
+                  cache: false,
+                  processData: false,
+                  data:{
+                      id: id
+                  },
+                  dataType: 'text',
+                  success: (datam) => {
+                      //var dat = JSON.parse(datam);
+                      $("#example1").DataTable().ajax.reload();
+                      //  file_button.after('<br><br><hr><br><img src="' + file_data + '" width="350px">');
+                      $('#modalDelete').modal('hide');
+                      console.log(datam);
+                      var Toast = Swal.mixin({
+                          toast: true,
+                          position: 'top',
+                          showConfirmButton: false,
+                          timer: 3000
+                      });
+                      Toast.fire({
+                          icon: 'success',
+                          title: dat["ogrenci_adsoyad"] + '<br>  Başaı ile silindi <br>',
+                      })
+
+                      document.getElementById("userdelete").reset();
+                  },
+                  error: function(data) {
+
+                      $('#modalDelete').modal('hide');
+
+
+                      var Toast = Swal.mixin({
+                          toast: true,
+                          position: 'top',
+                          showConfirmButton: false,
+                          timer: 3000
+                      });
+                      Toast.fire({
+                          icon: 'error',
+                          title: id
+
+                              +
+                              '<br> İşlem başarısız <br>',
+                      })
+                      document.getElementById("userdelete").reset();
+                  },
+              });
+
+          })
 
 
           hocagetir('#useradd #hoca');

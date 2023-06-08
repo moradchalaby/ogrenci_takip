@@ -1,8 +1,10 @@
   @extends('layouts.app')
-
+  @section('title',Auth::user()->name.' - Makbuzlar')
   @section('head')
       <!-- BS Stepper -->
       <link rel="stylesheet" href="../../plugins/bs-stepper/css/bs-stepper.min.css">
+      <!-- daterange picker -->
+      <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
   @endsection
   @section('content')
       <!-- Content Wrapper. Contains page content -->
@@ -40,6 +42,10 @@
                                       <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
                                           data-target="#modalAdd" id="#modalAdd">
                                           Yeni Ekle
+                                      </button>
+                                      <button type="button" class="btn btn-success btn-xs" data-toggle="modal"
+                                              data-target="#modalFilter">
+                                          Filtrele
                                       </button>
 
                                   </div>

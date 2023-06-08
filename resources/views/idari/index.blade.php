@@ -1,4 +1,5 @@
   @extends('layouts.app')
+  @section('title','Akmescid Erkek Öğrenci Yurdu - '.$veri['title'])
 
 
   @section('content')
@@ -41,7 +42,17 @@
                                           data-target="#modalAdd">
                                           Yeni Ekle
                                       </button>
-
+                                      <!-- Control sidebar content goes here -->
+                                      <x-adminlte-modal id="modalCustom11" title="Account Policy" size="sm" theme="teal"
+                                                        icon="fas fa-bell" v-centered static-backdrop scrollable>
+                                          <div style="height:300px;">Read the account policies...</div>
+                                          <x-slot name="footerSlot">
+                                              <x-adminlte-button class="mr-auto" theme="success" label="Accept"/>
+                                              <x-adminlte-button theme="danger" label="Dismiss" data-dismiss="modal"/>
+                                          </x-slot>
+                                      </x-adminlte-modal>
+                                      {{-- Example button to open modal --}}
+                                      <x-adminlte-button label="Open Modal" data-toggle="modal" data-target="#modalCustom11" class="bg-teal"/>
 
                                   </div>
                               </div>

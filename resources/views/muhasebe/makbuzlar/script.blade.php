@@ -14,10 +14,71 @@
     <script src="/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     <script src="/plugins/inputmask/jquery.inputmask.min.js"></script>
     <!-- BS-Stepper -->
+    <!-- date-range-picker -->
+    <script src="/plugins/daterangepicker/daterangepicker.js"></script>
     <script src="/plugins/bs-stepper/js/bs-stepper.min.js"></script>
     <script src="/dist/js/tolower.js"></script>
 
+    <script>
+        $(document).ready(function() {
+            //Date range as a button
+            $('#daterange-btn').daterangepicker({
+                    ranges: {
+                        'Bugün': [moment(), moment()],
+                        'Dün': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        'Son 7 gün': [moment().subtract(6, 'days'), moment()],
+                        'Son 30 gün': [moment().subtract(29, 'days'), moment()],
+                        'Bu Ay': [moment().startOf('month'), moment().endOf('month')],
+                        'Geçen Ay': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
+                            'month').endOf('month')]
+                    },
+                    startDate: moment().subtract(29, 'days'),
+                    endDate: moment(),
+                    "locale": {
+                        "format": "DD/MM/YYYY",
+                        "separator": " - ",
+                        "applyLabel": "Uygula",
+                        "cancelLabel": "Vazgeç",
+                        "fromLabel": "Dan",
+                        "toLabel": "a",
+                        "customRangeLabel": "Seç",
+                        "daysOfWeek": [
+                            "Pt",
+                            "Sl",
+                            "Çr",
+                            "Pr",
+                            "Cm",
+                            "Ct",
+                            "Pz"
+                        ],
+                        "monthNames": [
+                            "Ocak",
+                            "Şubat",
+                            "Mart",
+                            "Nisan",
+                            "Mayıs",
+                            "Haziran",
+                            "Temmuz",
+                            "Ağustos",
+                            "Eylül",
+                            "Ekim",
+                            "Kasım",
+                            "Aralık"
+                        ],
+                        "firstDay": 1
+                    },
+                },
 
+
+                function(start, end) {
+
+                    $('#tarihar').val(start.format('YYYY/MM/DD') + ' - ' + end.format(
+                        'YYYY/MM/DD'))
+                }
+            )
+
+        });
+    </script>
     <script>
         jQuery.extend(jQuery.fn.dataTableExt.oSort, {
             'locale-compare-asc': function(a, b) {
@@ -484,6 +545,9 @@
             odemeturgetir('#modalEdit #tur','SADAKA');
             odemesekligetir('#modalEdit #odeme_sekli','NAKİT');
             kurgetir('#modalEdit #kur','₺');
+         odemeturgetir('#modalFilter #odenen','SADAKA');
+            odemesekligetir('#modalFilter #odemeSekli','NAKİT');
+            kurgetir('#modalFilter #kur','₺');
         });
     </script>
     <script>
@@ -501,4 +565,5 @@
             newWin.close();
         }
     </script>
+
 @endsection
