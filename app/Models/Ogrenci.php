@@ -90,4 +90,13 @@ class Ogrenci extends Model
     {
         return $this->belongsToMany(Birim::class, 'ogrencibirim', 'ogrenci_id', 'birim_id');
     }
+    public function okul()
+    {
+        return $this->belongsToMany(Okul::class,'ogrenciokul', 'ogrenci_id', 'okul_id');
+    }
+
+    public function sinif()
+    {
+        return $this->belongsToMany(Sinif::class,'ogrencisinif', 'ogrenci_id', 'sinif_id');
+    }
 }

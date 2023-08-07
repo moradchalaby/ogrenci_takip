@@ -93,7 +93,7 @@ class BirimHafizlikController extends Controller
 
 
             $data =
-                Ogrenci::where(['ogrenci.ogrenci_kytdurum' => '1'])
+                Ogrenci::with('sinif', 'okul')->where(['ogrenci.ogrenci_kytdurum' => '1'])
 
                 ->rightJoin('ogrencibirim', function ($join) use ($birim_id) {
                     $join->on('ogrenci.id', '=', 'ogrencibirim.ogrenci_id')
@@ -102,6 +102,7 @@ class BirimHafizlikController extends Controller
 
 
                 ->leftJoin('birim', 'birim.birim_id', '=', 'ogrencibirim.birim_id')
+
                 ->rightJoin('hafizlikdurum', function ($join) use ($hoca_id) {
                     $join->on('ogrenci.id', '=', 'hafizlikdurum.ogrenci_id')
                         ->when($hoca_id > 0, function ($q) use ($hoca_id) {
@@ -114,7 +115,7 @@ class BirimHafizlikController extends Controller
                     $join->on('hfzlkders.ogrenci_id', '=', 'ogrenci.id')
                         ->WhereBetween('hfzlkders.hafizlik_tarih', [$bast, $sont]);
                 }, null, null, 'FULL')
-                ->leftJoin('ogrenciokul', 'ogrenciokul.ogrenci_id', '=', 'ogrenci.id')
+
 
 
                 ->orderBy('ogrenci.ogrenci_adsoyad', 'asc')
@@ -123,7 +124,7 @@ class BirimHafizlikController extends Controller
                     'ogrenci.id as id',
                     'ogrenci.ogrenci_resim',
                     'ogrenci.ogrenci_adsoyad as adsoyad',
-                    'ogrenciokul.aciklama as sinif',
+
                     'birim.birim_id as birim_id',
                     'birim.birim_ad as birim',
                     'hafizlikdurum.hafizlik_durum as durum',
@@ -182,11 +183,17 @@ class BirimHafizlikController extends Controller
 
                     return $hoca;
                 })
-                ->addColumn('sinif', function ($row) {
+                ->addColumn('okul', function ($row) {
 
 
 
-                    return $row['sinif'];
+                    return json_decode($row->okul,true)[0]['sinif'];
+                })
+                ->addColumn('yurd', function ($row) {
+
+
+
+                    return array_key_exists(0,json_decode($row->sinif,true)) ? json_decode($row->sinif,true)[0]["sinif_ad"] : 'Yok';
                 })
                 ->addColumn('hfzlkdurum', function ($row) {
                     $durum = ' <a  class="editDurum" data-toggle="modal" data-id="' . $row['id'] . '"data-target="#modalDurum">' . $row['durum']
@@ -334,7 +341,8 @@ class BirimHafizlikController extends Controller
             ['data' => 'resim', 'name' => 'resim', 'title' => 'Resim'],
             ['data' => 'adsoyad', 'name' => 'adsoyad', 'title' => 'Ad Soyad'],
             ['data' => 'hoca', 'name' => 'hoca', 'title' => 'Hocası'],
-            ['data' => 'sinif', 'name' => 'sinif', 'title' => 'Sınıf'],
+            ['data' => 'okul', 'name' => 'okul', 'title' => 'Okul'],
+            ['data' => 'yurd', 'name' => 'yurd', 'title' => 'Yurt'],
             ['data' => 'birim', 'name' => 'birim', 'title' => 'Birim'],
             ['data' => 'hfzlkdurum', 'name' => 'hfzlkdurum', 'title' => 'Durum'],
             ['data' => '+ -', 'name' => '+ -', 'title' => '+ -'],
