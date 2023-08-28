@@ -103,7 +103,7 @@ class BirimOgrenciController extends Controller
                                       </a>';
                     }
 
-                    return $row;
+                    return $btn;
                 })
                 ->rawColumns(['resim', 'action'])
                 ->make(true);
