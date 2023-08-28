@@ -53,7 +53,7 @@ class BirimOgrenciController extends Controller
             }
         }
         if (request()->ajax()) {
-            $data = Ogrenci::select('*')
+            $data = Ogrenci::select('ogrenci.*')
                 ->rightJoin('ogrencibirim', function ($join) use ($birim_id) {
                     $join->on('ogrenci.id', '=', 'ogrencibirim.ogrenci_id')
                         ->where('ogrencibirim.birim_id', '=', $birim_id);
@@ -76,6 +76,7 @@ class BirimOgrenciController extends Controller
                     return $resim;
                 })
                 ->addColumn('action', function ($row) {
+
                     if (Gate::denies('islem', 'birimogrenci')) {
                         $btn = '
 
@@ -102,7 +103,7 @@ class BirimOgrenciController extends Controller
                                       </a>';
                     }
 
-                    return $btn;
+                    return $row;
                 })
                 ->rawColumns(['resim', 'action'])
                 ->make(true);
