@@ -24,11 +24,6 @@ use Image;
 class OgrenciController extends Controller
 {
 
-    public function __construct()
-    {
-
-        $this->middleware('can:yetkili');
-    }
     /**
      * Display a listing of the resource.
      * @param  \Illuminate\Http\Request  $request

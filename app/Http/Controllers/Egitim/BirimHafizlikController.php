@@ -185,15 +185,18 @@ class BirimHafizlikController extends Controller
                 })
                 ->addColumn('okul', function ($row) {
 
+                    $ret="<a  class=\"editOsinif\" data-toggle=\"modal\" data-id=\"" . $row['okul'][0]['id'] . "\" data-target=\"#modalOsinif\">" . $row['okul'][0]['sinif'] . "</a>";
 
 
-                    return json_decode($row->okul,true)[0]['sinif'];
+                return $ret;
                 })
                 ->addColumn('yurd', function ($row) {
 
-
-
-                    return array_key_exists(0,json_decode($row->sinif,true)) ? json_decode($row->sinif,true)[0]["sinif_ad"] : 'Yok';
+                    $yurd=json_decode($row->sinif,true);
+                    $sinif=array_key_exists(0,$yurd) ? $yurd[0]["sinif_ad"] : 'Yok';
+                    $id=array_key_exists(0,$yurd) ? $yurd[0]["id"] : '-';
+                    $ret= ' <a  class="editYsinif" data-toggle="modal"  data-id="' . $id . '" data-target="#modalYsinf">' . $sinif . '</a> ';
+                    return $ret;
                 })
                 ->addColumn('hfzlkdurum', function ($row) {
                     $durum = ' <a  class="editDurum" data-toggle="modal" data-id="' . $row['id'] . '"data-target="#modalDurum">' . $row['durum']
@@ -218,29 +221,6 @@ class BirimHafizlikController extends Controller
 
                 ->addColumn('+ -', function ($row) use ($beign, $end) {
 
-                    //2 hhizb 0 4 hizb +1 yapar 10 sayfa 1 ders tamam
-                    /*  $arti = -1;
-                    foreach ($daterange as $date) {
-                        $gun = $date->format('Y-m-d');
-
-                        $gunler = explode(',', $row['gunler']);
-
-                        $toplamlar = explode('*', $row['toplamlar']);
-                        if (in_array($gun, $gunler)) {
-
-
-                            $tekrar =   array_count_values($gunler);
-                            $say = $tekrar[$gun];
-                            $arti = $arti + $toplamlar[array_search($gun, $gunler)];
-
-                            for ($i = 1; $i < $say; $i++) {
-
-                                $arti = $arti + $toplamlar[array_search($gun, $gunler) + $i];
-                            }
-                        } else {
-                            $arti--;
-                        }
-                    } */
                     $interval = $beign->diff($end);
                     $interval->format('%a');
                     $guns = $interval->format('%a');
@@ -385,7 +365,7 @@ class BirimHafizlikController extends Controller
             "caseInsensitive" => true
         ])->parameters([
             'columnDefs' => [
-                ['targets' => [2, 3, 4], "orderDataType" => "dom-text", "type" => "locale-compare"],
+                ['targets' => [2, 3, 4,5,6], "orderDataType" => "dom-text", "type" => "locale-compare"],
                 ['targets' => [0],  "type" => "numeric"]
 
             ]
