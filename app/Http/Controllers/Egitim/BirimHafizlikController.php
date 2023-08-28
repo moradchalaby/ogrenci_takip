@@ -188,7 +188,7 @@ class BirimHafizlikController extends Controller
                     $ret="<a  class=\"editOsinif\" data-toggle=\"modal\" data-id=\"" . $row['okul'][0]['id'] . "\" data-target=\"#modalOsinif\">" . $row['okul'][0]['sinif'] . "</a>";
 
 
-                return $ret;
+                return $row['okul'][0]['sinif'];
                 })
                 ->addColumn('yurd', function ($row) {
 
@@ -196,7 +196,7 @@ class BirimHafizlikController extends Controller
                     $sinif=array_key_exists(0,$yurd) ? $yurd[0]["sinif_ad"] : 'Yok';
                     $id=array_key_exists(0,$yurd) ? $yurd[0]["id"] : '-';
                     $ret= ' <a  class="editYsinif" data-toggle="modal"  data-id="' . $id . '" data-target="#modalYsinf">' . $sinif . '</a> ';
-                    return $ret;
+                    return $sinif ;
                 })
                 ->addColumn('hfzlkdurum', function ($row) {
                     $durum = ' <a  class="editDurum" data-toggle="modal" data-id="' . $row['id'] . '"data-target="#modalDurum">' . $row['durum']
